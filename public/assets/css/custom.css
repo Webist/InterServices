@@ -1,0 +1,93 @@
+section[id="about"],
+section[id="services"],
+section[id="markets"],
+section[id="mission"],
+section[id="team"],
+section[id="courses"],
+section[id="contact"]
+{
+   /** padding-top:15px; **/
+}
+
+/*Designing the header and its components*/
+.one-page-header.architecture-nav .navbar-nav > li > a {
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 15px 14px;
+    letter-spacing: 1px;
+}
+
+/* Add here all your css styles (customizations) */
+.block-name-ext {
+    color: #9797a2;
+}
+
+.content-xs {
+    padding-top: 4px;
+    padding-bottom: 20px;
+}
+
+.content {
+    padding-top: 5px;
+    padding-bottom: 40px;
+}
+
+.content-sm {
+    padding-top: 10px;
+    padding-bottom: 60px;
+}
+
+.content-md {
+    padding-top: 20px;
+    padding-bottom: 80px;
+}
+
+.content-lg {
+    padding-top: 30px;
+    padding-bottom: 100px;
+}
+
+.content-xlg {
+    padding-top: 80px;
+    padding-bottom: 150px;
+}
+
+.space-md-hor {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.space-lg-hor {
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+.space-xlg-hor {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+
+.g-heading-v7 .h2 .block-name {
+    font-size: 12px;
+    font-weight: 300;
+    font-style: normal;
+    letter-spacing: 5px;
+    display: block;
+    color: #c94645;
+    margin-bottom: 10px;
+}
+
+.g-heading-v7 h2, .g-heading-v7 .h2 {
+    /* text-transform: uppercase; */
+    font-size: 40px;
+    line-height: 1;
+    font-weight: 500;
+    position: relative;
+    padding-bottom: 30px;
+
+    color: #383339;
+    letter-spacing: 2px;
+}
