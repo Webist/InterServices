@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Config\AdminHandler;
+use App\Main\AdminHandler;
 use Http\Stream\InputHandler;
 
-class Admin implements \App\Config\Admin
+class Admin implements \App\Main\Admin
 {
     public function __construct(InputHandler $inputHandler, AdminHandler $handler)
     {

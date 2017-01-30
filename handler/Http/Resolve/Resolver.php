@@ -1,9 +1,4 @@
 <?php
-/**
- * User: fkus
- * Date: 26/12/2016
- * Time: 17:24
- */
 
 namespace Http\Resolve;
 
@@ -12,24 +7,26 @@ use Http\Routing\RoutingInterface;
 
 class Resolver implements ResolverInterface, RoutingInterface
 {
-    private $route;
+    private $routeHandler;
 
-    public function __construct($route)
+    public function __construct(\Http\Routing\RouteHandler $routeHandler)
     {
-        $this->route = $route;
+        $this->routeHandler = $routeHandler;
     }
 
     public function handle()
     {
-        if(isset($this->route[self::FORWARD_DESTINATION_NAME])){
-            return $this->route;
+        $route = $this->routeHandler->handle();
+
+        if(isset($route[self::FORWARD_DESTINATION_NAME])){
+            return $route;
         }
 
-        $this->route[self::CLASS_FIELD_NAME] = self::CONTROLLER_PATH_NAME . $this->route[self::CLASS_FIELD_NAME];
-        $this->route[self::CLASS_ACTION_FIELD_NAME] = $this->route[self::CLASS_ACTION_FIELD_NAME];
-        $this->route[self::INTER_FIELD_NAME] = self::INTER_PATH_NAME . $this->route[self::INTER_FIELD_NAME];
-        $this->route[self::HANDLER_FIELD_NAME] = self::HANDLER_PATH_NAME . $this->route[self::HANDLER_FIELD_NAME];
+        $route[self::CLASS_FIELD_NAME] = self::CONTROLLER_PATH_NAME . $route[self::CLASS_FIELD_NAME];
+        $route[self::CLASS_ACTION_FIELD_NAME] = $route[self::CLASS_ACTION_FIELD_NAME];
+        $route[self::INTER_FIELD_NAME] = self::INTER_PATH_NAME . $route[self::INTER_FIELD_NAME];
+        $route[self::HANDLER_FIELD_NAME] = self::HANDLER_PATH_NAME . $route[self::HANDLER_FIELD_NAME];
 
-        return $this->route;
+        return $route;
     }
 }

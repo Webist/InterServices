@@ -1,10 +1,4 @@
 <?php
-/**
- * Info
- * User: fkus
- * Date: 26/12/2016
- * Time: 09:56
- */
 
 namespace Http\Stream;
 

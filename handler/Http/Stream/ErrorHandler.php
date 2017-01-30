@@ -1,9 +1,4 @@
 <?php
-/**
- * Info
- * Created: 10/01/2017 21:58
- * User: fkus
- */
 
 namespace Http\Stream;
 

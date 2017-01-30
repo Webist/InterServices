@@ -1,9 +1,4 @@
 <?php
-/**
- * Info
- * Created: 13/01/2017 19:24
- * User: fkus
- */
 
 namespace Page\Data;
 

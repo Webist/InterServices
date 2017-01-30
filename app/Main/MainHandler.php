@@ -1,14 +1,9 @@
 <?php
-/**
- * Info
- * Created: 21/01/2017 21:07
- * User: fkus
- */
 
-namespace App\Config;
+namespace App\Main;
 
 
-interface GlobalHandler
+interface MainHandler
 {
     const DATABASE_SERVICE = \App\Service\Database::class;
     const MAILER = \Mail\Mailer::class;

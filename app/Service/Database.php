@@ -1,14 +1,9 @@
 <?php
-/**
- * Info
- * Created: 20/01/2017 14:06
- * User: fkus
- */
 
 namespace App\Service;
 
 
-class Database extends \App\Config\Service\Database
+class Database extends \App\Main\Service\Database
 {
     private $callback;
 

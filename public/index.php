@@ -1,10 +1,4 @@
 <?php
-/**
- * Info
- * User: fkus
- * Date: 26/12/2016
- * Time: 09:13
- */
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -18,17 +12,17 @@ try {
     );
 
     $resolver = new Http\Resolve\Resolver(
-        $routeHandler->handle(),
+        $routeHandler,
         $inputHandler
     );
 
     $dispatcher = new Http\Dispatch\Dispatcher(
-        $resolver->handle(),
+        $resolver,
         $inputHandler
     );
 
     $outputHandler = new Http\Stream\OutputHandler(
-        $dispatcher->handle(),
+        $dispatcher,
         $inputHandler
     );
 
@@ -46,10 +40,10 @@ try {
 
     // Redirect exception message to output
     if ($_SERVER['APPLICATION_ENV'] == 'development') {
-        $outputHandler = new Http\Stream\OutputHandler(
-            $exception->getMessage(),
-            $inputHandler
-        );
-        $outputHandler->handle();
+        //$outputHandler = new Http\Stream\OutputHandler(
+        //    $exception->getMessage(),
+        //    $inputHandler
+        //);
+        //$outputHandler->handle();
     }
 }

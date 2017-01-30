@@ -1,21 +1,16 @@
 <?php
-/**
- * Info
- * Created: 09/01/2017 20:36
- * User: fkus
- */
 
 namespace Http\Stream;
 
 
 class OutputHandler
 {
-    private $result;
+    private $dispatcher;
     private $inputHandler;
 
-    public function __construct($result, InputHandler $inputHandler)
+    public function __construct(\Http\Dispatch\Dispatcher $dispatcher, InputHandler $inputHandler)
     {
-        $this->result = $result;
+        $this->dispatcher = $dispatcher;
         $this->inputHandler = $inputHandler;
     }
 
@@ -25,6 +20,6 @@ class OutputHandler
             header('Content-Type: application/json');
         }
 
-        echo $this->result;
+        echo $this->dispatcher->handle();
     }
 }

@@ -4,9 +4,9 @@ namespace App\Controller;
 
 
 use Http\Stream\InputHandler;
-use App\Config\RootPathHandler;
+use App\Main\RootPathHandler;
 
-class RootPath implements \App\Config\RootPath
+class RootPath implements \App\Main\RootPath
 {
     private $inputHandler;
     private $handler;
@@ -41,9 +41,9 @@ class RootPath implements \App\Config\RootPath
     public function postXhr()
     {
         $handler = $this->handler;
-        $globalHandler = $handler::$global;
+        $mainHandler = $handler::$main;
             /** @var \Mail\Mailer $mailer */
-        $mailer = $globalHandler->service($globalHandler::MAILER);
+        $mailer = $mainHandler->service($mainHandler::MAILER);
         $mailer->setData(
             $this->handler->sanitizeMailData(
                 array_merge(['to' => self::EMAIL_TO], filter_input_array(INPUT_POST))

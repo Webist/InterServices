@@ -21,7 +21,7 @@ A **Forward Route** is a route with destination-path defined route.
 For example the following route matches the root URL path (/) with GET requests and  
 forwards directly to home.php file.  
 ```
-Route('GET', '/', '../web/home.php');
+RouteContext('GET', '/', '../web/home.php');
 ```
 
 A **Reqular Route** is a Controller::method defined route.   
@@ -29,7 +29,7 @@ For example the following route matches the root URL path with POST request and
 instantiates the object RootPath following with invoking the post() method.  
 If there are parameters then these parameters will be as arguments passed to post() method.  
 ```
-Route('POST', '/', 'RootPath@post');
+RouteContext('POST', '/', 'RootPath@post');
 ```
 
 #### Forward Route, Integrating Destination file with a Controller

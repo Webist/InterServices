@@ -98,7 +98,7 @@ var_dump($title);
                                 </li>
 
                                 <li class="page-scroll">
-                                    <a href="#markets">Development</a>
+                                    <a href="#markets">Cases</a>
                                 </li>
 
                             </ul>
@@ -175,7 +175,7 @@ var_dump($title);
 <section id="about">
     <div class="container content-lg">
         <div class="g-heading-v7 text-center">
-            <h2 class="h2 g-mb-30"><em class="block-name">Kennis en Kunde </em>Onze Expertise </h2>
+            <h2 class="h2 g-mb-30"><em class="block-name">Kennis en Kunde </em>Expertise </h2>
         </div>
 
         <!-- all for your comfort blocks -->
@@ -278,7 +278,7 @@ var_dump($title);
 
             <div class="row  g-heading-v7 text-center">
                 <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Methodiek </em> Ons werkwijze </h2>
+                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Methodiek </em> Werkwijze </h2>
 
                 </div>
             </div>
@@ -288,7 +288,7 @@ var_dump($title);
                 <div class="owl-slider-v4">
 
                     <div class="item">
-                        <img src="assets/img-temp/Self-Organizing-Partners.png" alt="">
+                        <img src="assets/img/group-vs-team.jpg" alt="Groep versus Team">
 
                         <p class="owl-p g-color-white-darker">
                             Met self-organizing <strike>team</strike> partners onze team is dynamisch.
@@ -363,7 +363,7 @@ var_dump($title);
 <section id="markets">
     <div class="container-fluid no-side-padding content-md">
         <div class="container g-heading-v7 text-center">
-            <h2 class="h2 g-mb-30"><em class="block-name">Development </em>Realisatie </h2>
+            <h2 class="h2 g-mb-30"><em class="block-name">Realisatie </em>Cases </h2>
         </div>
 
         <!-- markets cube-portfolio/ what we did -->
@@ -499,7 +499,7 @@ var_dump($title);
 
             <div class="row  g-heading-v7 text-center">
                 <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Ons Missie </em>Mission Statement</h2>
+                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Missie </em>Mission Statement</h2>
                 </div>
             </div>
 
@@ -822,7 +822,7 @@ var_dump($title);
     <section id="team">
         <div class="container-fluid team-section bg-color-com">
             <div class="container content-md g-heading-v7 text-center">
-                <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Samenwerkende Partners</em> Werken met
+                <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Partners</em> Werken met
                     professionals</h2>
 
                 <!-- Owl Carousel v4 team -->
@@ -928,7 +928,7 @@ var_dump($title);
 <!--Contact Section-->
 <section id="contact">
     <div class="container content-md g-heading-v7 text-center">
-        <h2 class="h2 g-mb-30"><em class="block-name">Contact </em>Vraag ons </h2>
+        <h2 class="h2 g-mb-30"><em class="block-name">Contact </em></h2>
 
         <!-- form and contatc information -->
         <div class="row">
@@ -939,13 +939,13 @@ var_dump($title);
                             <div class="col-md-6 col-md-offset-0">
                                 <div>
                                     <input type="text" name="name" id="name" class="form-control"
-                                           placeholder="Your Name">
+                                           placeholder="Uw naam">
                                 </div>
                             </div>
                             <div class="col-md-6 col-md-offset-0">
                                 <div>
                                     <input type="text" name="phone" id="phone" class="form-control"
-                                           placeholder="Your Phone">
+                                           placeholder="Uw telefoonnummer">
                                 </div>
                             </div>
                         </div>
@@ -961,7 +961,7 @@ var_dump($title);
                             <div class="col-md-6 col-md-offset-0">
                                 <div>
                                     <input type="text" name="subject" id="subject" class="form-control"
-                                           placeholder="Subject">
+                                           placeholder="Onderwerp">
                                 </div>
                             </div>
                         </div>
@@ -970,7 +970,7 @@ var_dump($title);
                             <div class="col-md-12 col-md-offset-0">
                                 <div>
                                     <textarea rows="4" name="message" id="message"
-                                              class="form-control g-textarea-noresize" placeholder="Message"></textarea>
+                                              class="form-control g-textarea-noresize" placeholder="Bericht"></textarea>
                                 </div>
                             </div>
                         </div>

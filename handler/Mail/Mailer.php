@@ -1,9 +1,4 @@
 <?php
-/**
- * Info
- * Created: 04/01/2017 13:40
- * User: fkus
- */
 
 namespace Mail;
 

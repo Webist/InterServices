@@ -1,47 +1,43 @@
 <?php
-/**
- * Info
- * Created: 27/12/2016 09:56
- * User: fkus
- */
 
 namespace Http\Dispatch;
 
 
-use App\Handler\GlobalHandler;
+use App\Handler\Main;
 use Http\Routing\RoutingInterface;
 
 class Dispatcher implements DispatcherInterface, RoutingInterface
 {
-    private $route;
+    private $resolver;
     private $inputHandler;
 
-    public function __construct(array $route, \Http\Stream\InputHandler $inputHandler)
+    public function __construct(\Http\Resolve\Resolver $resolver, \Http\Stream\InputHandler $inputHandler)
     {
-        $this->route = $route;
+        $this->resolver = $resolver;
         $this->inputHandler = $inputHandler;
     }
 
     public function handle()
     {
+        $route = $this->resolver->handle();
+
         // A Forward route
-        if (isset($this->route[self::FORWARD_DESTINATION_NAME])) {
+        if (isset($route[self::FORWARD_DESTINATION_NAME])) {
             ob_start();
-            $route = $this->route;
-            include $this->route[self::FORWARD_DESTINATION_NAME];
+            include $route[self::FORWARD_DESTINATION_NAME];
             return ob_get_clean();
         }
 
         // A Regular route
-        $controller = new \ReflectionClass($this->route[self::CLASS_FIELD_NAME]);
+        $controller = new \ReflectionClass($route[self::CLASS_FIELD_NAME]);
 
         // Machine Object Model, requires __construct, Interface and Handler.
         $handler = null;
-        if ('' != ($handlerClass = $this->route[self::CLASS_HANDLER_NAME])) {
-            $handler = new $handlerClass([], new GlobalHandler($this->route));
+        if ('' != ($handlerClass = $route[self::CLASS_HANDLER_NAME])) {
+            $handler = new $handlerClass([], new Main($route));
         }
         $object = $controller->newInstance($this->inputHandler, $handler);
-        $reflectionMethod = new \ReflectionMethod($object, $this->route[self::CLASS_ACTION_FIELD_NAME]);
+        $reflectionMethod = new \ReflectionMethod($object, $route[self::CLASS_ACTION_FIELD_NAME]);
         return $reflectionMethod->invokeArgs($object, [$this->inputHandler->parameters()]);
     }
 }

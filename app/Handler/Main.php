@@ -1,14 +1,9 @@
 <?php
-/**
- * Info
- * Created: 21/01/2017 20:00
- * User: fkus
- */
 
 namespace App\Handler;
 
 
-class GlobalHandler implements \App\Config\GlobalHandler
+class Main implements \App\Main\MainHandler
 {
     private $route = [];
     private $services = [];
@@ -22,11 +17,11 @@ class GlobalHandler implements \App\Config\GlobalHandler
 
     /**
      * Access to given (external) service, instantiate an object once only
-     * Services are declared in \App\Config\GlobalHandler
+     * Services are declared in \App\Main\Main
      *
      * @example
-     * $globalHandler = $this->handler::$global;
-     * $mailer = $globalHandler->service($globalHandler::MAILER);
+     * $mainHandler = $this->handler::$main;
+     * $mailer = $mainHandler->service($mainHandler::MAILER);
      *
      * @param $serviceName
      * @param null $callback

@@ -1,13 +1,13 @@
 #### App Data 
 In this directory resides data sets, c.q. data store, files.  
-Apart form the Interface data, see directory Config, these data sets are;
+Apart from the Interface data, see directory Main, these data sets are;
  + input data to process
  + template data set to reuse
  + result data to fetch
  
 For example  
 When there is a new route created, in this directory a new
-file with the name indexKey of that route created.
+file with the name indexKey of that route will be very useful.  
 This will make fetching data easy.
 
 ```

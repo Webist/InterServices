@@ -1,23 +1,18 @@
 <?php
-/**
- * Info
- * Created: 04/01/2017 17:13
- * User: fkus
- */
 
 namespace App\Handler;
 
 
 
-class RootPath implements \App\Config\RootPathHandler
+class RootPath implements \App\Main\RootPathHandler
 {
     private $input;
-    public static $global;
+    public static $main;
 
-    public function __construct($input, GlobalHandler $global)
+    public function __construct($input, Main $main)
     {
         $this->input = $input;
-        self::$global = $global;
+        self::$main = $main;
     }
 
     function sanitizeMailData($mailData)

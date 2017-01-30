@@ -1,4 +1,4 @@
-### Entry point of an app
+### App Entry Point controllers
 
 When regular route dispatched, 
 then the appropriate Controller in this directory invoked.

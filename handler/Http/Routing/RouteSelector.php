@@ -1,9 +1,4 @@
 <?php
-/**
- * Info
- * Created: 20/01/2017 00:00
- * User: fkus
- */
 
 namespace Http\Routing;
 

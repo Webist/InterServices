@@ -1,19 +1,14 @@
 <?php
-/**
- * Info
- * Created: 13/01/2017 23:12
- * User: fkus
- */
 
 namespace App\Handler;
 
 
-class Admin implements \App\Config\AdminHandler
+class Admin implements \App\Main\AdminHandler
 {
     private $input;
     public static $global;
 
-    public function __construct($input, GlobalHandler $global)
+    public function __construct($input, Main $global)
     {
         $this->input = $input;
         self::$global = $global;

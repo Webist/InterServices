@@ -1,11 +1,6 @@
 <?php
-/**
- * Info
- * Created: 20/01/2017 14:15
- * User: fkus
- */
 
-namespace App\Config\Service;
+namespace App\Main\Service;
 
 
 abstract class Database implements DatabaseInterface
