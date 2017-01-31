@@ -37,7 +37,7 @@
 .flip-clock-wrapper.clearfix {
   *zoom: 1; }
 
-/* Main */
+/* Spec */
 .flip-clock-wrapper {
   font: normal 11px "Helvetica Neue", Helvetica, sans-serif;
   -webkit-user-select: none; }
@@ -467,7 +467,7 @@
 .flip-clock-small-wrapper.clearfix {
   *zoom: 1; }
 
-/* Main */
+/* Spec */
 .flip-clock-small-wrapper {
   font: normal 11px "Helvetica Neue", Helvetica, sans-serif;
   -webkit-user-select: none; }

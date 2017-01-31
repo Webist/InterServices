@@ -4,9 +4,9 @@ namespace App\Controller;
 
 
 use Http\Stream\InputHandler;
-use App\Main\RootPathHandler;
+use App\Spec\RootPathHandler;
 
-class RootPath implements \App\Main\RootPath
+class RootPath implements \App\Spec\RootPath
 {
     private $inputHandler;
     private $handler;

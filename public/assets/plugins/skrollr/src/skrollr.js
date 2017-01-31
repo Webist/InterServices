@@ -15,7 +15,7 @@
 		get: function() {
 			return _instance;
 		},
-		//Main entry point.
+		//Spec entry point.
 		init: function(options) {
 			return _instance || new Skrollr(options);
 		},

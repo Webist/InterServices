@@ -37,13 +37,4 @@ try {
         $inputHandler
     );
     $errorHandler->handle();
-
-    // Redirect exception message to output
-    if ($_SERVER['APPLICATION_ENV'] == 'development') {
-        //$outputHandler = new Http\Stream\OutputHandler(
-        //    $exception->getMessage(),
-        //    $inputHandler
-        //);
-        //$outputHandler->handle();
-    }
 }

@@ -1,43 +1,44 @@
-### App Entry Point controllers
+### Controller env
 
-When regular route dispatched, 
-then the appropriate Controller in this directory invoked.
+The destination of a regular route is the controller object in this directory.
 
-M.O.M (Machine Object Model)  
-**Machine object model principles**   
+A Controller in this directory should meet the requirements M.O.M (Machine Object Model).
 
+##### Machine Object Model principles
 A machine object should: 
   + implement specification (for example via interfaces)
-  + construct with an input (process-data) as the first argument
-  + construct with its handler as the second argument
-  + optionally construct with an output handler as the third argument
+  + construct with an input (process-data) injection as the first argument
+  + construct with its handler injection as the second argument
+  + optionally construct with an output handler injection as the third argument
   
-
-A machine object is not an extension of a contextualizing system.  
-It does not directly extends of inherits from an another object or object groups.
-
-It connects to an another system, such as services or a framework, via its handler.
-
+A machine object does not require:
+  + Inheritance   
+  Extending from other class is not required. But it might be used for some cases.
+  
+  
+##### Anecdote  
+M.O.M scales up via input acceptance and handler attachments.
+For example, adding `Invoice` feature to object `Customer` is practically
+  + Enrich Customer-Input 
+  + Attach `Invoice` via `CustomerHandler`
+  
 ```
-class App\Controller\Admin implements \App\Main\Admin
+$customerInput = ['genereateInvoice' => true ];
+```
+```
+class CustomerHandler 
 {
-  public function __construct(InputHandler $inputHandler, AdminHandler $handler)
+  function generateInvoice()
+  {
+  // .. connect to the Invoice service and handle.
+  }
+}   
+```
+```
+class Customer implements Spec\Customer
+{
+ public function __construct($customerInput, new CustomerHanlder()) {}
 }
 ```
 
-```
-class App\Handler\Admin extends BaseController implements \App\Main\AdminHandler
-{
-    private $input;
-    public static $main;
-
-    public function __construct($input, MainHandler $main)
-    {
-        $this->input = $input;
-        self::$main = $main;
-    }
-}
-```
-```App\Handler\Admin``` is injected into the ```App\Controller\Admin``` 
-and extends a `BaseController` object. This object might be the connection to a framework.
 

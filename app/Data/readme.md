@@ -1,21 +1,24 @@
-#### App Data 
-In this directory resides data sets, c.q. data store, files.  
-Apart from the Interface data, see directory Main, these data sets are;
+#### Data env 
+In this directory resides data sets.  
+Data sets are;
  + input data to process
- + template data set to reuse
+ + template data to reuse
  + result data to fetch
  
-For example  
-When there is a new route created, in this directory a new
-file with the name indexKey of that route will be very useful.  
-This will make fetching data easy.
+Example usage  
+New route created and there is no need to connect to database, 
+but fetch data from file storage.
 
+In that case the `indexKey` of that route will be very useful
+to save data in correct file and fetch contents.
+
+Every route contains indexKey. 
 ```
 var_dump($route['indexKey']);
 string 'e531c13f9cf22ea38d0ccb29e27f1449' (length=32)
 ```
 
-A filename that equals the ```indexKey``` 
+Create a filename that equals to the ```indexKey``` 
 ```
 /app/Data/e531c13f9cf22ea38d0ccb29e27f1449.php
 ```
@@ -23,7 +26,3 @@ Using a php-data file.
 ```
 $this->pageData = include dirname(getcwd()) . '/app/Data/'.$indexKey.'.php';
 ```
-
-
-### Serialized data
-.... 

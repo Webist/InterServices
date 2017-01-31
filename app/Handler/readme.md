@@ -1,25 +1,18 @@
-### Internal Handlers
+### Internal Handler env
 
-##### Adapters to External handlers
-In this directory resides Controller internal adapter-handlers.  
-An internal handler is the connection to an external service or handler.  
-Services are containers to manage the external handlers in a DRY principle.
+An internal handler is a injected handler object of a controller.
+Every controller should have its handler representation in this directory.
 
-##### Basic Rules
-+ Every Controller has its Handler representation in this directory.
-+ An Handler extends Services (with Registered external handlers) 
-+ An Handler implements own specific Handler-Specification (an interface) wherein  
- the methods are declared (Declarations of a Controller-Specification are interface constants).  
- ```
- // path to main specification of a Controller
- class Controller\RootPath implements \App\Main\RootPath 
- interface \App\Main\RootPath extends GlobalConfig
- ```
- ```
- // path to external handler of a Controller
- class Handler\RootPath extends Service\Services 
-                        implements \App\Main\RootPathHandler   
-                        
- // Services manage the declared classes in Registers 
- Container\Services implements Service\Locator
-```
+Internal handlers are useful for making use of;
++ External services
++ Main specifications
++ Specific business logic
+
+An external service might be;
++ Connection to a database as service
+
+A main specification might be;
++ Admin E-mail address saved in `Spec\Main` interface to use throughout the system. 
+
+Specific business logic might be;
++ Validation controller specific data, like checking if a certain post value exists. 

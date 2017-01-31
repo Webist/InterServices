@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Main\Service;
+namespace App\Spec\Service;
 
 interface DatabaseInterface
 {
@@ -13,7 +13,7 @@ interface DatabaseInterface
         'dbname' => ''
     ];
 
-    const DB_CONNECTION_PARAMS_FILE = '/App/Main/Credentials/.db';
+    const DB_CONNECTION_PARAMS_FILE = '/App/Spec/Credentials/.db';
 
     const PROTOCOL = 'mysql';
     const ADAPTER = \PDO::class;

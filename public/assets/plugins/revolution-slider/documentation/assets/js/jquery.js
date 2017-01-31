@@ -7194,7 +7194,7 @@ jQuery.extend({
 	ajaxPrefilter: addToPrefiltersOrTransports( prefilters ),
 	ajaxTransport: addToPrefiltersOrTransports( transports ),
 
-	// Main method
+	// Spec method
 	ajax: function( url, options ) {
 
 		// If url is an object, simulate pre-1.5 signature

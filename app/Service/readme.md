@@ -1,8 +1,8 @@
-### External Services
+### External Services Env
 
 Services do; 
 + Pre-config (auto-connect, pop-up or build)
-+ accept process-data (query command, mail-data to send)
++ Accept process-data (query command, mail-data to send)
 
 
 Services comply to;
@@ -20,7 +20,7 @@ Connection and execution of queries can be handled as a (micro)-service.
 
 Creating the (micro)-service
 ```
-class App\Service\Database extends \App\Main\Service\Database
+class App\Service\Database extends \App\Spec\Service\Database
 {
     private $callback;
 
@@ -42,7 +42,7 @@ Inserting a record into database via callback.
         $ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR');  
         
 
-        $dbLogger = function($pdo) use ($routeId, $ip) {
+        $visitsDbLogger = function($pdo) use ($routeId, $ip) {
 
             $query = "INSERT INTO visits SET route_id = :routeId, ip = :ip";
             $dbh = $pdo->prepare($query);
@@ -51,7 +51,7 @@ Inserting a record into database via callback.
             );
         };
 
-        $db = $this->service(\App\Service\Database, $dbLogger);
+        $db = $this->service(\App\Service\Database, $visitsDbLogger);
         $db->handle();
 ```
 

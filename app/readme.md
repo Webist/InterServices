@@ -2,15 +2,26 @@
 
 In this /app directory resides back-end (PHP) development files.  
 
-Six different type of folders meets the requirements of Machine Object Model.
+Six different type of folders meets the requirements of the Machine Object Model.
 
++ Spec  
+Specification data (interfaces, config)  
 
-+ Controller, the entry point
-+ Main, Specification data (interfaces, config)
-+ Handler, Controller specific Handlers or Middlewares
-+ Data, Data Store
-+ Service, External service connection/adapters, microservices.
-+ Exception, Controller specific error handlers
++ Handler  
+Controller specific Handlers or Middleware's  
+
++ Controller   
+The entry points 
+
++ Data  
+Data Store  
+
++ Service  
+External service connection/adapters, microservices  
+
++ Exception   
+Controller specific error handlers  
+
 
 
    

@@ -3,14 +3,14 @@
 namespace App\Handler;
 
 
-class Admin implements \App\Main\AdminHandler
+class Admin implements \App\Spec\AdminHandler
 {
     private $input;
-    public static $global;
+    public static $main;
 
-    public function __construct($input, Main $global)
+    public function __construct($input, Main $main)
     {
         $this->input = $input;
-        self::$global = $global;
+        self::$main = $main;
     }
 }

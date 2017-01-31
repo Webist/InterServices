@@ -4,7 +4,7 @@ namespace App\Handler;
 
 
 
-class RootPath implements \App\Main\RootPathHandler
+class RootPath implements \App\Spec\RootPathHandler
 {
     private $input;
     public static $main;

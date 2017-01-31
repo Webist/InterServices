@@ -1,12 +1,13 @@
-### App Main Specification
+### Specification Env
 
 This directory can be seen as the main-board of the system.
-Herein resides the very begin specification data and/or method of a model.  
+Herein resides the initial specification data (interface constants) 
+and methods of a model.  
 
-A app-specification is typically an interface.
+An app-specification is typically an interface and might look like configuration of the object.
 
-+ Every Controller and Handler implements a specific-config.
-+ Specification-Config data, via interfaces, should be intended to share with every implementing 
++ Every Controller and Handler implements a specification.
++ Specification data, via interfaces, should be intended to share with every implementing 
 classes and subclasses. Use it with caution.
  
 
@@ -29,7 +30,7 @@ and the system should just work.
 
 The point of using interface here is;
 + No conditional checks (cyclomatic complexity) in the code.
-+ Interface is the specification-config (the app DNA). It is that simple.
++ Interface is the specification (the app DNA). It is that simple.
 
 #### Do not use sensitive data in Interfaces
 Since an interface constant will be visible to all inheriting

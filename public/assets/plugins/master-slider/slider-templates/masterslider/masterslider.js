@@ -5310,7 +5310,7 @@ MSSliderEvent.DESTROY				= 'ms_destroy';
 
 /* ================== bin-debug/js/pro/MasterSlider.js =================== */
 /**
- * Master Slider Main JavaScript File
+ * Master Slider Spec JavaScript File
  */
 
 ;(function($){

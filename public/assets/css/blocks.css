@@ -88,7 +88,7 @@
 34. Blog Grid
 35. Blog Thumb
 36. Shop Subscribe
-37. Parallax Slider (Main)
+37. Parallax Slider (Spec)
 38. Master Slider
 39. Revolution Slider
 40. Layer Slider
@@ -141,7 +141,7 @@
 	54.3 - Tags v3
 	54.4 - Tags v4
 
-##. Main Page Styles
+##. Spec Page Styles
 
 -------------------------------------------------------------*/
 
@@ -4434,7 +4434,7 @@
 }
 
 /*--------------------------------------------------
-  [37. Parallax Slider (Main)]
+  [37. Parallax Slider (Spec)]
 ----------------------------------------------------*/
 .slider-inner .da-slider {
  box-shadow: none;
@@ -6274,7 +6274,7 @@
 }
 
 /*--------------------------------------------------
-	[##. Main Page Styles]
+	[##. Spec Page Styles]
 ----------------------------------------------------*/
 /* Purchase Block
 ------------------------------------*/

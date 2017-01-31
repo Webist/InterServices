@@ -3,7 +3,7 @@
 namespace App\Handler;
 
 
-class Main implements \App\Main\MainHandler
+class Main implements \App\Spec\MainHandler
 {
     private $route = [];
     private $services = [];
@@ -17,7 +17,7 @@ class Main implements \App\Main\MainHandler
 
     /**
      * Access to given (external) service, instantiate an object once only
-     * Services are declared in \App\Main\Main
+     * Services are declared in \App\Spec\Spec
      *
      * @example
      * $mainHandler = $this->handler::$main;
