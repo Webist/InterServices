@@ -2,7 +2,7 @@
 
 The destination of a regular route is the controller object in this directory.
 
-A Controller in this directory should meet the requirements M.O.M (Machine Object Model).
+A Controller in this directory should meet the requirements [M.O.M (Machine Object Model)](http://webist.nl/articles/machine-object-model.md).
 
 ##### Machine Object Model principles
 A machine object should: 
@@ -16,28 +16,51 @@ A machine object does not require:
   Extending from other class is not required. But it might be used for some cases.
   
   
-##### Anecdote  
-M.O.M scales up via input acceptance and handler attachments.
+##### Anecdote and example
+M.O.M scales up via input acceptance and handler methods.  
 For example, adding `Invoice` feature to object `Customer` is practically
-  + Enrich Customer-Input 
-  + Attach `Invoice` via `CustomerHandler`
-  
+  + Specify the `Invoice` class in main interface
+  + Enrich Customer-Input with parameters
+  + Access `Invoice` via `CustomerHandler`
+ 
+ 
+Add to main interface. 
+```
+interface Main
+{
+    const Invoice = \App\Service\Invoice::class;
+}
+```  
+Some input parameters.
 ```
 $customerInput = ['genereateInvoice' => true ];
 ```
+Handler method for the customer object.
 ```
-class CustomerHandler 
+class CustomerHandler extends AbstractHandler 
 {
   function generateInvoice()
   {
   // .. connect to the Invoice service and handle.
   }
-}   
+}
+```
+
+```
+$customerHandler = new CustomerHandler();
 ```
 ```
 class Customer implements Spec\Customer
 {
- public function __construct($customerInput, new CustomerHanlder()) {}
+ public function __construct($customerInput, $customerHandler) 
+ {
+   // ... $this->input = $customerInput;
+   // ... $this->handler = $customerHandler;   
+   
+   
+   // ... $invoice = $this->handler->service(self::Invoice, $this->input);
+   // ... $invoice->generateInvoice();
+ }
 }
 ```
 

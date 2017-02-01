@@ -4,6 +4,7 @@ namespace Http\Dispatch;
 
 
 use App\Handler\Main;
+use App\Handler\MainHandler;
 use Http\Routing\RoutingInterface;
 
 class Dispatcher implements DispatcherInterface, RoutingInterface
@@ -34,7 +35,7 @@ class Dispatcher implements DispatcherInterface, RoutingInterface
         // Machine Object Model, requires __construct, Interface and Handler.
         $handler = null;
         if ('' != ($handlerClass = $route[self::CLASS_HANDLER_NAME])) {
-            $handler = new $handlerClass([], new Main($route));
+            $handler = new $handlerClass([], new Main($route, new MainHandler()));
         }
         $object = $controller->newInstance($this->inputHandler, $handler);
         $reflectionMethod = new \ReflectionMethod($object, $route[self::CLASS_ACTION_FIELD_NAME]);

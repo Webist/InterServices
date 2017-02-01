@@ -29,7 +29,7 @@ and the system should just work.
 ```
 
 The point of using interface here is;
-+ No conditional checks (cyclomatic complexity) in the code.
++ No conditional checks (cyclomatic complexity) in the underlying code.
 + Interface is the specification (the app DNA). It is that simple.
 
 #### Do not use sensitive data in Interfaces

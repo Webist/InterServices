@@ -4,17 +4,8 @@ namespace App\Handler;
 
 
 
-class RootPath implements \App\Spec\RootPathHandler
+class RootPath extends AbstractHandler
 {
-    private $input;
-    public static $main;
-
-    public function __construct($input, Main $main)
-    {
-        $this->input = $input;
-        self::$main = $main;
-    }
-
     function sanitizeMailData($mailData)
     {
         // sanitize
