@@ -39,10 +39,7 @@ Handler method for the customer object.
 ```
 class CustomerHandler extends AbstractHandler 
 {
-  function generateInvoice()
-  {
-  // .. connect to the Invoice service and handle.
-  }
+ // ..
 }
 ```
 
@@ -54,12 +51,12 @@ class Customer implements Spec\Customer
 {
  public function __construct($customerInput, $customerHandler) 
  {
-   // ... $this->input = $customerInput;
-   // ... $this->handler = $customerHandler;   
+   // .. $this->input = $customerInput;
+   // .. $this->handler = $customerHandler;   
    
    
-   // ... $invoice = $this->handler->service(self::Invoice, $this->input);
-   // ... $invoice->generateInvoice();
+   // .. $invoice = $this->handler->service(self::Invoice, $this->input);
+   // .. $invoice->generateInvoice();
  }
 }
 ```
