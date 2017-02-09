@@ -20,7 +20,7 @@ Connection and execution of queries can be handled as a (micro)-service.
 
 Creating the (micro)-service
 ```
-class App\Service\Database extends \App\Spec\Service\Database
+class App\Service\Database extends \App\Spec\Service\Database\Database
 {
     private $callback;
 
