@@ -6,10 +6,7 @@
   },
   "autoload" : {
     "psr-4" : {
-      "App\\" : "app",
-      "Http\\" : "handler/Http",
-      "Page\\" : "handler/Page",
-      "Mail\\" : "handler/Mail"
+      "" : ["app", "handler"]
     }
   },
   "require": {
