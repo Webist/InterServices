@@ -2,21 +2,38 @@
 
 namespace Http\Stream;
 
+use Exception;
 
 class ErrorHandler
 {
+    /**
+     * @var Exception
+     */
     private $exception;
+
+    /**
+     * @var InputHandler
+     */
     private $inputHandler;
-    public function __construct($exception, InputHandler $inputHandler)
+
+    /**
+     * ErrorHandler constructor.
+     *
+     * @param Exception $exception
+     * @param InputHandler $inputHandler
+     */
+    public function __construct(Exception $exception, InputHandler $inputHandler)
     {
         $this->exception = $exception;
         $this->inputHandler;
     }
 
+    /**
+     * Handle error
+     */
     public function handle()
     {
-
-        if ($_SERVER['APPLICATION_ENV'] == 'development') {
+        if (!empty($_SERVER['APPLICATION_ENV']) && $_SERVER['APPLICATION_ENV'] == 'development') {
             echo $this->exception->getMessage();
         }
 
