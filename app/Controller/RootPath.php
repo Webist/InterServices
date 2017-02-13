@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-
+use App\Exception\NotImplementedException;
+use Exception;
 use Http\Stream\InputHandler;
 use App\Spec\RootPathHandler;
 
@@ -30,12 +31,12 @@ class RootPath implements \App\Spec\RootPath
 
     public function post()
     {
-        throw new \App\Exception\RootPath('This ' . __CLASS__ . '::' . __FUNCTION__ . ' is empty yet.');
+        throw new NotImplementedException('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__);
     }
 
     public function getXhr()
     {
-        throw new \App\Exception\RootPath('This ' . __CLASS__ . '::' . __FUNCTION__ . ' is empty yet.');
+        throw new NotImplementedException('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__);
     }
 
     public function postXhr()
@@ -50,11 +51,11 @@ class RootPath implements \App\Spec\RootPath
 
         try {
             if (!$mailer->send()) {
-                throw new \Exception('Mail for delivery failed!');
+                throw new Exception('Mail for delivery failed!');
             }
 
             $message = 'The mail was successfully accepted for delivery';
-        } catch (\App\Exception\RootPath $exception) {
+        } catch (Exception $exception) {
             $message = $exception->getMessage();
         }
 
