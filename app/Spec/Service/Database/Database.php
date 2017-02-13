@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Spec\Service;
+namespace App\Spec\Service\Database;
 
 
 abstract class Database implements DatabaseInterface

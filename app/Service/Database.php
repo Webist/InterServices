@@ -3,7 +3,7 @@
 namespace App\Service;
 
 
-class Database extends \App\Spec\Service\Database
+class Database extends \App\Spec\Service\Database\Database
 {
     private $callback;
 
