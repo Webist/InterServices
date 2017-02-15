@@ -1,14 +1,22 @@
 <?php
-/**
- * Info
- * Created: 13/02/2017 13:51
- *
- */
 
 namespace Commerce;
 
 
-class Customer
-{
 
+class Customer implements CustomerSpec
+{
+    private $input;
+
+    public function __construct($input)
+    {
+        $this->input = $input;
+    }
+
+    public function handle()
+    {
+        foreach($this->input as $operation){
+            $operation->handle();
+        }
+    }
 }

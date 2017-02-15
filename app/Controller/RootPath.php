@@ -4,14 +4,13 @@ namespace App\Controller;
 
 
 use Http\Stream\InputHandler;
-use App\Spec\RootPathHandler;
 
 class RootPath implements \App\Spec\RootPath
 {
     private $inputHandler;
     private $handler;
 
-    public function __construct(InputHandler $inputHandler, RootPathHandler $handler)
+    public function __construct(InputHandler $inputHandler, \App\Handler\RootPath $handler)
     {
         $this->inputHandler = $inputHandler;
         /** @var \App\Handler\RootPath $handler */
@@ -30,6 +29,7 @@ class RootPath implements \App\Spec\RootPath
 
     public function post()
     {
+
         throw new \App\Exception\RootPath('This ' . __CLASS__ . '::' . __FUNCTION__ . ' is empty yet.');
     }
 

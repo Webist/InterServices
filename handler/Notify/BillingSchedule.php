@@ -13,12 +13,30 @@ namespace Notify;
  * Class Billing
  * @package Notify
  */
-class Billing
+class BillingSchedule implements BillingScheduleSpec
 {
     private $id;
+    private $schedule;
+
     public function __construct($id = null)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSchedule()
+    {
+        return $this->schedule;
+    }
+
+    /**
+     * @param mixed $schedule
+     */
+    public function setSchedule($schedule)
+    {
+        $this->schedule = $schedule;
     }
 
     public function handle()

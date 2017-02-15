@@ -1,15 +1,19 @@
 <?php
 
-namespace App\Spec\Service\Database;
+namespace App\Service;
 
 
-abstract class Database implements DatabaseInterface
+abstract class DatabaseAbstract implements \App\Spec\Database
 {
     private $connection;
 
-    protected function db($protocol = 'mysql')
+    /**
+     * @param $credentialsFile DSN string container file
+     * @return \mysqli|\PDO
+     */
+    protected function db(string $credentialsFile)
     {
-        $credentials = $this->credentials();
+        $credentials = $this->credentials($credentialsFile);
         switch (self::ADAPTER) {
             case 'PDO' :
                 $this->connection = new \PDO(
@@ -31,9 +35,9 @@ abstract class Database implements DatabaseInterface
         return $this->connection;
     }
 
-    private function credentials()
+    private function credentials($credentialsFile)
     {
-        $credentials = @file_get_contents(dirname(getcwd()) . self::DB_CONNECTION_PARAMS_FILE);
+        $credentials = @file_get_contents($credentialsFile);
         $dbCredentials = explode("\n", $credentials);
         foreach($dbCredentials as $db => $line){
             if(trim($line) != '' && strpos($line, self::PROTOCOL) !== false){

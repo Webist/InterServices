@@ -8,9 +8,8 @@ class MainHandler extends AbstractMain
 
     function logVisit(array $params)
     {
-        // Micro-service; Non-blocking, db logging
-
-        $dbLogger = function($pdo) use ($params) {
+        // Non-blocking, db logging
+        $visitsLoggerQuery = function($pdo) use ($params) {
 
             $query = "INSERT INTO visits SET route_id = :routeId, ip = :ip";
             $dbh = $pdo->prepare($query);
@@ -19,7 +18,8 @@ class MainHandler extends AbstractMain
             );
         };
 
-        $db = $this->service(self::DATABASE, $dbLogger);
-        $db->handle();
+        /** @var \App\Service\Database $db */
+        $db = $this->service(self::DATABASE, $visitsLoggerQuery);
+        $db->handle( dirname(getcwd()) . self::DATABASE_LOGS_CREDENTIALS_FILE);
     }
 }

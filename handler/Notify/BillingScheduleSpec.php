@@ -8,7 +8,7 @@
 namespace Notify;
 
 
-interface BillingScheduleInterface
+interface BillingScheduleSpec
 {
     const MONTHLY = 30;
 }

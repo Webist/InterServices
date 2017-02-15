@@ -8,7 +8,7 @@
 namespace Commerce;
 
 
-interface CustomerInterface
+interface CustomerSpec
 {
 
 }

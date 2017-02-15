@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use App\Spec\AdminHandler;
 use Http\Stream\InputHandler;
 
 class Admin implements \App\Spec\Admin
 {
-    public function __construct(InputHandler $inputHandler, AdminHandler $handler)
+    public function __construct(InputHandler $inputHandler, \App\Handler\Admin $handler)
     {
         throw new \App\Exception\Admin('This ' . __CLASS__ .'::'.__FUNCTION__.' is empty yet.');
     }

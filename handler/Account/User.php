@@ -10,5 +10,15 @@ namespace Account;
 
 class User
 {
+    private $input;
 
+    public function __construct(UserInput $input)
+    {
+        $this->input = $input;
+    }
+
+    public function handle()
+    {
+        // .. save to persistence
+    }
 }
