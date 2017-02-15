@@ -3,13 +3,13 @@
 namespace App\Controller;
 
 use App\Exception\NotImplementedException;
-use App\Spec\AdminHandler;
+
 use Http\Stream\InputHandler;
 use App\Spec\Admin as AdminInterface;
 
 class Admin implements AdminInterface
 {
-    public function __construct(InputHandler $inputHandler, AdminHandler $handler)
+    public function __construct(InputHandler $inputHandler, \App\Handler\Admin $handler)
     {
 
     }

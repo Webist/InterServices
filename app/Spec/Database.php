@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Spec\Service\Database;
+namespace App\Spec;
 
-interface DatabaseInterface
+interface Database
 {
     const CREDENTIALS = [
         'protocol' => 'mysql',
@@ -12,8 +12,6 @@ interface DatabaseInterface
         'port' => 3306,
         'dbname' => ''
     ];
-
-    const DB_CONNECTION_PARAMS_FILE = '/App/Spec/Credentials/.db';
 
     const PROTOCOL = 'mysql';
     const ADAPTER = \PDO::class;

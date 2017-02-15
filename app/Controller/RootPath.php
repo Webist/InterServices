@@ -5,14 +5,13 @@ namespace App\Controller;
 use App\Exception\NotImplementedException;
 use Exception;
 use Http\Stream\InputHandler;
-use App\Spec\RootPathHandler;
 
 class RootPath implements \App\Spec\RootPath
 {
     private $inputHandler;
     private $handler;
 
-    public function __construct(InputHandler $inputHandler, RootPathHandler $handler)
+    public function __construct(InputHandler $inputHandler, \App\Handler\RootPath $handler)
     {
         $this->inputHandler = $inputHandler;
         /** @var \App\Handler\RootPath $handler */

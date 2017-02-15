@@ -8,28 +8,25 @@ class AbstractMain implements \App\Spec\Main, \App\Spec\MainHandler
     private $services = [];
 
     /**
-     * Access to given (external) service, instantiate an object once only
-     * Services are declared in \App\Spec\Main
+     * Dynamically instantiate, once only, an object via reflection
      *
      * @example
      * $mailer = $this->handler->service(self::MAILER);
+     * $database = $this->handler->service(self::DATABASE, $visitsLoggerQuery);
      *
      * @param $serviceName
-     * @param null $callback
-     * @return mixed
+     * @param \Closure $callback a callable injection
+     * @return object
      */
-    public function service($serviceName, $callback = null)
+    public function service($serviceName, \Closure $callback)
     {
+
         if(!isset($this->services[$serviceName])){
 
             $reflection = new \ReflectionClass($serviceName);
 
             if($reflection->hasMethod('__construct')){
-                // Closure
-                //if(($callback instanceof \Closure)){
                 $object = $reflection->newInstance($callback);
-                //}
-
             } else {
                 $object = $reflection->newInstance();
             }

@@ -3,7 +3,7 @@
 namespace App\Handler;
 
 
-class AbstractHandler implements \App\Spec\RootPathHandler
+class AbstractHandler
 {
     private $input;
     private $main;
@@ -14,8 +14,21 @@ class AbstractHandler implements \App\Spec\RootPathHandler
         $this->main = $main;
     }
 
-    public function service(string $class, array $arguments = [])
+    /**
+     * Gateway to object instantiation method
+     *
+     * @param string $class
+     * @param \Closure|null $callable
+     * @return object
+     */
+    public function service(string $class, \Closure $callable = null)
     {
-        return $this->main->service($class, $arguments);
+        // As of PHP 7.1.x we cannot assign anonymous function in arguments, fix this by if statement.
+        if(!$callable){
+            $callable = function () {};
+        }
+        return $this->main->service($class, $callable);
     }
+
+
 }
