@@ -2,22 +2,25 @@
 
 namespace App\Controller;
 
-use Http\Stream\InputHandler;
+use App\Exception\NotImplementedException;
 
-class Admin implements \App\Spec\Admin
+use Http\Stream\InputHandler;
+use App\Spec\Admin as AdminInterface;
+
+class Admin implements AdminInterface
 {
     public function __construct(InputHandler $inputHandler, \App\Handler\Admin $handler)
     {
-        throw new \App\Exception\Admin('This ' . __CLASS__ .'::'.__FUNCTION__.' is empty yet.');
+
     }
 
     public function index()
     {
-        throw new \App\Exception\Admin('This ' . __CLASS__ .'::'.__FUNCTION__.' is empty yet.');
+        throw new NotImplementedException('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__);
     }
 
     public function post()
     {
-        throw new \App\Exception\Admin('This ' . __CLASS__ .'::'.__FUNCTION__.' is empty yet.');
+        throw new NotImplementedException('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__);
     }
 }
