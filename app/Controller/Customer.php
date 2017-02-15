@@ -1,14 +1,10 @@
 <?php
 /**
- * Info
- * Created: 09/02/2017 22:59
  *
  *
- * A Visitor should be able to register as new Commerce
- * A system manager should be able to register a new Commerce
+ * A Visitor should be able to Register as new Customer
+ * A System Manager should be able to Register a new Customer
  *
- *
- * Commerce is een Entity.
  */
 
 namespace App\Controller;
@@ -24,12 +20,10 @@ class Customer implements \App\Spec\Customer
     {
         $this->inputHandler = $inputHandler;
         $this->handler = $handler;
-
     }
 
     public function get()
     {
-
         $postData = array (
             'username' => 'John707',
             'password' => '12345',
@@ -42,11 +36,14 @@ class Customer implements \App\Spec\Customer
             'address' => 'Teststreet 38',
             'city' => 'Eindhoven',
             'country' => 'NL',
+
             'remarks' => 'Remarks',
+
             'card_name' => 'J DOE',
             'card_number' => '1111111111111111',
             'card_cvc' => '383',
             'card_expiry_date' => '11/2020',
+
             'payment' =>
                 array (
                     0 => '1',
@@ -54,26 +51,24 @@ class Customer implements \App\Spec\Customer
                 ),
         );
 
-
-        if(isset($_GET['uuid'])) {
-            // /customer?uuid=db914168-f773-4bba-86b5-2b4d281e59ef
-            $uuid = $_GET['uuid'];
-        } else {
+        if(empty($this->inputHandler->parameters()['GET']['uuid'])) {
             $uuid4 = \Ramsey\Uuid\Uuid::uuid4();
             $uuid = $uuid4->toString();
+        } else {
+            // /customer?uuid=db914168-f773-4bba-86b5-2b4d281e59ef
+            $uuid = $this->inputHandler->parameters()['GET']['uuid'];
         }
 
         $postData = array_merge($postData, ['uuid' => $uuid]);
 
         /** @var \Commerce\Customer $customerService */
         $customerService = $this->handler->service(self::CUSTOMER);
-
         $operations = $this->handler->buildOperations($postData);
 
-        $customerService->handle();
+        print '<pre>';
+        print_r($operations);
 
-        //print '<pre>';
-        //print_r($operations);
+        // $customerService->handle($operations);
 
     }
 }
