@@ -8,6 +8,7 @@
  */
 
 namespace App\Controller;
+
 use Http\Stream\InputHandler;
 
 class Customer implements \App\Spec\Customer
@@ -22,9 +23,11 @@ class Customer implements \App\Spec\Customer
         $this->handler = $handler;
     }
 
-    public function get()
+    public function test()
     {
-        $postData = array (
+        print 'Test the Customer data save into storage <br/>';
+
+        $postData = array(
             'username' => 'John707',
             'password' => '12345',
             'rpassword' => '12345',
@@ -45,30 +48,28 @@ class Customer implements \App\Spec\Customer
             'card_expiry_date' => '11/2020',
 
             'payment' =>
-                array (
+                array(
                     0 => '1',
                     1 => '2',
                 ),
         );
 
-        if(empty($this->inputHandler->parameters()['GET']['uuid'])) {
-            $uuid4 = \Ramsey\Uuid\Uuid::uuid4();
-            $uuid = $uuid4->toString();
-        } else {
-            // /customer?uuid=db914168-f773-4bba-86b5-2b4d281e59ef
-            $uuid = $this->inputHandler->parameters()['GET']['uuid'];
+
+        $uuid = $this->inputHandler->parameter('uuid');
+        if (empty($uuid)) {
+            $uuid = $this->handler->uuid();
         }
 
-        $postData = array_merge($postData, ['uuid' => $uuid]);
+        // Prepare operations to callback by CustomerService
+        $this->handler::buildOperations($postData, $uuid);
 
-        /** @var \Commerce\Customer $customerService */
-        $customerService = $this->handler->service(self::CUSTOMER);
-        $operations = $this->handler->buildOperations($postData);
+        // Reflect the customer service stateless in the global shared state with a callback
+        /** @var \App\Service\Customer $customerService */
+        $customerService = $this->handler->service(self::CUSTOMER, function () {
+            return $this->handler::getOperations();
+        });
 
-        print '<pre>';
-        print_r($operations);
-
-        // $customerService->handle($operations);
+        $customerService->handle();
 
     }
 }

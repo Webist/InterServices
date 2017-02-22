@@ -1,8 +1,13 @@
 ### External Services Env
 
+Services are;  
++ Aggregations
++ Facade
++ function-objects
+
 Services do; 
 + Pre-config (auto-connect, pop-up or build)
-+ Accept process-data (query command, mail-data to send)
++ Accept Handlers tp process-data (query command, mail to send)
 
 
 Services comply to;
@@ -18,7 +23,7 @@ Examples:
 MySQL is an external service.  
 Connection and execution of queries can be handled as a (micro)-service.
 
-Creating the (micro)-service
+Creating the service
 ```
 class App\Service\Database extends \App\Spec\Service\Database\Database
 {

@@ -12,22 +12,38 @@ These specification data, via interfaces, will be available to every implementin
 classes and subclasses. Use it with caution.
 To avoid sensitive pollution split interfaces in two different interface objects.
 
-### Two different type `interface` object usage
+### `interface` object usage
 + Specifications;   
 Specifications are constant value agreements to reuse in the whole system as the type of configuration values.
 Depending on context these might be strategy, settings, initial values.  
 
 For example registering a class string can be used to access a facade (a service object) in MVC setup.
 ```php
-    /**
-     * Customer service provider
-     */
+interface Main
+{
     const CUSTOMER = \Commerce\Customer::class;
+    
+    const DOCTRINE = \App\Service\Doctrine::class;
+    const DOCTRINE_PATH_TO_ENTITY_FILES = ['app', 'handler'];
+}
+
+interface App\Spec\Controller
+{
+    const  RESPONSE_MESSAGE_KEY = 'message';
+}
 ```
 
 
-+ Class Methods;   
++ Class Methods, behaviour;   
 Class Methods are behaviour agreement declarations to define a consistent minimum required implementation. 
+```php
+interface Customer extends Controller, Main
+{
+     function handle();
+     function buildOperations($postData);
+}
+```
+
 
 ### Anti-pattern warning
 Generally known that an `interface` should specify the behavior.   

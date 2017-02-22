@@ -1,41 +1,36 @@
 <?php
-/**
- * Info
- * Created: 15/02/2017 00:23
- *
- */
 
 namespace Payment;
 
 
 class CreditCard
 {
-    private $input;
-    private $autopay = false;
-
-    public function __construct($input)
-    {
-        $this->input = $input;
-    }
-
     /**
-     * @return bool
+     * @var CreditCardData
      */
-    public function isAutopay(): bool
-    {
-        return $this->autopay;
-    }
-
+    private $data;
     /**
-     * @param bool $autopay
+     * @var \Doctrine\ORM\EntityManager
      */
-    public function setAutopay(bool $autopay)
+    private $entityManager;
+
+    public function __construct(CreditCardData $creditCardData, $entityManager)
     {
-        $this->autopay = $autopay;
+        $this->data = $creditCardData;
+        $this->entityManager = $entityManager;
     }
 
     public function handle()
     {
-        // .. save to persistence
+        $repo = $this->entityManager->getRepository(CreditCardData::class);
+        $data = $repo->find($this->data->getId());
+
+        if($data){
+            $this->entityManager->merge($this->data);
+        } else {
+            $this->entityManager->persist($this->data);
+        }
+
+        $this->entityManager->flush();
     }
 }

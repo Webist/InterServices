@@ -1,0 +1,57 @@
+<?php
+/**
+ * Info
+ * Created: 14/02/2017 23:26
+ *
+ */
+
+namespace Account;
+
+/**
+ * @Entity
+ * @Table(name="users")
+ * @HasLifecycleCallbacks
+ **/
+class UserInput
+{
+
+    /** @Id @Column(type="integer") @GeneratedValue **/
+    protected $id;
+
+    /** @Column(name="created_at", type="datetime") */
+    protected $createdAt;
+
+    /**
+     * @Column(name="updated_at", type="datetime")
+     */
+    protected $updatedAt;
+
+    protected $uuid;
+    protected $username;
+    protected $passwd;
+    protected $rpasswd;
+    protected $fullname;
+
+    public function __construct($uuid = null)
+    {
+        $this->uuid = $uuid;
+
+        $this->setCreatedAt(new \DateTime());
+    }
+
+    /**
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->setUpdatedAt(new \DateTime('now'));
+
+        if ($this->getCreatedAt() == null) {
+            $this->setCreatedAt(new \DateTime('now'));
+        }
+    }
+
+
+}

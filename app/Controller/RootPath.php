@@ -41,7 +41,7 @@ class RootPath implements \App\Spec\RootPath
     public function postXhr()
     {
         /** @var \Mail\Mailer $mailer */
-        $mailer = $this->handler->service(self::MAILER);
+        $mailer = $this->handler->service(self::MAILER, function() {} );
         $mailer->setData(
             $this->handler->sanitizeMailData(
                 array_merge(['to' => self::EMAIL_TO], filter_input_array(INPUT_POST))

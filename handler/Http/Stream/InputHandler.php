@@ -96,4 +96,14 @@ class InputHandler implements InputInterface, InputHandlerInterface
         }
         return $params;
     }
+
+    public function parameter($name)
+    {
+        $methods = $this->parameters();
+        foreach($methods as $parameters){
+            if(isset($parameters[$name])){
+                return $parameters[$name];
+            }
+        }
+    }
 }

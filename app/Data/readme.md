@@ -7,7 +7,7 @@ Data sets are;
  
 Example usage  
 New route created and there is no need to connect to database, 
-but fetch data from file storage.
+but fetch the data from a file storage.
 
 In that case the `indexKey` of that route will be very useful
 to save data in correct file and fetch contents.

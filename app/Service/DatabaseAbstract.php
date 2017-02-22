@@ -5,14 +5,22 @@ namespace App\Service;
 
 abstract class DatabaseAbstract implements \App\Spec\Database
 {
+    /**
+     * @var \PDO|\mysqli
+     */
     private $connection;
 
     /**
      * @param $credentialsFile DSN string container file
      * @return \mysqli|\PDO
      */
-    protected function db(string $credentialsFile)
+    protected function db(string $credentialsFile = '')
     {
+        // Use default
+        if($credentialsFile === '') {
+            $credentialsFile = dirname(__DIR__) . self::DATABASE_GYM_CREDENTIALS_FILE;
+        }
+
         $credentials = $this->credentials($credentialsFile);
         switch (self::ADAPTER) {
             case 'PDO' :
@@ -35,7 +43,7 @@ abstract class DatabaseAbstract implements \App\Spec\Database
         return $this->connection;
     }
 
-    private function credentials($credentialsFile)
+    protected function credentials($credentialsFile)
     {
         $credentials = @file_get_contents($credentialsFile);
         $dbCredentials = explode("\n", $credentials);

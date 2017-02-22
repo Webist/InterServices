@@ -3,10 +3,22 @@
 namespace App\Handler;
 
 
-class MainHandler extends AbstractMain
-{
+use App\Spec\Database;
 
-    function logVisit(array $params)
+class MainHandler extends Service implements Database
+{
+    private $route = [];
+
+    public function __construct(array $route)
+    {
+        $this->route = $route;
+
+        $this->logVisit([
+            'routeId' => $this->route['indexKey'], 'ip' => filter_input(INPUT_SERVER, 'REMOTE_ADDR')
+        ]);
+    }
+
+    private function logVisit(array $params)
     {
         // Non-blocking, db logging
         $visitsLoggerQuery = function($pdo) use ($params) {
@@ -20,6 +32,6 @@ class MainHandler extends AbstractMain
 
         /** @var \App\Service\Database $db */
         $db = $this->service(self::DATABASE, $visitsLoggerQuery);
-        $db->handle( dirname(getcwd()) . self::DATABASE_LOGS_CREDENTIALS_FILE);
+        $db->handle( dirname(__DIR__) . self::DATABASE_LOGS_CREDENTIALS_FILE);
     }
 }

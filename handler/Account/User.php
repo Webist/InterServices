@@ -1,24 +1,36 @@
 <?php
-/**
- * Info
- * Created: 14/02/2017 22:41
- *
- */
 
 namespace Account;
 
 
 class User
 {
-    private $input;
+    /**
+     * @var UserData
+     */
+    private $data;
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    private $entityManager;
 
-    public function __construct(UserInput $input)
+    public function __construct(UserData $userData, $entityManager)
     {
-        $this->input = $input;
+        $this->data = $userData;
+        $this->entityManager = $entityManager;
     }
 
     public function handle()
     {
-        // .. save to persistence
+        $repo = $this->entityManager->getRepository(UserData::class);
+        $data = $repo->find($this->data->getId());
+
+        if($data){
+            $this->entityManager->merge($this->data);
+        } else {
+            $this->entityManager->persist($this->data);
+        }
+
+        $this->entityManager->flush();
     }
 }

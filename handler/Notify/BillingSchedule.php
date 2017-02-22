@@ -1,46 +1,36 @@
 <?php
-/**
- * Info
- * Created: 15/02/2017 00:54
- *
- */
 
 namespace Notify;
 
-/**
- * @example Email me monthly billing.
- *
- * Class Billing
- * @package Notify
- */
-class BillingSchedule implements BillingScheduleSpec
+
+class BillingSchedule
 {
-    private $id;
-    private $schedule;
-
-    public function __construct($id = null)
-    {
-        $this->id = $id;
-    }
-
     /**
-     * @return mixed
+     * @var BillingScheduleData
      */
-    public function getSchedule()
-    {
-        return $this->schedule;
-    }
-
+    private $data;
     /**
-     * @param mixed $schedule
+     * @var \Doctrine\ORM\EntityManager
      */
-    public function setSchedule($schedule)
+    private $entityManager;
+
+    public function __construct(BillingScheduleData $billingScheduleData, $entityManager)
     {
-        $this->schedule = $schedule;
+        $this->data = $billingScheduleData;
+        $this->entityManager = $entityManager;
     }
 
     public function handle()
     {
-        // .. save into tasks-schedule or scheduler.
+        $repo = $this->entityManager->getRepository(BillingScheduleData::class);
+        $data = $repo->find($this->data->getId());
+
+        if($data){
+            $this->entityManager->merge($this->data);
+        } else {
+            $this->entityManager->persist($this->data);
+        }
+
+        $this->entityManager->flush();
     }
 }

@@ -13,6 +13,8 @@
     "zendframework/zendframework": "^3.0",
     "symfony/symfony": "^3.2",
     "illuminate/container": "^5.3",
-    "ramsey/uuid": "^3.5"
+    "ramsey/uuid": "^3.5",
+    "corneltek/sqlbuilder": "^3.2",
+    "doctrine/orm": "^2.5"
   }
 }

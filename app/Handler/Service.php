@@ -1,10 +1,15 @@
 <?php
 
+
 namespace App\Handler;
 
 
-class AbstractMain implements \App\Spec\Main, \App\Spec\MainHandler
+class Service
 {
+    /**
+     * Holds already instantiated objects. A simple DIC.
+     * @var array
+     */
     private $services = [];
 
     /**
@@ -14,19 +19,19 @@ class AbstractMain implements \App\Spec\Main, \App\Spec\MainHandler
      * $mailer = $this->handler->service(self::MAILER);
      * $database = $this->handler->service(self::DATABASE, $visitsLoggerQuery);
      *
-     * @param $serviceName
-     * @param \Closure $callback a callable injection
+     * @param $serviceName string representation of the object to instantiate
+     * @param \Closure $callable a callable injection as handler
      * @return object
      */
-    public function service($serviceName, \Closure $callback)
+    public function service($serviceName, \Closure $callable)
     {
-
         if(!isset($this->services[$serviceName])){
 
             $reflection = new \ReflectionClass($serviceName);
 
+            // Directly to callback Closures can be injected into the construct of class
             if($reflection->hasMethod('__construct')){
-                $object = $reflection->newInstance($callback);
+                $object = $reflection->newInstance($callable);
             } else {
                 $object = $reflection->newInstance();
             }

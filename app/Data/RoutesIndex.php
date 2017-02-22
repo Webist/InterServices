@@ -313,7 +313,7 @@ return [
             ),
         'indexKey' => '84e615922e339086e93db8b2a188e2f6',
         'class' => 'Customer',
-        'method' => 'get',
+        'method' => 'test',
         'config' => 'Customer',
         'handler' => 'Customer',
     )

@@ -2,12 +2,11 @@
 
 namespace App\Service;
 
-
-class Database extends DatabaseAbstract
+class Customer
 {
     /**
      * Holds the callback as it was defined when this service was reflected
-     * @example Query container to execute $visitsLoggerQuery = function($pdo) use ($params) {}
+     * @example function () { return $this->handler::getOperations();}
      *
      * @var \Closure
      */
@@ -18,8 +17,12 @@ class Database extends DatabaseAbstract
         $this->callback = $callback;
     }
 
-    public function handle($credentialsFile)
+    public function handle()
     {
-        return call_user_func($this->callback, $this->db($credentialsFile));
+       $operations = call_user_func($this->callback);
+
+        foreach($operations as $operation) {
+            $operation->handle();
+        }
     }
 }

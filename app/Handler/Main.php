@@ -3,19 +3,25 @@
 namespace App\Handler;
 
 
-class Main extends AbstractMain
+class Main
 {
-    private $route = [];
-    private $handler;
+    private $inputHandler;
+    private $mainHandler;
 
-    public function __construct($route, MainHandler $handler)
+    public function __construct(\Http\Stream\InputHandler $inputHandler, MainHandler $mainHandler)
     {
-        $this->route = $route;
-        $this->handler = $handler;
-
-        $args = [
-          'routeId' => $this->route['indexKey'], 'ip' => filter_input(INPUT_SERVER, 'REMOTE_ADDR')
-        ];
-        $this->handler->logVisit($args);
+        $this->inputHandler = $inputHandler;
+        $this->mainHandler = $mainHandler;
     }
+
+    public function inputHandler()
+    {
+        return $this->inputHandler;
+    }
+
+    public function mainHandler()
+    {
+        return $this->mainHandler;
+    }
+
 }

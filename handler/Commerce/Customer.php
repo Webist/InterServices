@@ -4,19 +4,34 @@ namespace Commerce;
 
 
 
-class Customer implements CustomerSpec
+class Customer
 {
-    private $input;
+    /**
+     * @var CustomerData
+     */
+    private $data;
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    private $entityManager;
 
-    public function __construct($input)
+    public function __construct(CustomerData $customerData, $entityManager)
     {
-        $this->input = $input;
+        $this->data = $customerData;
+        $this->entityManager = $entityManager;
     }
 
     public function handle()
     {
-        foreach($this->input as $operation){
-            $operation->handle();
+        $repo = $this->entityManager->getRepository(CustomerData::class);
+        $data = $repo->find($this->data->getId());
+
+        if($data){
+            $this->entityManager->merge($this->data);
+        } else {
+            $this->entityManager->persist($this->data);
         }
+
+        $this->entityManager->flush();
     }
 }
