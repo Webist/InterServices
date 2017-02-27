@@ -39,10 +39,45 @@ class CreditCardData
     /** @Column(type="string", length=8) */
     private $expiryDate;
 
+    protected $paymentPreference;
+    protected $billingSchedule;
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentPreference()
+    {
+        return $this->paymentPreference;
+    }
+
+    /**
+     * @param mixed $paymentPreference
+     */
+    public function setPaymentPreference($paymentPreference)
+    {
+        $this->paymentPreference = $paymentPreference;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBillingSchedule()
+    {
+        return $this->billingSchedule;
+    }
+
+    /**
+     * @param mixed $billingSchedule
+     */
+    public function setBillingSchedule($billingSchedule)
+    {
+        $this->billingSchedule = $billingSchedule;
+    }
+
     public function __construct($uuid = null)
     {
         $this->id = $uuid;
-        $this->setCreatedAt(new \DateTime());
+        // $this->setCreatedAt(new \DateTime());
     }
 
     /**

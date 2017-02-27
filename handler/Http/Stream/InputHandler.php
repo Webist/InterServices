@@ -88,6 +88,7 @@ class InputHandler implements InputInterface, InputHandlerInterface
                     $params['HEAD'] = filter_input_array(INPUT_GET);
                 case "POST":
                     $params['POST'] = filter_input_array(INPUT_POST);
+                    $params['GET'] = filter_input_array(INPUT_GET);
                 case "PUT":
                     $put = [];
                     parse_str(file_get_contents('php://input'), $put);

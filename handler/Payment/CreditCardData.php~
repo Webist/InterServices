@@ -1,9 +1,4 @@
 <?php
-/**
- * Info
- * Created: 15/02/2017 00:23
- *
- */
 
 namespace Payment;
 
@@ -240,5 +235,19 @@ class CreditCardData
     public function getExpiryDate()
     {
         return $this->expiryDate;
+    }
+
+    /**
+     * Set id
+     *
+     * @param guid $id
+     *
+     * @return CreditCardData
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 }

@@ -1,9 +1,4 @@
 <?php
-/**
- * Info
- * Created: 15/02/2017 23:00
- *
- */
 
 namespace Commerce;
 
@@ -211,5 +206,19 @@ class CustomerData
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * Set id
+     *
+     * @param guid $id
+     *
+     * @return CustomerData
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 }

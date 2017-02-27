@@ -26,11 +26,23 @@ class UserProfileData
 
     /**
      * @Column(type="string", length=65)
+     * @Assert\Email
+     */
+    protected $email;
+
+    /**
+     * @Column(name="fullname", type="string", length=65)
+     */
+    protected $fullName;
+
+    /**
+     * @Column(type="string", length=65)
      */
     private $phone;
 
     /**
-     * @Column(name="gender", type="string", columnDefinition="enum('male', 'female', 'trans')")
+     * @Column(name="gender", type="string", length=8)
+     * @Enum({"male", "female", "trans"})
      */
     private $gender;
 
@@ -60,7 +72,7 @@ class UserProfileData
     public function __construct($uuid = null)
     {
         $this->id = $uuid;
-        $this->setCreatedAt(new \DateTime());
+        // $this->setCreatedAt(new \DateTime());
     }
 
     /**
@@ -292,5 +304,53 @@ class UserProfileData
         $this->id = $id;
 
         return $this;
+    }
+
+    /**
+     * Set email
+     *
+     * @param \email $email
+     *
+     * @return UserProfileData
+     */
+    public function setEmail( $email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return \email
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set fullName
+     *
+     * @param string $fullName
+     *
+     * @return UserProfileData
+     */
+    public function setFullName($fullName)
+    {
+        $this->fullName = $fullName;
+
+        return $this;
+    }
+
+    /**
+     * Get fullName
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->fullName;
     }
 }

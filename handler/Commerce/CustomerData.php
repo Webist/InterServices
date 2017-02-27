@@ -37,7 +37,7 @@ class CustomerData
     public function __construct($uuid = null)
     {
         $this->id = $uuid;
-        $this->setCreatedAt(new \DateTime());
+        // $this->setCreatedAt(new \DateTime());
     }
 
     /**

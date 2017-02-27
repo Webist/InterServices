@@ -1,6 +1,9 @@
 <?php
 
+
 namespace Account;
+
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Entity
@@ -16,6 +19,11 @@ class UserData
      */
     protected $id;
 
+    /**
+     * @Column(type="string", length=65)
+     */
+    protected $name;
+
     /** @Column(name="created_at", type="datetime") */
     protected $createdAt;
 
@@ -25,26 +33,52 @@ class UserData
     protected $updatedAt;
 
     /**
-     * @Column(type="string", length=65)
-     */
-    protected $username;
-
-    /**
-     * @Column(type="string")
+     * The below length depends on the "algorithm" you use for encoding
+     * the password, but this works well with bcrypt.
+     *
+     * @Column(type="string", length=64)
+     * @Assert\NotEmpty
      *
      * https://github.com/jeremykendall/password-validator
      */
     protected $passwd;
 
+    /*
+     * @OneToMany(targetEntity="UserProfileData", mappedBy="userData")
+     * @var UserProfileData
+     *
+    protected $profiles;
+    */
+
     /**
-     * @Column(type="string")
+     * Holds user profile data.
+     * @notice No need foreign key refernce when using unique generated id.
+     * @var UserProfileData
      */
-    protected $fullname;
+    protected $profileData;
+
+    /**
+     * @return mixed
+     */
+    public function profileData()
+    {
+        return $this->profileData;
+    }
+
+    /**
+     * @param mixed $profileData
+     */
+    public function setProfileData($profileData)
+    {
+        $this->profileData = $profileData;
+    }
 
     public function __construct($uuid)
     {
         $this->id = $uuid;
-        $this->setCreatedAt(new \DateTime());
+        // $this->setCreatedAt(new \DateTime());
+
+        // $this->profiles = new ArrayCollection();
     }
 
     /**
@@ -203,5 +237,53 @@ class UserData
         $this->id = $id;
 
         return $this;
+    }
+
+    /**
+     * Set email
+     *
+     * @param \email $email
+     *
+     * @return UserData
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return \email
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return UserData
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

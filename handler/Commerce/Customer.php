@@ -33,5 +33,7 @@ class Customer
         }
 
         $this->entityManager->flush();
+
+        return true;
     }
 }

@@ -20,9 +20,11 @@ class Customer
     public function handle()
     {
        $operations = call_user_func($this->callback);
-
+       $results = [];
         foreach($operations as $operation) {
-            $operation->handle();
+            $results[] = $operation->handle();
         }
+
+        return $results;
     }
 }

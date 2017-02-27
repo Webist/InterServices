@@ -52,4 +52,148 @@ class PaymentPreferenceData
             $this->setCreatedAt(new \DateTime('now'));
         }
     }
+
+    /**
+     * Set id
+     *
+     * @param guid $id
+     *
+     * @return PaymentPreferenceData
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return guid
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return PaymentPreferenceData
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return PaymentPreferenceData
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return PaymentPreferenceData
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set method
+     *
+     * @param string $method
+     *
+     * @return PaymentPreferenceData
+     */
+    public function setMethod($method)
+    {
+        $this->method = $method;
+
+        return $this;
+    }
+
+    /**
+     * Get method
+     *
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * Set autopay
+     *
+     * @param string $autopay
+     *
+     * @return PaymentPreferenceData
+     */
+    public function setAutopay($autopay)
+    {
+        $this->autopay = $autopay;
+
+        return $this;
+    }
+
+    /**
+     * Get autopay
+     *
+     * @return string
+     */
+    public function getAutopay()
+    {
+        return $this->autopay;
+    }
 }

@@ -30,13 +30,14 @@ class PaymentPreferenceData
     /** @Column(type="string", length=22) */
     protected $method;
 
-    /** @Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL") */
-    protected $autopay;
+    /** @Column(name="auto_pay", type="boolean") */
+    protected $autoPay;
+
 
     public function __construct($uuid = null)
     {
         $this->id = $uuid;
-        $this->setCreatedAt(new \DateTime());
+        // $this->setCreatedAt(new \DateTime());
     }
 
     /**
@@ -176,13 +177,13 @@ class PaymentPreferenceData
     /**
      * Set autopay
      *
-     * @param string $autopay
+     * @param string $autoPay
      *
      * @return PaymentPreferenceData
      */
-    public function setAutopay($autopay)
+    public function setAutopay($autoPay)
     {
-        $this->autopay = $autopay;
+        $this->autoPay = $autoPay;
 
         return $this;
     }
@@ -194,6 +195,6 @@ class PaymentPreferenceData
      */
     public function getAutopay()
     {
-        return $this->autopay;
+        return $this->autoPay;
     }
 }
