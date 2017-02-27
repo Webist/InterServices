@@ -6,21 +6,6 @@ namespace Html;
 
 class Composite
 {
-    private const HTML = <<<HTML
-<!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="en">
-<!--<![endif]-->
-%s 
-%s
-</html>
-HTML;
-
-    private const HEAD = '<head>%s</head>';
-    private const BODY = '%s';
-
     private $headContent;
 
     /**
@@ -54,9 +39,17 @@ HTML;
             return $elements;
         };
 
-        return sprintf(self::HTML,
-            sprintf(self::HEAD, $this->headContent->render()),
-            sprintf(self::BODY, $renderBody())
+        return sprintf('<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+%s 
+%s
+</html>',
+            sprintf('<head>%s</head>', $this->headContent->render()),
+            sprintf('%s', $renderBody())
         );
     }
 
