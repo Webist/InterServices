@@ -44,7 +44,7 @@ class BreadCrumbData
 3. Inject data-object, Require template and Place into the appropriate content.
 ```php
 $breadCrumb = new \Html\Element($breadCrumbData);
-$breadCrumb->require( '../metronic/html.page.breadcrumb.php');
+$breadCrumb->require( '../web/metronic/html.page.breadcrumb.php');
 $bodyContent->addElement(':pageBreadCrumb',$breadCrumb);
 ```
 4. Now the BreadCrumbData is in the parsed file and can be called like this.  

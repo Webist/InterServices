@@ -7,7 +7,7 @@ namespace App\Spec;
 interface HTML
 {
     const METRONIC = [
-        'head_file' => '../metronic/html.head.php',
+        'head_file' => '../web/metronic/html.head.php',
     ];
 
 

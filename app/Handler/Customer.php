@@ -146,6 +146,7 @@ class Customer implements ORM, HTML
         $userProfileData->setPhone($postData['phone']);
 
         $userProfileData->setAddress($postData['address']);
+        $userProfileData->setZipcode($postData['zipcode']);
         $userProfileData->setCity($postData['city']);
         $userProfileData->setCountry($postData['country']);
 
@@ -242,22 +243,22 @@ class Customer implements ORM, HTML
 
 
         $formContent = new \Html\Element($userData);
-        $formContent->require('../metronic/form-customer/form.php');
+        $formContent->require('../web/metronic/form-customer/form.php');
 
         $account = new \Html\Element($userData);
-        $account->require('../metronic/form-customer/account.details.php');
+        $account->require('../web/metronic/form-customer/account.details.php');
         $formContent->addElement(':formAccountDetails', $account);
 
         $profile = new \Html\Element($userProfileData);
-        $profile->require('../metronic/form-customer/profile.details.php');
+        $profile->require('../web/metronic/form-customer/profile.details.php');
         $formContent->addElement(':formProfileDetails', $profile);
 
         $billing = new \Html\Element($creditCardData);
-        $billing->require('../metronic/form-customer/billing.details.php');
+        $billing->require('../web/metronic/form-customer/billing.details.php');
         $formContent->addElement(':formBillingDetails', $billing);
 
         $confirm = new \Html\Element($userData);
-        $confirm->require('../metronic/form-customer/confirm.details.php');
+        $confirm->require('../web/metronic/form-customer/confirm.details.php');
         $formContent->addElement(':confirmDetails', $confirm);
 
         return $this->main()->mainHandler()->buildContentWith(':pageBaseContent', $formContent);
@@ -270,7 +271,7 @@ class Customer implements ORM, HTML
         $userProfileData = $repo->findAll();
 
         $listContent = new \Html\Element($userProfileData);
-        $listContent->require('../metronic/table-customer/list.php');
+        $listContent->require('../web/metronic/table-customer/list.php');
 
         return $this->main()->mainHandler()->buildContentWith(':pageBaseContent', $listContent);
     }

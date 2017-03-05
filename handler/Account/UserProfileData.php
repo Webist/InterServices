@@ -52,6 +52,12 @@ class UserProfileData
     private $address;
 
     /**
+     * @Column(type="string", length=8)
+     * @var string
+     */
+    private $zipcode;
+
+    /**
      * @Column(type="string", length=65)
      */
     private $city;
@@ -218,6 +224,24 @@ class UserProfileData
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * Get zip code
+     * @param string $zipcode
+     */
+    public function setZipcode(string $zipcode)
+    {
+        $this->zipcode = $zipcode;
+    }
+
+    /**
+     * Set zip code
+     * @return string
+     */
+    public function getZipcode(): string
+    {
+        return $this->zipcode;
     }
 
     /**

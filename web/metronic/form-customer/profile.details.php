@@ -51,6 +51,15 @@ $data = $this->data;
         </div>
     </div>
     <div class="form-group">
+        <label class="control-label col-md-3">Zipcode
+            <span class="required"> * </span>
+        </label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" name="zipcode" value="<?= $data->getZipcode() ?>"/>
+            <span class="help-block"> Provide your zipcode </span>
+        </div>
+    </div>
+    <div class="form-group">
         <label class="control-label col-md-3">City/Town
             <span class="required"> * </span>
         </label>

@@ -40,6 +40,7 @@ class Customer implements \App\Spec\Customer
             'fullname' => 'John Doe',
 
             'address' => 'Teststreet 38',
+            'zipcode' => '5642RB',
             'city' => 'Eindhoven',
             'country' => 'NL',
 
@@ -124,8 +125,6 @@ class Customer implements \App\Spec\Customer
 
     public function get()
     {
-        echo '<p>Here is the list of Customers</p>';
-
         $lay = $this->handler->buildListHtml();
         return $lay->render();
 
