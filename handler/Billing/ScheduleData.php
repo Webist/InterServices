@@ -6,7 +6,6 @@ namespace Billing;
 /**
  * @Entity
  * @Table(name="billing_schedules")
- * @HasLifecycleCallbacks
  **/
 class ScheduleData
 {
@@ -17,14 +16,6 @@ class ScheduleData
      */
     protected $id;
 
-    /** @Column(name="created_at", type="datetime") */
-    protected $createdAt;
-
-    /**
-     * @Column(name="updated_at", type="datetime")
-     */
-    protected $updatedAt;
-
     /**
      * @Column(type="smallint")
      */
@@ -33,21 +24,6 @@ class ScheduleData
     public function __construct($uuid = null)
     {
         $this->id = $uuid;
-        // $this->setCreatedAt(new \DateTime());
-    }
-
-    /**
-     *
-     * @PrePersist
-     * @PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setUpdatedAt(new \DateTime('now'));
-
-        if ($this->getCreatedAt() == null) {
-            $this->setCreatedAt(new \DateTime('now'));
-        }
     }
 
     /**
@@ -58,54 +34,6 @@ class ScheduleData
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return CreditCardData
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return CreditCardData
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 
     public function setPeriod($period)

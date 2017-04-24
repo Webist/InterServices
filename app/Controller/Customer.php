@@ -13,7 +13,6 @@ use Http\Stream\InputHandler;
 
 class Customer implements \App\Spec\Customer
 {
-
     private $inputHandler;
     private $handler;
 
@@ -58,57 +57,28 @@ class Customer implements \App\Spec\Customer
                 ),
         );
 
-
-        $uuid = $this->inputHandler->parameter('uuid');
-        if (empty($uuid)) {
-            $uuid = $this->handler->uuid();
-        }
-
-        // Prepare operations to callback by CustomerService
-        $this->handler::buildOperations($postData, $uuid);
-
-        // Reflect the customer service stateless in the global shared state with a callback
-        /** @var \App\Service\Customer $customerService */
-        $customerService = $this->handler->service(self::CUSTOMER, function () {
-            return $this->handler::getOperations();
-        });
-
-        $customerService->handle();
-
+        $this->handler->postData($postData, $this->inputHandler->parameter('uuid'));
     }
 
     public function postXhr()
     {
-        $postData = filter_input_array(INPUT_POST);
-
         try {
-            $uuid = $this->inputHandler->parameter('uuid');
 
-            if (empty($uuid)) {
-                $uuid = $this->handler->uuid();
-            }
+            $this->handler->postData(
+                filter_input_array(INPUT_POST),
+                    $this->inputHandler->parameter('uuid'));
 
-            // Prepare operations to callback by CustomerService
-            $this->handler::buildOperations($postData, $uuid);
-
-            // Reflect the customer service stateless in the global shared state with a callback
-            /** @var \App\Service\Customer $customerService */
-            $customerService = $this->handler->service(self::CUSTOMER, function () {
-                return $this->handler::getOperations();
-            });
-
-            $customerService->handle();
             $message = [
                 self::RESPONSE_MESSAGE_KEY => 'ok',
                 'state' => ['title' => 'Customer form - Saved', 'url' => 'window.location.href'],
-                'uuid' => $uuid
+                'uuid' => $this->handler->uuid()
             ];
 
         } catch (\App\Exception\Customer $exception) {
             $message = [
                 self::RESPONSE_MESSAGE_KEY => $exception->getMessage(),
                 'state' => ['title' => 'Customer form - Failed', 'url' => 'window.location.href'],
-                'uuid' => $uuid
+                'uuid' => $this->handler->uuid()
             ];
         }
 
@@ -127,7 +97,5 @@ class Customer implements \App\Spec\Customer
     {
         $lay = $this->handler->buildListHtml();
         return $lay->render();
-
     }
-
 }

@@ -1,4 +1,4 @@
-####Routing
+#### Routing
 Currently supported options.
 
 + Match the URL path via REQUEST_URI, obviously.
@@ -31,25 +31,25 @@ Fits better Back-end web/http development.
 1. With the following snippet, generate a route.
 
 ```
-$routeContext = new Http\Routing\RouteContext('GET', '/', '../web/home.php');
+$route = new Http\Routing\RouteBuilder('GET', '/', '../web/home.php');
 ```
 
 ```
-$routeContext = new Http\Routing\RouteContext('POST', '/', 'RootPath@post');
+$route = new Http\Routing\RouteBuilder('POST', '/', 'RootPath@post');
 ```
 
 ```
-$routeContext = new Http\Routing\RouteContext('GET', '/test', 'Test@getXhr');
-$routeContext->setXRequestedWith(true);
+$route = new Http\Routing\RouteBuilder('GET', '/test', 'Test@getXhr');
+$route->setXRequestedWith(true);
 ```
 ```
-$routeContext = new Http\Routing\RouteContext('POST', '/admin', 'Admin@postXhr');
-$routeContext->setXRequestedWith(true);
+$route = new Http\Routing\RouteBuilder('POST', '/admin', 'Admin@postXhr');
+$route->setXRequestedWith(true);
 ```
 
 View the result like this
 ```
-var_export($routeContext->buildRoute());
+var_export($route->build());
 ```
 
 2. Copy and Paste the result into RoutesCollection.php  

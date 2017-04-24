@@ -6,22 +6,36 @@ namespace Mail;
 class Mailer
 {
     private $data;
-    public function setData($data)
+    private $entityManager;
+
+    public function __construct(EmailData $emailData, \Doctrine\ORM\EntityManager $entityManager)
     {
-        $this->data = $data;
+        $this->data = $emailData;
+        $this->entityManager = $entityManager;
     }
 
-    public function send()
+    public function handle()
     {
-        $headers = 'From: ' . $this->data['email'] . "\r\n" .
-            'Reply-To: ' . $this->data['email'] . "\r\n" .
-            'X-Mailer: PHP/' . phpversion();
+        try {
+            // when duplicate, then throw an error.
+            $entityManager = $this->entityManager;
+             $entityManager->persist($this->data);
+             $entityManager->flush();
 
-        $message = 'Name: '. $this->data['name'] . 'Phone: ' . $this->data['phone'] . 'Message: '. $this->data['message'];
-        return mail(
-            $this->data['to'],
-            $this->data['subject'],
-            $message,
-            $headers);
+            if(mail(
+                $this->data->getReceiver(),
+                $this->data->getSubject(),
+                $this->data->getMessage(),
+                $this->data->getHeaders()
+            )) {
+                return 'The mail was successfully accepted for delivery';
+            }
+        } catch (\Exception $exception) {
+
+            if(strpos($exception->getMessage(), '1062 Duplicate entry') !== false){
+                return 'Message was already sent.';
+            }
+            return $exception->getMessage();
+        }
     }
 }

@@ -3,12 +3,9 @@
 
 namespace Account;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * @Entity
  * @Table(name="users")
- * @HasLifecycleCallbacks
  **/
 class UserData
 {
@@ -23,14 +20,6 @@ class UserData
      * @Column(type="string", length=65)
      */
     protected $name;
-
-    /** @Column(name="created_at", type="datetime") */
-    protected $createdAt;
-
-    /**
-     * @Column(name="updated_at", type="datetime")
-     */
-    protected $updatedAt;
 
     /**
      * The below length depends on the "algorithm" you use for encoding
@@ -57,6 +46,11 @@ class UserData
      */
     protected $profileData;
 
+    public function __construct($uuid)
+    {
+        $this->id = $uuid;
+    }
+
     /**
      * @return mixed
      */
@@ -73,28 +67,6 @@ class UserData
         $this->profileData = $profileData;
     }
 
-    public function __construct($uuid)
-    {
-        $this->id = $uuid;
-        // $this->setCreatedAt(new \DateTime());
-
-        // $this->profiles = new ArrayCollection();
-    }
-
-    /**
-     *
-     * @PrePersist
-     * @OPreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setUpdatedAt(new \DateTime('now'));
-
-        if ($this->getCreatedAt() == null) {
-            $this->setCreatedAt(new \DateTime('now'));
-        }
-    }
-
     /**
      * Get id
      *
@@ -106,63 +78,15 @@ class UserData
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return UserData
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return UserData
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
      * Set username
      *
      * @param string $username
      *
      * @return UserData
      */
-    public function setUsername($username)
+    public function setUsername(string $username)
     {
-        $this->username = $username;
+        $this->username = (string) $username;
 
         return $this;
     }
@@ -184,9 +108,9 @@ class UserData
      *
      * @return UserData
      */
-    public function setPasswd($passwd)
+    public function setPasswd(string $passwd)
     {
-        $this->passwd = $passwd;
+        $this->passwd = (string) $passwd;
 
         return $this;
     }
@@ -208,9 +132,9 @@ class UserData
      *
      * @return UserData
      */
-    public function setFullname($fullname)
+    public function setFullname(string $fullname)
     {
-        $this->fullname = $fullname;
+        $this->fullname = (string) $fullname;
 
         return $this;
     }
@@ -246,9 +170,9 @@ class UserData
      *
      * @return UserData
      */
-    public function setEmail($email)
+    public function setEmail(string $email)
     {
-        $this->email = $email;
+        $this->email = (string) $email;
 
         return $this;
     }
@@ -270,9 +194,9 @@ class UserData
      *
      * @return UserData
      */
-    public function setName($name)
+    public function setName(string $name)
     {
-        $this->name = $name;
+        $this->name = (string) $name;
 
         return $this;
     }

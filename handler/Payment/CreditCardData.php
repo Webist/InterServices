@@ -5,7 +5,6 @@ namespace Payment;
 /**
  * @Entity
  * @Table(name="credit_cards")
- * @HasLifecycleCallbacks
  *
  * improve this https://github.com/doctrine/doctrine2/issues/1757
  **/
@@ -17,12 +16,6 @@ class CreditCardData
      * @GeneratedValue(strategy="NONE")
      */
     protected $id;
-
-    /** @Column(name="created_at", type="datetime") */
-    protected $createdAt;
-
-    /** @Column(name="updated_at", type="datetime") */
-    protected $updatedAt;
 
     /** @Column(type="string", length=8) */
     protected $status;
@@ -77,21 +70,6 @@ class CreditCardData
     public function __construct($uuid = null)
     {
         $this->id = $uuid;
-        // $this->setCreatedAt(new \DateTime());
-    }
-
-    /**
-     *
-     * @PrePersist
-     * @PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setUpdatedAt(new \DateTime('now'));
-
-        if ($this->getCreatedAt() == null) {
-            $this->setCreatedAt(new \DateTime('now'));
-        }
     }
 
     /**
@@ -105,63 +83,15 @@ class CreditCardData
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return CreditCardData
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return CreditCardData
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
      * Set status
      *
      * @param string $status
      *
      * @return CreditCardData
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
-        $this->status = $status;
+        $this->status = (string) $status;
 
         return $this;
     }
@@ -183,9 +113,9 @@ class CreditCardData
      *
      * @return CreditCardData
      */
-    public function setName($name)
+    public function setName(string $name)
     {
-        $this->name = $name;
+        $this->name = (string) $name;
 
         return $this;
     }
@@ -207,9 +137,9 @@ class CreditCardData
      *
      * @return CreditCardData
      */
-    public function setNumber($number)
+    public function setNumber(string $number)
     {
-        $this->number = $number;
+        $this->number = (string) $number;
 
         return $this;
     }
@@ -231,9 +161,9 @@ class CreditCardData
      *
      * @return CreditCardData
      */
-    public function setCvc($cvc)
+    public function setCvc(string $cvc)
     {
-        $this->cvc = $cvc;
+        $this->cvc = (string) $cvc;
 
         return $this;
     }
@@ -255,9 +185,9 @@ class CreditCardData
      *
      * @return CreditCardData
      */
-    public function setExpiryDate($expiryDate)
+    public function setExpiryDate(string $expiryDate)
     {
-        $this->expiryDate = $expiryDate;
+        $this->expiryDate = (string) $expiryDate;
 
         return $this;
     }

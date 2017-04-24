@@ -16,7 +16,7 @@ var_dump($title);
 <!--[if !IE]><!-->
 <html lang="en"> <!--<![endif]-->
 <head>
-    <title>Software Development Specialists - Ansoft.nl</title>
+    <title>Software Development Consultancy - anSoft</title>
 
     <!-- Meta -->
     <meta charset="utf-8">
@@ -65,9 +65,9 @@ var_dump($title);
     <div class="container">
         <div class="page-scroll">
             <a class="logo-link navbar-brand logo-left" href="#intro"
-               title="Self-organizing Software Development Partners">
-                <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="AnSoft Logo light">
-                <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="AnSoft Logo dark">
+               title="anSoft: Software Development Consultancy">
+                <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="anSoft Logo light">
+                <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="anSoft Logo dark">
             </a>
         </div>
 
@@ -109,10 +109,10 @@ var_dump($title);
                 <div class="col-md-2 no-side-padding">
                     <div class="center-block logo page-scroll">
                         <a class="logo-link navbar-brand logo-centered" href="#intro">
-                            <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="AnSoft Logo light"
-                                 title="Self-organizing Software Development Partners">
-                            <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="AnSoft Logo dark"
-                                 title="Self-organizing Software Development Partners">
+                            <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="anSoft Logo light"
+                                 title="AnSoft: Software Development Consultancy">
+                            <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="anSoft Logo dark"
+                                 title="AnSoft: Software Development Consultancy">
                         </a>
                     </div>
                 </div>
@@ -125,7 +125,7 @@ var_dump($title);
                                     <a href="#mission">Missie</a>
                                 </li>
                                 <li class="page-scroll">
-                                    <a href="#courses">AnSoft Academy</a>
+                                    <a href="#courses">anSoft Academy</a>
                                 </li>
 
                                 <li class="page-scroll">
@@ -159,7 +159,7 @@ var_dump($title);
         <div class="container valign__middle">
             <div class="row">
                 <div class="col-sm-12 text-center-xs g-heading-v7 text-center">
-                    <h1 class="h2 g-mb-30"><em class="block-name">Software Development Specialists</em> AnSoft
+                    <h1 class="h2 g-mb-30"><em class="block-name">Software Development Consultancy</em> anSoft
                         <div class="block-name-ext">.nl</div>
                     </h1>
                 </div>
@@ -175,7 +175,7 @@ var_dump($title);
 <section id="about">
     <div class="container content-lg">
         <div class="g-heading-v7 text-center">
-            <h2 class="h2 g-mb-30"><em class="block-name">Kennis en Kunde </em>Expertise </h2>
+            <h2 class="h2 g-mb-30"><em class="block-name">Specialisme in Software Development </em>Expertise </h2>
         </div>
 
         <!-- all for your comfort blocks -->
@@ -278,7 +278,7 @@ var_dump($title);
 
             <div class="row  g-heading-v7 text-center">
                 <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Methodiek </em> Werkwijze </h2>
+                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Agile software development framework </em> Werkwijze </h2>
 
                 </div>
             </div>
@@ -363,7 +363,7 @@ var_dump($title);
 <section id="markets">
     <div class="container-fluid no-side-padding content-md">
         <div class="container g-heading-v7 text-center">
-            <h2 class="h2 g-mb-30"><em class="block-name">Realisatie </em>Cases </h2>
+            <h2 class="h2 g-mb-30"><em class="block-name">Reeds gerealiseerd </em>Cases </h2>
         </div>
 
         <!-- markets cube-portfolio/ what we did -->
@@ -499,7 +499,8 @@ var_dump($title);
 
             <div class="row  g-heading-v7 text-center">
                 <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Missie </em>Mission Statement</h2>
+                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Gids voor doeltreffend acties
+                        </em>Missie</h2>
                 </div>
             </div>
 
@@ -527,7 +528,7 @@ var_dump($title);
                 <div class="col-md-3 arch-service arch-service-3">
                     <div class="arch-service-in img-hover-1 equal-height-column">
                         <span aria-hidden="true" class="icon-graph icon"></span>
-                        <h3>Team Building</h3>
+                        <h3>Culture Building</h3>
                         <p>Ieder mens is anders ... cultuur opbouwen ... happy team-work</p>
 
                         <p> ...</p>
@@ -552,6 +553,7 @@ var_dump($title);
     </div>
 </section>
 <!--End of mission Section-->
+
 
 <?php /*
 	<!--Gallery Section-->
@@ -717,7 +719,9 @@ var_dump($title);
         <div class="container content-md">
             <div class="row">
                 <div class="col-md-3 g-heading-v7 text-center">
-                    <h2 class="h2 g-mb-30"><em class="block-name">AnSoft Academy </em></h2>
+                    <h2 class="h2 g-mb-30"><em class="block-name">anSoft Academy </em>
+                        Educatie
+                    </h2>
                     <p class="g-mb-30"></p>
                     <p></p>
                 </div>
@@ -822,8 +826,8 @@ var_dump($title);
     <section id="team">
         <div class="container-fluid team-section bg-color-com">
             <div class="container content-md g-heading-v7 text-center">
-                <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Partners</em> Werken met
-                    professionals</h2>
+                <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Werken met
+                        professionals</em>Partners</h2>
 
                 <!-- Owl Carousel v4 team -->
                 <div class="owl-carousel-v4 owl-theme">
@@ -928,7 +932,7 @@ var_dump($title);
 <!--Contact Section-->
 <section id="contact">
     <div class="container content-md g-heading-v7 text-center">
-        <h2 class="h2 g-mb-30"><em class="block-name">Contact </em></h2>
+        <h2 class="h2 g-mb-30"><em class="block-name">Vraag ons </em>Contact</h2>
 
         <!-- form and contatc information -->
         <div class="row">
@@ -1030,8 +1034,8 @@ var_dump($title);
     <!-- copyrights -->
     <div class="copyrights container-fluid bg-color-com page-scroll">
         <div clas="container">
-            <a class="footer-logo" href="#intro" title="Self-organizing Software Development Partners">
-                <img class="img-responsive" src="assets/img/ansoft-logo-light.png" alt="AnSoft Logo">
+            <a class="footer-logo" href="#intro" title="anSoft: Software Development Consultancy">
+                <img class="img-responsive" src="assets/img/ansoft-logo-light.png" alt="anSoft Logo">
             </a>
             <?php /**
              * <ul class="list-inline footer-list">

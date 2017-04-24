@@ -3,7 +3,7 @@
 namespace App\Spec;
 
 
-interface Admin extends Controller, Main
+interface Admin extends Controller
 {
 
 }

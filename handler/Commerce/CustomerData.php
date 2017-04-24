@@ -5,53 +5,63 @@ namespace Commerce;
 /**
  * @Entity
  * @Table(name="customers")
- * @HasLifecycleCallbacks
  **/
 class CustomerData
 {
     /**
+     *
+     * @var
      * @Id
      * @Column(name="id", type="guid")
      * @GeneratedValue(strategy="NONE")
      */
     protected $id;
 
-    /** @Column(name="created_at", type="datetime") */
-    protected $createdAt;
-
-    /** @Column(name="updated_at", type="datetime") */
-    protected $updatedAt;
-
-    /** @Column(type="string", length=8) */
+    /**
+     *
+     * @var
+     * @Column(type="string", length=8)
+     */
     protected $status;
 
-    /** @Column(type="string", length=8) */
+    /**
+     *
+     *
+     * @Column(type="string", length=8)
+     */
     private $state;
 
-    /** @Column(type="string", length=22) */
+    /**
+     * 
+     * @var
+     * @Column(type="string", length=22)
+     */
     private $timezone;
 
-    /** @Column(type="string", length=6) */
+    /**
+     *
+     *
+     * @Column(type="string", length=6)
+     */
     private $locale;
 
     public function __construct($uuid = null)
     {
         $this->id = $uuid;
-        // $this->setCreatedAt(new \DateTime());
     }
 
     /**
+     * Set id
      *
-     * @PrePersist
-     * @PreUpdate
+     * @param guid $id
+     *
+     * @return CustomerData
      */
-    public function updatedTimestamps()
+    public function setId($id)
     {
-        $this->setUpdatedAt(new \DateTime('now'));
+        $this->id = $id;
 
-        if ($this->getCreatedAt() == null) {
-            $this->setCreatedAt(new \DateTime('now'));
-        }
+        return $this;
     }
 
     /**
@@ -65,63 +75,15 @@ class CustomerData
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return CustomerData
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return CustomerData
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
      * Set status
      *
      * @param string $status
      *
      * @return CustomerData
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
-        $this->status = $status;
+        $this->status = (string) $status;
 
         return $this;
     }
@@ -131,7 +93,7 @@ class CustomerData
      *
      * @return string
      */
-    public function getStatus()
+    public function getStatus() : string
     {
         return $this->status;
     }
@@ -143,9 +105,9 @@ class CustomerData
      *
      * @return CustomerData
      */
-    public function setState($state)
+    public function setState(string $state)
     {
-        $this->state = $state;
+        $this->state = (string) $state;
 
         return $this;
     }
@@ -167,9 +129,9 @@ class CustomerData
      *
      * @return CustomerData
      */
-    public function setTimezone($timezone)
+    public function setTimezone(string $timezone)
     {
-        $this->timezone = $timezone;
+        $this->timezone = (string) $timezone;
 
         return $this;
     }
@@ -191,9 +153,9 @@ class CustomerData
      *
      * @return CustomerData
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale)
     {
-        $this->locale = $locale;
+        $this->locale = (string) $locale;
 
         return $this;
     }
@@ -206,19 +168,5 @@ class CustomerData
     public function getLocale()
     {
         return $this->locale;
-    }
-
-    /**
-     * Set id
-     *
-     * @param guid $id
-     *
-     * @return CustomerData
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 }

@@ -1,3 +1,8 @@
 <?php
+/**
+Dev Notes:
+- When Doctrine is via cli initiated, it tries auto-magically to load "config/cli-config.php" file.
+Within this file console helperSet will be configured.
+*/
 
 include dirname(__DIR__) . '/vendor/doctrine/orm/bin/doctrine.php';

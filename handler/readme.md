@@ -1,4 +1,4 @@
-### External Handlers
+### External Handlers - Components/Middleware
 
 In this /handler directory resides various components.  
 

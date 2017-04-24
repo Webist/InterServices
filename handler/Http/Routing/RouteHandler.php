@@ -3,38 +3,39 @@
 namespace Http\Routing;
 
 
-class RouteHandler extends RouteAbstract
+class RouteHandler implements RoutingInterface, RouteInterface
 {
-    private $routeSelector;
     private $inputHandler;
 
-    public function __construct(\Http\Routing\RouteSelector $routeSelector, \Http\Stream\InputHandler $inputHandler)
+    private $matchContext;
+
+    public function __construct(\Http\Stream\InputHandler $inputHandler, MatchContext $matchContext)
     {
-        parent::__construct();
-
-        $this->routeSelector = $routeSelector;
         $this->inputHandler = $inputHandler;
+        $this->matchContext = $matchContext;
 
-        $this->setMatchContext($this->inputHandler->requestMethod(), $this->inputHandler->requestUrlPath(), $this->inputHandler->isAjax());
-
+        $this->matchContext->setMatchContext(
+            $this->inputHandler->requestMethod(),
+            $this->inputHandler->requestUrlPath(),
+            $this->inputHandler->isAjax());
     }
 
     public function handle()
     {
-        $routes = $this->routeSelector->handle();
+        $routes = include dirname(getcwd()) . self::ROUTES_DATASTORAGE_PATH . DIRECTORY_SEPARATOR . self::ROUTES_DATASTORAGE_FILE;
 
         // Forward route
-        $this->generateIndexKey();
-        if (isset($routes[$this->indexKey])) {
-            return $routes[$this->indexKey];
+        $this->matchContext->generateIndexKey();
+        if (isset($routes[$this->matchContext->indexKey()])) {
+            return $routes[$this->matchContext->indexKey()];
         }
 
         // Regular route
-        $this->matchContext['routeType'] = self::ROUTE_TYPE_ROUTE;
-        $this->generateIndexKey();
+        $this->matchContext->setRouteType(self::ROUTE_TYPE_ROUTE);
+        $this->matchContext->generateIndexKey();
 
-        if (isset($routes[$this->indexKey])) {
-            return $routes[$this->indexKey];
+        if (isset($routes[$this->matchContext->indexKey()])) {
+            return $routes[$this->matchContext->indexKey()];
         }
 
         throw new NotFoundException(sprintf('The requested resource %s was not found on this server.',

@@ -6,7 +6,6 @@ namespace Payment;
 /**
  * @Entity
  * @Table(name="payment_preferences")
- * @HasLifecycleCallbacks
  *
  **/
 class PaymentPreferenceData
@@ -18,12 +17,6 @@ class PaymentPreferenceData
      */
     protected $id;
 
-    /** @Column(name="created_at", type="datetime") */
-    protected $createdAt;
-
-    /** @Column(name="updated_at", type="datetime") */
-    protected $updatedAt;
-
     /** @Column(type="string", length=8) */
     protected $status;
 
@@ -33,25 +26,9 @@ class PaymentPreferenceData
     /** @Column(name="auto_pay", type="boolean") */
     protected $autoPay;
 
-
     public function __construct($uuid = null)
     {
         $this->id = $uuid;
-        // $this->setCreatedAt(new \DateTime());
-    }
-
-    /**
-     *
-     * @PrePersist
-     * @PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setUpdatedAt(new \DateTime('now'));
-
-        if ($this->getCreatedAt() == null) {
-            $this->setCreatedAt(new \DateTime('now'));
-        }
     }
 
     /**
@@ -79,63 +56,15 @@ class PaymentPreferenceData
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return PaymentPreferenceData
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return PaymentPreferenceData
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
      * Set status
      *
      * @param string $status
      *
      * @return PaymentPreferenceData
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
-        $this->status = $status;
+        $this->status = (string) $status;
 
         return $this;
     }
@@ -157,9 +86,9 @@ class PaymentPreferenceData
      *
      * @return PaymentPreferenceData
      */
-    public function setMethod($method)
+    public function setMethod(string $method)
     {
-        $this->method = $method;
+        $this->method = (string) $method;
 
         return $this;
     }
@@ -181,9 +110,9 @@ class PaymentPreferenceData
      *
      * @return PaymentPreferenceData
      */
-    public function setAutopay($autoPay)
+    public function setAutopay(bool $autoPay)
     {
-        $this->autoPay = $autoPay;
+        $this->autoPay = (bool) $autoPay;
 
         return $this;
     }

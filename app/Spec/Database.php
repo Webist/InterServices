@@ -2,7 +2,7 @@
 
 namespace App\Spec;
 
-interface Database extends Main
+interface Database
 {
     const DATABASE = \App\Service\Database::class;
 

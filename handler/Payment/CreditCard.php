@@ -2,35 +2,43 @@
 
 namespace Payment;
 
-
 class CreditCard
 {
     /**
      * @var CreditCardData
      */
     private $data;
+
     /**
      * @var \Doctrine\ORM\EntityManager
      */
     private $entityManager;
 
-    public function __construct(CreditCardData $creditCardData, $entityManager)
+    public function __construct(CreditCardData $creditCardData, \Doctrine\ORM\EntityManager $entityManager)
     {
         $this->data = $creditCardData;
         $this->entityManager = $entityManager;
     }
 
+    public function data()
+    {
+        return $this->data;
+    }
+
     public function handle()
     {
-        $repo = $this->entityManager->getRepository(CreditCardData::class);
+        $entityManager = $this->entityManager;
+
+        $repo = $entityManager->getRepository(CreditCardData::class);
         $data = $repo->find($this->data->getId());
 
         if($data){
-            $this->entityManager->merge($this->data);
+            $entityManager->merge($this->data);
         } else {
-            $this->entityManager->persist($this->data);
+            $entityManager->persist($this->data);
         }
 
-        $this->entityManager->flush();
+        $entityManager->flush();
+        return $entityManager->contains($this->data);
     }
 }

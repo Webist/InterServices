@@ -276,6 +276,8 @@ var FormWizard = function () {
                     window.history.replaceState(response.state, response.state.title, newUrl);
                     currentState = response.state;
 
+                    // @todo trigger a proper confirmation message window. message-bar?
+
                 });
 
                 request.fail(function(jqXHR, textStatus, errorThrown) {

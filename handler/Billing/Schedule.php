@@ -3,34 +3,45 @@
 namespace Billing;
 
 
-class Schedule
+use App\Spec\ORM;
+
+class Schedule implements ORM
 {
     /**
      * @var ScheduleData
      */
     private $data;
+
     /**
      * @var \Doctrine\ORM\EntityManager
      */
     private $entityManager;
 
-    public function __construct(ScheduleData $scheduleData, $entityManager)
+    public function __construct(ScheduleData $scheduleData, \Doctrine\ORM\EntityManager $entityManager)
     {
         $this->data = $scheduleData;
         $this->entityManager = $entityManager;
     }
 
+    public function data()
+    {
+        return $this->data;
+    }
+
     public function handle()
     {
-        $repo = $this->entityManager->getRepository(ScheduleData::class);
+        $entityManager = $this->entityManager;
+
+        $repo = $entityManager->getRepository(ScheduleData::class);
         $data = $repo->find($this->data->getId());
 
         if($data){
-            $this->entityManager->merge($this->data);
+            $entityManager->merge($this->data);
         } else {
-            $this->entityManager->persist($this->data);
+            $entityManager->persist($this->data);
         }
 
-        $this->entityManager->flush();
+        $entityManager->flush();
+        return $entityManager->contains($this->data);
     }
 }

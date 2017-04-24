@@ -10,7 +10,7 @@ class Handler
     public function __construct($indexKey)
     {
         $this->indexKey = $indexKey;
-        $this->pageData = include dirname(getcwd()) . '/app/Data/'.$indexKey.'.php';
+        $this->pageData = include dirname(getcwd()) . '/app/DataStorage/'.$indexKey.'.php';
     }
 
     public function title()

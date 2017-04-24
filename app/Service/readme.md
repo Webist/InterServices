@@ -1,6 +1,10 @@
 ### External Services Env
 
 Services are;  
++ Performs a "global" specific task. (So any PHP object is a service if it used globally)
++ Each service do just one job.
++ simpel to instantiate, invoke.
+
 + Aggregations
 + Facade
 + function-objects
@@ -14,6 +18,18 @@ Services comply to;
 + Non-blocking command executions
 + Tasks completion by a new process, via queueing system
 + Instantiating vendor apps
++ Building Commands/Operations should be possible to build on the client-side app.
+
+Services are accessible as;
++ Web service (http://.../UserService.wsdl)
++ Globally within app Envrionment
++ Single operand (microServices)
+
+Service operations/methods (generally) are;
++ get / query (parameters, response), list / selections
++ mutate (parameters, response)
++ handle (callbacks)
++ errors
 
 Composition of reusable's
 + DRY  
@@ -23,20 +39,32 @@ Examples:
 MySQL is an external service.  
 Connection and execution of queries can be handled as a (micro)-service.
 
-Creating the service
 ```
-class App\Service\Database extends \App\Spec\Service\Database\Database
+namespace App\Service;
+
+
+class Database extends DatabaseAbstract
 {
+    /**
+     * Holds the callback as it was defined when this service was reflected
+     * @example Query container to execute $visitsLoggerQuery = function($pdo) use ($params) {}
+     *
+     * @var \Closure
+     */
     private $callback;
 
-    public function __construct($callback)
+    public function __construct(\Closure $callback)
     {
         $this->callback = $callback;
     }
 
-    public function handle()
+    /**
+     * @param null $credentialsFile when used, overrides default credentials file
+     * @return mixed
+     */
+    public function handle($credentialsFile = null)
     {
-        return call_user_func($this->callback, $this->db());
+        return call_user_func($this->callback, $this->db($credentialsFile));
     }
 }
 ```

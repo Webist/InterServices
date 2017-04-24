@@ -745,13 +745,13 @@
                 <li class="nav-item  ">
                     <a href="app_todo.html" class="nav-link ">
                         <i class="icon-clock"></i>
-                        <span class="title">Todo 1</span>
+                        <span class="title">To-do 1</span>
                     </a>
                 </li>
                 <li class="nav-item  ">
                     <a href="app_todo_2.html" class="nav-link ">
                         <i class="icon-check"></i>
-                        <span class="title">Todo 2</span>
+                        <span class="title">To-do 2</span>
                     </a>
                 </li>
                 <li class="nav-item  ">

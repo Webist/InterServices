@@ -1,15 +1,16 @@
-### Back-end app development environment
+### Back-end app environment - Web Delivery Framework
 
 In this /app directory resides back-end (PHP) development files.
   
-Main concern of this application access directory is routing, 
-request composition and protocol translation in a MVC structure.
+Main concern of this /app directory is application access 
+to become the web delivery framework.
+The web delivery framework consists of routing, 
+request model/composition and protocol translation in an MVC structure.
 
 Six different type of folders meets the requirements of the Machine Object Model.
 
 + Spec  
 Specification data (interfaces, config). 
-The choice for 
 
 + Handler  
 Controller specific Handlers or Middleware's  
@@ -17,7 +18,7 @@ Controller specific Handlers or Middleware's
 + Controller   
 The entry points 
 
-+ Data  
++ DataStorage  
 Data Store  
 
 + Service  

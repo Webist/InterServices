@@ -5,7 +5,6 @@ namespace Account;
 /**
  * @Entity
  * @Table(name="user_profiles")
- * @HasLifecycleCallbacks
  **/
 class UserProfileData
 {
@@ -15,14 +14,6 @@ class UserProfileData
      * @GeneratedValue(strategy="NONE")
      */
     protected $id;
-
-    /** @Column(name="created_at", type="datetime") */
-    protected $createdAt;
-
-    /**
-     * @Column(name="updated_at", type="datetime")
-     */
-    protected $updatedAt;
 
     /**
      * @Column(type="string", length=65)
@@ -55,7 +46,7 @@ class UserProfileData
      * @Column(type="string", length=8)
      * @var string
      */
-    private $zipcode;
+    private $zipcode = '';
 
     /**
      * @Column(type="string", length=65)
@@ -78,23 +69,7 @@ class UserProfileData
     public function __construct($uuid = null)
     {
         $this->id = $uuid;
-        // $this->setCreatedAt(new \DateTime());
     }
-
-    /**
-     *
-     * @PrePersist
-     * @PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setUpdatedAt(new \DateTime('now'));
-
-        if ($this->getCreatedAt() == null) {
-            $this->setCreatedAt(new \DateTime('now'));
-        }
-    }
-
 
     /**
      * Get id
@@ -107,63 +82,15 @@ class UserProfileData
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return UserProfileData
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return UserProfileData
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
      * Set phone
      *
      * @param string $phone
      *
      * @return UserProfileData
      */
-    public function setPhone($phone)
+    public function setPhone(string $phone)
     {
-        $this->phone = $phone;
+        $this->phone = (string) $phone;
 
         return $this;
     }
@@ -185,9 +112,9 @@ class UserProfileData
      *
      * @return UserProfileData
      */
-    public function setGender($gender)
+    public function setGender(string $gender)
     {
-        $this->gender = $gender;
+        $this->gender = (string) $gender;
 
         return $this;
     }
@@ -209,9 +136,9 @@ class UserProfileData
      *
      * @return UserProfileData
      */
-    public function setAddress($address)
+    public function setAddress(string $address)
     {
-        $this->address = $address;
+        $this->address = (string) $address;
 
         return $this;
     }
@@ -232,7 +159,7 @@ class UserProfileData
      */
     public function setZipcode(string $zipcode)
     {
-        $this->zipcode = $zipcode;
+        $this->zipcode = (string) $zipcode;
     }
 
     /**
@@ -251,9 +178,9 @@ class UserProfileData
      *
      * @return UserProfileData
      */
-    public function setCity($city)
+    public function setCity(string $city)
     {
-        $this->city = $city;
+        $this->city = (string) $city;
 
         return $this;
     }
@@ -275,9 +202,9 @@ class UserProfileData
      *
      * @return UserProfileData
      */
-    public function setCountry($country)
+    public function setCountry(string $country)
     {
-        $this->country = $country;
+        $this->country = (string) $country;
 
         return $this;
     }
@@ -299,9 +226,9 @@ class UserProfileData
      *
      * @return UserProfileData
      */
-    public function setRemarks($remarks)
+    public function setRemarks(string $remarks)
     {
-        $this->remarks = $remarks;
+        $this->remarks = (string) $remarks;
 
         return $this;
     }
@@ -323,9 +250,9 @@ class UserProfileData
      *
      * @return UserProfileData
      */
-    public function setId($id)
+    public function setId(string $id)
     {
-        $this->id = $id;
+        $this->id = (string) $id;
 
         return $this;
     }
@@ -337,9 +264,9 @@ class UserProfileData
      *
      * @return UserProfileData
      */
-    public function setEmail( $email)
+    public function setEmail(string $email)
     {
-        $this->email = $email;
+        $this->email = (string) $email;
 
         return $this;
     }
@@ -361,9 +288,9 @@ class UserProfileData
      *
      * @return UserProfileData
      */
-    public function setFullName($fullName)
+    public function setFullName(string $fullName)
     {
-        $this->fullName = $fullName;
+        $this->fullName = (string) $fullName;
 
         return $this;
     }

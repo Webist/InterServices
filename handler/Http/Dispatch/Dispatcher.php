@@ -2,13 +2,9 @@
 
 namespace Http\Dispatch;
 
+use Http\Resolve\ResolverInterface;
 
-use App\Handler\Main;
-use App\Handler\MainHandler;
-use App\Handler\Service;
-use Http\Routing\RoutingInterface;
-
-class Dispatcher implements DispatcherInterface, RoutingInterface
+class Dispatcher implements ResolverInterface, DispatcherInterface
 {
     private $resolver;
     private $inputHandler;
@@ -23,23 +19,29 @@ class Dispatcher implements DispatcherInterface, RoutingInterface
     {
         $route = $this->resolver->handle();
 
-        // A Forward route
-        if (isset($route[self::FORWARD_DESTINATION_NAME])) {
-            ob_start();
-            include $route[self::FORWARD_DESTINATION_NAME];
-            return ob_get_clean();
-        }
+        switch($route[self::DELIVERY_NAME]) {
+            case self::DELIVERY_MODEL_SIMPLE :
+                $delivery = new \Delivery\Simple;
+                return $delivery($route, $route[self::CLASS_FIELD_NAME]);
+            case self::DELIVERY_MODEL_MVC :
+                $delivery = new \Delivery\MVC;
+                return $delivery(
+                    $route[self::CLASS_FIELD_NAME],
+                    $route[self::CLASS_ACTION_FIELD_NAME],
+                    $this->inputHandler->parameters());
+            case self::DELIVERY_MODEL_MOM :
+                $delivery = new \Delivery\MOM;
+                return $delivery(
+                    $route[self::CLASS_FIELD_NAME],
+                    $route[self::CLASS_HANDLER_NAME],
+                    $route[self::CLASS_ACTION_FIELD_NAME],
+                    $route,
+                    $this->inputHandler
+                );
 
-        // A Regular route
-        $controller = new \ReflectionClass($route[self::CLASS_FIELD_NAME]);
-
-        // Machine Object Model, requires __construct, Interface and Handler.
-        $handler = null;
-        if ('' != ($handlerClass = $route[self::CLASS_HANDLER_NAME])) {
-            $handler = new $handlerClass(new Main($this->inputHandler, new MainHandler($route)), new Service() );
+            default :
+                throw new \RuntimeException("Delivery parameter `{$route[self::DELIVERY_NAME]}` is not implemented, 
+                it should be one of [simple, MVC, MOM]");
         }
-        $object = $controller->newInstance($this->inputHandler, $handler);
-        $reflectionMethod = new \ReflectionMethod($object, $route[self::CLASS_ACTION_FIELD_NAME]);
-        return $reflectionMethod->invokeArgs($object, [$this->inputHandler->parameters()]);
     }
 }

@@ -13,7 +13,9 @@ A machine object should:
   
 A machine object does not require:
   + Inheritance   
-  Extending from other class is not required. But it might be used for some cases.
+  Extending from other class is initially not required.
+  When it might seem good idea to implement an abstract class, for example reusing it from different class, 
+  then the way of constructing of the client-sides should be reconsidered.
   
   
 ##### Anecdote and example

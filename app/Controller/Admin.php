@@ -16,11 +16,11 @@ class Admin implements AdminInterface
 
     public function index()
     {
-        throw new NotImplementedException('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__);
+        throw new NotImplementedException(sprintf('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__));
     }
 
     public function post()
     {
-        throw new NotImplementedException('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__);
+        throw new NotImplementedException(sprintf('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__));
     }
 }

@@ -18,7 +18,12 @@ class Database extends DatabaseAbstract
         $this->callback = $callback;
     }
 
-    public function handle($credentialsFile)
+    /**
+     * Handles the callback
+     * @param null $credentialsFile when used, overrides default credentials file
+     * @return mixed
+     */
+    public function handle($credentialsFile = null)
     {
         return call_user_func($this->callback, $this->db($credentialsFile));
     }

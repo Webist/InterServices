@@ -19,14 +19,6 @@ Depending on context these might be strategy, settings, initial values.
 
 For example registering a class string can be used to access a facade (a service object) in MVC setup.
 ```php
-interface Main
-{
-    const CUSTOMER = \Commerce\Customer::class;
-    
-    const DOCTRINE = \App\Service\Doctrine::class;
-    const DOCTRINE_PATH_TO_ENTITY_FILES = ['app', 'handler'];
-}
-
 interface App\Spec\Controller
 {
     const  RESPONSE_MESSAGE_KEY = 'message';
@@ -37,7 +29,7 @@ interface App\Spec\Controller
 + Class Methods, behaviour;   
 Class Methods are behaviour agreement declarations to define a consistent minimum required implementation. 
 ```php
-interface Customer extends Controller, Main
+interface App\Spec\Customer extends Controller
 {
      function handle();
      function buildOperations($postData);
@@ -86,3 +78,5 @@ and eventually redirecting the user to installation directory.
 
 Read more   
 https://en.wikipedia.org/wiki/Constant_interface
+
+

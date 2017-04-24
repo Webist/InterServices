@@ -21,7 +21,7 @@ A **Forward Route** is a route with a destination-path defined route.
 For example the following route matches the root URL path (/) with GET requests and  
 forwards directly to home.php file.  
 ```
-RouteContext('GET', '/', '../web/home.php');
+RouteBuilder('GET', '/', '../web/home.php');
 ```
 
 A **Reqular Route** is a Controller::method defined route.   
@@ -29,7 +29,7 @@ For example the following route matches the root URL path with POST request and
 instantiates the RootPath object, following with invoking the post() method.  
 If there are parameters then these parameters will be as arguments passed to the post() method.  
 ```
-RouteContext('POST', '/', 'RootPath@post');
+RouteBuilder('POST', '/', 'RootPath@post');
 ```
 
 #### Forward Route, Integrating Destination file with a Controller
@@ -48,7 +48,7 @@ A route indexKey value is unique and looks like this ```e531c13f9cf22ea38d0ccb29
 
 Lets say we have this file
 ```
-app/Data/e531c13f9cf22ea38d0ccb29e27f1449.php
+app/DataStorage/e531c13f9cf22ea38d0ccb29e27f1449.php
 ```
 With the content
 ```
@@ -77,7 +77,7 @@ class Handler
     public function __construct($indexKey)
     {
         $this->indexKey = $indexKey;
-        $this->pageData = include dirname(getcwd()) . '/app/Data/'.$indexKey.'.php';
+        $this->pageData = include dirname(getcwd()) . '/app/DataStorage/'.$indexKey.'.php';
     }
 
     public function title()

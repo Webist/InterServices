@@ -9,28 +9,45 @@ class User
      * @var UserData
      */
     private $data;
+
     /**
      * @var \Doctrine\ORM\EntityManager
      */
     private $entityManager;
 
-    public function __construct(UserData $userData, $entityManager)
+    public function __construct(UserData $userData, \Doctrine\ORM\EntityManager $entityManager)
     {
         $this->data = $userData;
         $this->entityManager = $entityManager;
     }
 
+    public function data()
+    {
+        return $this->data;
+    }
+
     public function handle()
     {
-        $repo = $this->entityManager->getRepository(UserData::class);
+        $entityManager = $this->entityManager;
+
+        $repo = $entityManager->getRepository(UserData::class);
         $data = $repo->find($this->data->getId());
 
         if($data){
-            $this->entityManager->merge($this->data);
+            $entityManager->merge($this->data);
         } else {
-            $this->entityManager->persist($this->data);
+            $entityManager->persist($this->data);
         }
 
-        $this->entityManager->flush();
+        $entityManager->flush();
+        return $entityManager->contains($this->data);
+    }
+
+    public function userProfileDataByEmail($email)
+    {
+        $entityManager = $this->entityManager;
+
+        $repo = $entityManager->getRepository(UserProfileData::class);
+        return $repo->findOneBy(['email' => $email]);
     }
 }

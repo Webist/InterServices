@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Exception\NotImplementedException;
-use Exception;
 use Http\Stream\InputHandler;
 
 class RootPath implements \App\Spec\RootPath
@@ -30,34 +29,18 @@ class RootPath implements \App\Spec\RootPath
 
     public function post()
     {
-        throw new NotImplementedException('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__);
+        throw new NotImplementedException(sprintf('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__));
     }
 
     public function getXhr()
     {
-        throw new NotImplementedException('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__);
+        throw new NotImplementedException(sprintf('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__));
     }
 
     public function postXhr()
     {
-        /** @var \Mail\Mailer $mailer */
-        $mailer = $this->handler->service(self::MAILER, function() {} );
-        $mailer->setData(
-            $this->handler->sanitizeMailData(
-                array_merge(['to' => self::EMAIL_TO], filter_input_array(INPUT_POST))
-            )
-        );
+        \Assert\Assertion::notEmpty($postData = filter_input_array(INPUT_POST));
 
-        try {
-            if (!$mailer->send()) {
-                throw new Exception('Mail for delivery failed!');
-            }
-
-            $message = 'The mail was successfully accepted for delivery';
-        } catch (Exception $exception) {
-            $message = $exception->getMessage();
-        }
-
-        return json_encode([self::RESPONSE_MESSAGE_KEY => $message]);
+        return json_encode([self::RESPONSE_MESSAGE_KEY => $this->handler->postData($postData)]);
     }
 }

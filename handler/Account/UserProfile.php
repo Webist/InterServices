@@ -3,34 +3,45 @@
 namespace Account;
 
 
-class UserProfile
+use App\Spec\ORM;
+
+class UserProfile implements ORM
 {
     /**
      * @var UserProfileData
      */
     private $data;
+
     /**
      * @var \Doctrine\ORM\EntityManager
      */
     private $entityManager;
 
-    public function __construct(UserProfileData $userData, $entityManager)
+    public function __construct(UserProfileData $userData, \Doctrine\ORM\EntityManager $entityManager)
     {
         $this->data = $userData;
         $this->entityManager = $entityManager;
     }
 
+    public function data()
+    {
+        return $this->data;
+    }
+
     public function handle()
     {
-        $repo = $this->entityManager->getRepository(UserProfileData::class);
+        $entityManager = $this->entityManager;
+
+        $repo = $entityManager->getRepository(UserProfileData::class);
         $data = $repo->find($this->data->getId());
 
         if($data){
-            $this->entityManager->merge($this->data);
+            $entityManager->merge($this->data);
         } else {
-            $this->entityManager->persist($this->data);
+            $entityManager->persist($this->data);
         }
 
-        $this->entityManager->flush();
+        $entityManager->flush();
+        return $entityManager->contains($this->data);
     }
 }

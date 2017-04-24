@@ -7,13 +7,13 @@ $inputHandler = new Http\Stream\InputHandler();
 try {
 
     $routeHandler = new Http\Routing\RouteHandler(
-        new Http\Routing\RouteSelector(dirname(getcwd()) . '/app/Data/RoutesIndex.php'),
-        $inputHandler
+        $inputHandler,
+        new Http\Routing\MatchContext()
     );
 
     $resolver = new Http\Resolve\Resolver(
         $routeHandler,
-        $inputHandler
+        new Http\Resolve\NameServer()
     );
 
     $dispatcher = new Http\Dispatch\Dispatcher(
