@@ -9,6 +9,7 @@ namespace Journal;
  * @package Journal
  * @Entity()
  * @Table(name="entity_events")
+ * @HasLifecycleCallbacks()
  */
 class EntityEventData
 {
@@ -28,15 +29,15 @@ class EntityEventData
     protected $uuid;
 
     /**
+     * @Column(name="created_at", type="datetime")
+     */
+    protected $createdAt;
+
+    /**
      *
      * @Column(type="bigint")
      */
     protected $sequence;
-
-    /**
-     * @Column(name="timestamp", type="datetime")
-     */
-    protected $timestamp;
 
     /**
      * Event name
@@ -78,6 +79,16 @@ class EntityEventData
     }
 
     /**
+     * Get uuid
+     *
+     * @return guid
+     */
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    /**
      * Set uuid
      *
      * @param guid $uuid
@@ -92,13 +103,13 @@ class EntityEventData
     }
 
     /**
-     * Get uuid
+     * Get sequence
      *
-     * @return guid
+     * @return integer
      */
-    public function getUuid()
+    public function getSequence()
     {
-        return $this->uuid;
+        return $this->sequence;
     }
 
     /**
@@ -116,13 +127,16 @@ class EntityEventData
     }
 
     /**
-     * Get sequence
-     *
-     * @return integer
+     * Get timestamp
+     * @PrePersist()
+     * @return \DateTime
      */
-    public function getSequence()
+    public function getCreatedAt()
     {
-        return $this->sequence;
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime('now');
+        }
+        return $this->createdAt;
     }
 
     /**
@@ -132,21 +146,21 @@ class EntityEventData
      *
      * @return EntityEventData
      */
-    public function setTimestamp($timestamp)
+    public function setCreatedAt(\DateTime $dateTime)
     {
-        $this->timestamp = $timestamp;
+        $this->createdAt = $dateTime;
 
         return $this;
     }
 
     /**
-     * Get timestamp
+     * Get name
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getTimestamp()
+    public function getName()
     {
-        return $this->timestamp;
+        return $this->name;
     }
 
     /**
@@ -164,13 +178,13 @@ class EntityEventData
     }
 
     /**
-     * Get name
+     * Get version
      *
      * @return string
      */
-    public function getName()
+    public function getVersion()
     {
-        return $this->name;
+        return $this->version;
     }
 
     /**
@@ -188,13 +202,13 @@ class EntityEventData
     }
 
     /**
-     * Get version
+     * Get object
      *
-     * @return string
+     * @return \stdClass
      */
-    public function getVersion()
+    public function getObject()
     {
-        return $this->version;
+        return $this->object;
     }
 
     /**
@@ -212,23 +226,32 @@ class EntityEventData
     }
 
     /**
-     * Get object
-     *
-     * @return \stdClass
+     * @return mixed
      */
-    public function getObject()
-    {
-        return $this->object;
-    }
-
-    public function setChangeSet($changeSet)
-    {
-        $this->changeSet = serialize($changeSet);
-    }
-
     public function getChangeSet()
     {
         return unserialize($this->changeSet);
+    }
+
+    /**
+     * @param $changeSet
+     *
+     * @return EntityEventData
+     */
+    public function setChangeSet($changeSet)
+    {
+        $this->changeSet = serialize($changeSet);
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     /**
@@ -243,15 +266,5 @@ class EntityEventData
         $this->userId = $userId;
 
         return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 }

@@ -1,9 +1,13 @@
 ### External Services Env
 
+Services live inside a domain and independed form their execution envrionments.
+A service share's schema, contract and not class.
+The compablitity of a service is based on policy (business rules), not on business logic (process).
+
 Services are;  
 + Performs a "global" specific task. (So any PHP object is a service if it used globally)
 + Each service do just one job.
-+ simpel to instantiate, invoke.
++ simple to instantiate, invoke.
 
 + Aggregations
 + Facade
@@ -11,7 +15,7 @@ Services are;
 
 Services do; 
 + Pre-config (auto-connect, pop-up or build)
-+ Accept Handlers tp process-data (query command, mail to send)
++ Accept Handlers to process-data (query command, mail to send)
 
 
 Services comply to;
@@ -25,10 +29,12 @@ Services are accessible as;
 + Globally within app Envrionment
 + Single operand (microServices)
 
-Service operations/methods (generally) are;
+Service Actions (operations/methods) (generally) are;
 + get / query (parameters, response), list / selections
 + mutate (parameters, response)
-+ handle (callbacks)
++ dispatch (to an handler) 
++ invoke (callbacks)
++ notify (commpand pattern, pub/sub (leave a message, trigger a listener)) 
 + errors
 
 Composition of reusable's
@@ -43,7 +49,7 @@ Connection and execution of queries can be handled as a (micro)-service.
 namespace App\Service;
 
 
-class Database extends DatabaseAbstract
+class Database
 {
     /**
      * Holds the callback as it was defined when this service was reflected
@@ -62,7 +68,7 @@ class Database extends DatabaseAbstract
      * @param null $credentialsFile when used, overrides default credentials file
      * @return mixed
      */
-    public function handle($credentialsFile = null)
+    public function invoke($credentialsFile = null)
     {
         return call_user_func($this->callback, $this->db($credentialsFile));
     }
@@ -74,7 +80,6 @@ Inserting a record into database via callback.
         $routeId = $this->route['indexKey'];
         $ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR');  
         
-
         $visitsDbLogger = function($pdo) use ($routeId, $ip) {
 
             $query = "INSERT INTO visits SET route_id = :routeId, ip = :ip";
@@ -85,7 +90,7 @@ Inserting a record into database via callback.
         };
 
         $db = $this->service(\App\Service\Database, $visitsDbLogger);
-        $db->handle();
+        $db->invoke();
 ```
 
 

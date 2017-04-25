@@ -5,6 +5,7 @@ namespace Account;
 /**
  * @Entity
  * @Table(name="user_profiles")
+ * @HasLifecycleCallbacks()
  **/
 class UserProfileData
 {
@@ -14,6 +15,12 @@ class UserProfileData
      * @GeneratedValue(strategy="NONE")
      */
     protected $id;
+
+    /**
+     * @var
+     * @Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
 
     /**
      * @Column(type="string", length=65)
@@ -82,6 +89,52 @@ class UserProfileData
     }
 
     /**
+     * Set id
+     *
+     * @param guid $id
+     *
+     * @return UserProfileData
+     */
+    public function setId(string $id)
+    {
+        $this->id = (string)$id;
+
+        return $this;
+    }
+
+    /**
+     * @PrePersist()
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime('now');
+        }
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $dateTime)
+    {
+        $this->createdAt = $dateTime;
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
      * Set phone
      *
      * @param string $phone
@@ -96,13 +149,13 @@ class UserProfileData
     }
 
     /**
-     * Get phone
+     * Get gender
      *
      * @return string
      */
-    public function getPhone()
+    public function getGender()
     {
-        return $this->phone;
+        return $this->gender;
     }
 
     /**
@@ -120,13 +173,13 @@ class UserProfileData
     }
 
     /**
-     * Get gender
+     * Get address
      *
      * @return string
      */
-    public function getGender()
+    public function getAddress()
     {
-        return $this->gender;
+        return $this->address;
     }
 
     /**
@@ -144,13 +197,12 @@ class UserProfileData
     }
 
     /**
-     * Get address
-     *
+     * Set zip code
      * @return string
      */
-    public function getAddress()
+    public function getZipcode(): string
     {
-        return $this->address;
+        return $this->zipcode;
     }
 
     /**
@@ -163,12 +215,13 @@ class UserProfileData
     }
 
     /**
-     * Set zip code
+     * Get city
+     *
      * @return string
      */
-    public function getZipcode(): string
+    public function getCity()
     {
-        return $this->zipcode;
+        return $this->city;
     }
 
     /**
@@ -186,13 +239,13 @@ class UserProfileData
     }
 
     /**
-     * Get city
+     * Get country
      *
      * @return string
      */
-    public function getCity()
+    public function getCountry()
     {
-        return $this->city;
+        return $this->country;
     }
 
     /**
@@ -210,13 +263,13 @@ class UserProfileData
     }
 
     /**
-     * Get country
+     * Get remarks
      *
      * @return string
      */
-    public function getCountry()
+    public function getRemarks()
     {
-        return $this->country;
+        return $this->remarks;
     }
 
     /**
@@ -234,27 +287,13 @@ class UserProfileData
     }
 
     /**
-     * Get remarks
+     * Get email
      *
-     * @return string
+     * @return \email
      */
-    public function getRemarks()
+    public function getEmail()
     {
-        return $this->remarks;
-    }
-
-    /**
-     * Set id
-     *
-     * @param guid $id
-     *
-     * @return UserProfileData
-     */
-    public function setId(string $id)
-    {
-        $this->id = (string) $id;
-
-        return $this;
+        return $this->email;
     }
 
     /**
@@ -272,13 +311,13 @@ class UserProfileData
     }
 
     /**
-     * Get email
+     * Get fullName
      *
-     * @return \email
+     * @return string
      */
-    public function getEmail()
+    public function getFullName()
     {
-        return $this->email;
+        return $this->fullName;
     }
 
     /**
@@ -293,15 +332,5 @@ class UserProfileData
         $this->fullName = (string) $fullName;
 
         return $this;
-    }
-
-    /**
-     * Get fullName
-     *
-     * @return string
-     */
-    public function getFullName()
-    {
-        return $this->fullName;
     }
 }

@@ -4,10 +4,9 @@
 namespace App\Handler;
 
 
-use App\Spec\HTML;
 use App\Spec\ORM;
 
-class Customer implements ORM, HTML
+class Customer implements ORM
 {
     /**
      * Holds route, input information and access to generic handler
@@ -33,24 +32,32 @@ class Customer implements ORM, HTML
         return $this->main;
     }
 
+    /**
+     * @param $postData
+     * @param null $uuid
+     * @return array
+     */
     public function postData($postData, $uuid = null)
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER, function () {
         });
         return $customerService->mutate(
-            $customerService->buildOperations($postData, $uuid));
-
+            $customerService->buildOperations($postData, $uuid)
+        );
     }
 
+    /**
+     * @param $uuid
+     * @return \Html\Composite
+     */
     public function buildFormHtml($uuid)
     {
-        $customerData = null;
-
         /** @var \App\Service\DoctrineORM $doctrine */
         $doctrine = $this->container->get(self::DOCTRINE, function(){});
         $entityManager = $doctrine->entityManager();
 
+        $customerData = null;
         if($uuid) {
             $repo = $entityManager->getRepository(\Commerce\CustomerData::class);
             $customerData = $repo->find($uuid);
@@ -76,7 +83,7 @@ class Customer implements ORM, HTML
 
         } else {
 
-            $customerData = new \Commerce\CustomerData($uuid);
+            // $customerData = new \Commerce\CustomerData($uuid);
             $userData = new \Account\UserData($uuid);
             $userProfileData = new \Account\UserProfileData($uuid);
             $userData->setProfileData($userProfileData);
@@ -88,42 +95,35 @@ class Customer implements ORM, HTML
             $creditCardData->setBillingSchedule($billingSchedule);
         }
 
+        $customerFormContent = function () use ($userData, $userProfileData, $creditCardData) {
+            $customerView = new \View\Customer();
+            return $customerView->formContent($userData, $userProfileData, $creditCardData);
+        };
 
-        $formContent = new \Html\Element($userData);
-        $formContent->require('../web/metronic/form-customer/form.php');
-
-        $account = new \Html\Element($userData);
-        $account->require('../web/metronic/form-customer/account.details.php');
-        $formContent->addElement(':formAccountDetails', $account);
-
-        $profile = new \Html\Element($userProfileData);
-        $profile->require('../web/metronic/form-customer/profile.details.php');
-        $formContent->addElement(':formProfileDetails', $profile);
-
-        $billing = new \Html\Element($creditCardData);
-        $billing->require('../web/metronic/form-customer/billing.details.php');
-        $formContent->addElement(':formBillingDetails', $billing);
-
-        $confirm = new \Html\Element($userData);
-        $confirm->require('../web/metronic/form-customer/confirm.details.php');
-        $formContent->addElement(':confirmDetails', $confirm);
-
-        return $this->main->buildContentWith(':pageBaseContent', $formContent);
+        /** @var \App\Service\Html $htmlService */
+        $htmlService = $this->container->get(self::HTML, $customerFormContent);
+        return $htmlService->pageBaseContent(include self::DATA_STORAGE_PATH . $this->main->route()['indexKey'] . '.php');
 
     }
 
+    /**
+     * @return \Html\Composite
+     */
     public function buildListHtml()
     {
         /** @var \App\Service\DoctrineORM $doctrine */
         $doctrine = $this->container->get(self::DOCTRINE, function(){});
-
         $repo = $doctrine->entityManager()->getRepository(\Account\UserProfileData::class);
         $userProfileData = $repo->findAll();
 
-        $listContent = new \Html\Element($userProfileData);
-        $listContent->require('../web/metronic/table-customer/list.php');
+        $customerListContent = function () use ($userProfileData) {
+            $view = new \View\Customer();
+            return $view->listContent($userProfileData);
+        };
 
-        return $this->main->buildContentWith(':pageBaseContent', $listContent);
+        /** @var \App\Service\Html $htmlService */
+        $htmlService = $this->container->get(self::HTML, $customerListContent);
+        return $htmlService->pageBaseContent(include self::DATA_STORAGE_PATH . $this->main->route()['indexKey'] . '.php');
     }
 
 }

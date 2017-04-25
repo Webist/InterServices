@@ -35,14 +35,6 @@ class EmailSender
         return $this->email;
     }
 
-    /**
-     * @return \email
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
     private function isBlackListed()
     {
         $blackList = [];
@@ -53,6 +45,11 @@ class EmailSender
     {
         $domain = substr(strstr($this->email, '@'), 1);
         return checkdnsrr($domain);
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
     }
 
 }

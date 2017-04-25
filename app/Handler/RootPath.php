@@ -7,7 +7,6 @@ namespace App\Handler;
 use App\Spec\ORM;
 use Mail\EmailData;
 use Mail\EmailSender;
-use Mail\Mailer;
 
 class RootPath implements \App\Spec\Main, ORM
 {
@@ -23,19 +22,23 @@ class RootPath implements \App\Spec\Main, ORM
      */
     private $container;
 
-
     public function __construct(Main $main)
     {
         $this->main = $main;
         $this->container = $this->main->container();
     }
 
+    /**
+     * @param array $postData
+     * @return mixed
+     */
     public function postData(array $postData)
     {
         /** @var \App\Service\DoctrineORM $doctrine */
         $doctrine = $this->container->get(self::DOCTRINE, function(){});
         $entityManager = $doctrine->entityManager();
 
+        $message = null;
         // Define which type of command
         if(array_key_exists('email', $postData)
             && array_key_exists('subject', $postData)
@@ -58,45 +61,21 @@ class RootPath implements \App\Spec\Main, ORM
 
             $eMail->setHeaders($headers);
 
-            $mailer = new Mailer($eMail, $entityManager);
-            $message = $mailer->handle();
+            $mailer = function () use ($eMail, $entityManager) {
+                $mailer = new \Mail\Mailer($eMail);
+                $mailer->handle($entityManager);
+            };
 
-            $this->createUserProfile($postData, $entityManager);
+            /** @var \App\Service\Mailer $mailerService */
+            $mailerService = $this->container->get(self::MAILER, $mailer);
+            $message = $mailerService->invoke();
 
-            return $message;
+            /** @var \App\Service\Customer $customerService */
+            $customerService = $this->container->get(self::CUSTOMER, function () {
+            });
+            $customerService->createUserProfileFromEmail($postData, $this->main->uuid()->toString());
         }
+
+        return $message;
     }
-
-    public function createUserProfile($postData, $entityManager)
-    {
-        $repo = $entityManager->getRepository(\Account\UserProfileData::class);
-        /** @var \Account\UserProfileData $userProfileData */
-        $userProfileData = $repo->findOneBy(['email' => $postData['email']]);
-
-        // no-user matched, then create new user
-        if(!$userProfileData) {
-            $uuid = $this->main->uuid()->toString();
-
-            $userProfileData = new \Account\UserProfileData($uuid);
-            $userProfileData->setEmail($postData['email']);
-            $userProfileData->setPhone($postData['phone']);
-            $userProfileData->setFullName('');
-            $userProfileData->setGender(0);
-            $userProfileData->setAddress('');
-            $userProfileData->setCity('');
-            $userProfileData->setCountry('');
-            $userProfileData->setRemarks('');
-
-            $userProfile = new \Account\UserProfile($userProfileData, $entityManager);
-            $userProfile->handle();
-
-            $userData = new \Account\UserData($uuid);
-            $userData->setName($postData['name']);
-            $userData->setPasswd(1);
-
-            $user = new \Account\User($userData, $entityManager);
-            return $user->handle();
-        }
-    }
-
 }

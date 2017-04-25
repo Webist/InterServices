@@ -16,7 +16,7 @@ class Customer
         $this->callback = $callback;
     }
 
-    public function handle()
+    public function invoke()
     {
         return call_user_func($this->callback);
     }
@@ -159,5 +159,43 @@ class Customer
         return $operations;
     }
 
+    /**
+     * Creates new userProfile, User when there is no userProfile with the same email address
+     * @param array $postData
+     * @param string $uuid
+     * @return bool
+     */
+    public function createUserProfileFromEmail(array $postData, string $uuid)
+    {
+        $doctrine = new DoctrineORM();
+        $entityManager = $doctrine->entityManager();
 
+        $repo = $entityManager->getRepository(\Account\UserProfileData::class);
+        /** @var \Account\UserProfileData $userProfileData */
+        $userProfileData = $repo->findOneBy(['email' => $postData['email']]);
+
+        // no-user matched, then create new user
+        if (!$userProfileData) {
+
+            $userProfileData = new \Account\UserProfileData($uuid);
+            $userProfileData->setEmail($postData['email']);
+            $userProfileData->setPhone($postData['phone']);
+            $userProfileData->setFullName('');
+            $userProfileData->setGender(0);
+            $userProfileData->setAddress('');
+            $userProfileData->setCity('');
+            $userProfileData->setCountry('');
+            $userProfileData->setRemarks('');
+
+            $userProfile = new \Account\UserProfile($userProfileData, $entityManager);
+            $userProfile->handle();
+
+            $userData = new \Account\UserData($uuid);
+            $userData->setName($postData['name']);
+            $userData->setPasswd(1);
+
+            $user = new \Account\User($userData, $entityManager);
+            return $user->handle();
+        }
+    }
 }

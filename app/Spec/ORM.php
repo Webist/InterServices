@@ -4,7 +4,7 @@
 namespace App\Spec;
 
 
-interface ORM extends Main
+interface ORM extends Database, Main
 {
     const DOCTRINE = \App\Service\DoctrineORM::class;
     const DOCTRINE_PATH_TO_ENTITY_FILES = ['app', 'handler'];

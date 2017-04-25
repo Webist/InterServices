@@ -23,7 +23,7 @@ class EntityEvent
             $data->setName(get_class($object));
             $data->setObject($object);
             $data->setSequence(1);
-            $data->setTimestamp(new \DateTime('now'));
+            $data->setCreatedAt(new \DateTime('now'));
             $data->setVersion(1);
             $data->setChangeSet($em->getUnitOfWork()->getEntityChangeSet($object));
 
@@ -31,6 +31,7 @@ class EntityEvent
             $em->flush();
             return $em->contains($data);
         }
+        return false;
     }
 
     /**
@@ -50,7 +51,7 @@ class EntityEvent
             $data->setName(get_class($object));
             $data->setObject($object);
             $data->setSequence(2);
-            $data->setTimestamp(new \DateTime('now'));
+            $data->setCreatedAt(new \DateTime('now'));
             $data->setVersion(1);
             $data->setChangeSet($em->getUnitOfWork()->getEntityChangeSet($object));
 
@@ -58,5 +59,6 @@ class EntityEvent
             $em->flush();
             return $em->contains($data);
         }
+        return false;
     }
 }

@@ -6,6 +6,7 @@ namespace Billing;
 /**
  * @Entity
  * @Table(name="billing_schedules")
+ * @HasLifecycleCallbacks()
  **/
 class ScheduleData
 {
@@ -15,6 +16,12 @@ class ScheduleData
      * @GeneratedValue(strategy="NONE")
      */
     protected $id;
+
+    /**
+     * @var
+     * @Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
 
     /**
      * @Column(type="smallint")
@@ -36,16 +43,6 @@ class ScheduleData
         return $this->id;
     }
 
-    public function setPeriod($period)
-    {
-        $this->period = $period;
-    }
-
-    public function getPeriod()
-    {
-        return $this->period;
-    }
-
     /**
      * Set id
      *
@@ -59,4 +56,49 @@ class ScheduleData
 
         return $this;
     }
+
+    /**
+     * @PrePersist()
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime('now');
+        }
+        return $this->createdAt;
+
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $dateTime)
+    {
+        $this->createdAt = $dateTime;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+
+    /**
+     * @param $period
+     * @return $this
+     */
+    public function setPeriod($period)
+    {
+        $this->period = $period;
+        return $this;
+    }
+
+
+
+
 }

@@ -6,6 +6,7 @@ namespace Payment;
 /**
  * @Entity
  * @Table(name="payment_preferences")
+ * @HasLifecycleCallbacks()
  *
  **/
 class PaymentPreferenceData
@@ -16,6 +17,12 @@ class PaymentPreferenceData
      * @GeneratedValue(strategy="NONE")
      */
     protected $id;
+
+    /**
+     * @var
+     * @Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
 
     /** @Column(type="string", length=8) */
     protected $status;
@@ -29,6 +36,16 @@ class PaymentPreferenceData
     public function __construct($uuid = null)
     {
         $this->id = $uuid;
+    }
+
+    /**
+     * Get id
+     *
+     * @return guid
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -46,13 +63,35 @@ class PaymentPreferenceData
     }
 
     /**
-     * Get id
-     *
-     * @return guid
+     * @PrePersist()
+     * @return \DateTime
      */
-    public function getId()
+    public function getCreatedAt()
     {
-        return $this->id;
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime('now');
+        }
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $dateTime)
+    {
+        $this->createdAt = $dateTime;
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -70,13 +109,13 @@ class PaymentPreferenceData
     }
 
     /**
-     * Get status
+     * Get method
      *
      * @return string
      */
-    public function getStatus()
+    public function getMethod()
     {
-        return $this->status;
+        return $this->method;
     }
 
     /**
@@ -94,13 +133,13 @@ class PaymentPreferenceData
     }
 
     /**
-     * Get method
+     * Get autopay
      *
      * @return string
      */
-    public function getMethod()
+    public function getAutopay()
     {
-        return $this->method;
+        return $this->autoPay;
     }
 
     /**
@@ -115,15 +154,5 @@ class PaymentPreferenceData
         $this->autoPay = (bool) $autoPay;
 
         return $this;
-    }
-
-    /**
-     * Get autopay
-     *
-     * @return string
-     */
-    public function getAutopay()
-    {
-        return $this->autoPay;
     }
 }

@@ -3,10 +3,10 @@
 namespace App\Service;
 
 use App\Spec\ORM;
-use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 
-class DoctrineORM extends DatabaseAbstract implements ORM
+class DoctrineORM implements ORM
 {
     /**
      * @var \Doctrine\ORM\Configuration
@@ -44,7 +44,10 @@ class DoctrineORM extends DatabaseAbstract implements ORM
      */
     public function entityManager()
     {
-        $credentials = $this->credentials(dirname(__DIR__) . self::DATABASE_GYM_CREDENTIALS_FILE);
+
+        $db = new \Connector\Database();
+        $credentials = $db->credentials(dirname(__DIR__) . self::DATABASE_GYM_CREDENTIALS_FILE);
+
         $dbParams = array(
             'driver'   => 'pdo_mysql',
             'host' => $credentials['host'],

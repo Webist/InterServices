@@ -5,6 +5,7 @@ namespace Commerce;
 /**
  * @Entity
  * @Table(name="customers")
+ * @HasLifecycleCallbacks()
  **/
 class CustomerData
 {
@@ -16,6 +17,12 @@ class CustomerData
      * @GeneratedValue(strategy="NONE")
      */
     protected $id;
+
+    /**
+     * @var
+     * @Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
 
     /**
      *
@@ -51,6 +58,16 @@ class CustomerData
     }
 
     /**
+     * Get id
+     *
+     * @return guid
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set id
      *
      * @param guid $id
@@ -65,13 +82,35 @@ class CustomerData
     }
 
     /**
-     * Get id
-     *
-     * @return guid
+     * @PrePersist()
+     * @return \DateTime
      */
-    public function getId()
+    public function getCreatedAt()
     {
-        return $this->id;
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime('now');
+        }
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $dateTime)
+    {
+        $this->createdAt = $dateTime;
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 
     /**
@@ -89,13 +128,13 @@ class CustomerData
     }
 
     /**
-     * Get status
+     * Get state
      *
      * @return string
      */
-    public function getStatus() : string
+    public function getState()
     {
-        return $this->status;
+        return $this->state;
     }
 
     /**
@@ -113,13 +152,13 @@ class CustomerData
     }
 
     /**
-     * Get state
+     * Get timezone
      *
      * @return string
      */
-    public function getState()
+    public function getTimezone()
     {
-        return $this->state;
+        return $this->timezone;
     }
 
     /**
@@ -137,13 +176,13 @@ class CustomerData
     }
 
     /**
-     * Get timezone
+     * Get locale
      *
      * @return string
      */
-    public function getTimezone()
+    public function getLocale()
     {
-        return $this->timezone;
+        return $this->locale;
     }
 
     /**
@@ -158,15 +197,5 @@ class CustomerData
         $this->locale = (string) $locale;
 
         return $this;
-    }
-
-    /**
-     * Get locale
-     *
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
     }
 }

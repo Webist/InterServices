@@ -6,6 +6,7 @@ namespace Account;
 /**
  * @Entity
  * @Table(name="users")
+ * @HasLifecycleCallbacks()
  **/
 class UserData
 {
@@ -15,6 +16,12 @@ class UserData
      * @GeneratedValue(strategy="NONE")
      */
     protected $id;
+
+    /**
+     * @var
+     * @Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
 
     /**
      * @Column(type="string", length=65)
@@ -52,6 +59,52 @@ class UserData
     }
 
     /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @param guid $id
+     *
+     * @return UserData
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @PrePersist()
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime('now');
+        }
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $dateTime)
+    {
+        $this->createdAt = $dateTime;
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function profileData()
@@ -65,16 +118,6 @@ class UserData
     public function setProfileData($profileData)
     {
         $this->profileData = $profileData;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -102,6 +145,16 @@ class UserData
     }
 
     /**
+     * Get passwd
+     *
+     * @return string
+     */
+    public function getPasswd()
+    {
+        return $this->passwd;
+    }
+
+    /**
      * Set passwd
      *
      * @param string $passwd
@@ -113,16 +166,6 @@ class UserData
         $this->passwd = (string) $passwd;
 
         return $this;
-    }
-
-    /**
-     * Get passwd
-     *
-     * @return string
-     */
-    public function getPasswd()
-    {
-        return $this->passwd;
     }
 
     /**
@@ -150,20 +193,6 @@ class UserData
     }
 
     /**
-     * Set id
-     *
-     * @param guid $id
-     *
-     * @return UserData
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Set email
      *
      * @param \email $email
@@ -188,6 +217,16 @@ class UserData
     }
 
     /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Set name
      *
      * @param string $name
@@ -199,15 +238,5 @@ class UserData
         $this->name = (string) $name;
 
         return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 }

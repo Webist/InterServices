@@ -3,7 +3,7 @@
 namespace App\Service;
 
 
-class Database extends DatabaseAbstract
+class Database
 {
     /**
      * Holds the callback as it was defined when this service was reflected
@@ -23,8 +23,9 @@ class Database extends DatabaseAbstract
      * @param null $credentialsFile when used, overrides default credentials file
      * @return mixed
      */
-    public function handle($credentialsFile = null)
+    public function invoke($credentialsFile = null)
     {
-        return call_user_func($this->callback, $this->db($credentialsFile));
+        $db = new \Connector\Database();
+        return call_user_func($this->callback, $db->connection($credentialsFile));
     }
 }

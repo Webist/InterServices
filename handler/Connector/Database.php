@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Service;
+
+namespace Connector;
 
 
-abstract class DatabaseAbstract implements \App\Spec\Database
+class Database implements \App\Spec\Database
 {
     /**
      * @var \PDO|\mysqli
@@ -11,13 +12,13 @@ abstract class DatabaseAbstract implements \App\Spec\Database
     private $connection;
 
     /**
-     * @param $credentialsFile DSN string container file
+     * @param string $credentialsFile
      * @return \mysqli|\PDO
      */
-    protected function db(string $credentialsFile = '')
+    public function connection(string $credentialsFile = '')
     {
         // Use default
-        if($credentialsFile === '') {
+        if ($credentialsFile === '') {
             $credentialsFile = dirname(__DIR__) . self::DATABASE_GYM_CREDENTIALS_FILE;
         }
 
@@ -43,15 +44,20 @@ abstract class DatabaseAbstract implements \App\Spec\Database
         return $this->connection;
     }
 
-    protected function credentials($credentialsFile)
+    /**
+     * @param $credentialsFile
+     * @return array
+     */
+    public function credentials($credentialsFile)
     {
         $credentials = @file_get_contents($credentialsFile);
         $dbCredentials = explode("\n", $credentials);
-        foreach($dbCredentials as $db => $line){
-            if(trim($line) != '' && strpos($line, self::PROTOCOL) !== false){
+        foreach ($dbCredentials as $db => $line) {
+            if (trim($line) != '' && strpos($line, self::PROTOCOL) !== false) {
                 return $this->parseDSN($line);
             }
         }
+        return false;
     }
 
     /**
@@ -61,7 +67,7 @@ abstract class DatabaseAbstract implements \App\Spec\Database
     private function parseDSN(string $dsn)
     {
         $matches = [];
-        preg_match('/^(?P<'.self::PROTOCOL.'>\w+)(:\/\/)(?P<username>\w+)(:(?P<passwd>\w+))?@(?P<host>[.\w]+)(:(?P<port>\d+))?\\\\(?P<dbname>\w+)$/im', $dsn, $matches);
+        preg_match('/^(?P<' . self::PROTOCOL . '>\w+)(:\/\/)(?P<username>\w+)(:(?P<passwd>\w+))?@(?P<host>[.\w]+)(:(?P<port>\d+))?\\\\(?P<dbname>\w+)$/im', $dsn, $matches);
 
         $values = [];
         foreach (self::CREDENTIALS as $key => $value) {

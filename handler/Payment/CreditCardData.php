@@ -5,6 +5,7 @@ namespace Payment;
 /**
  * @Entity
  * @Table(name="credit_cards")
+ * @HasLifecycleCallbacks()
  *
  * improve this https://github.com/doctrine/doctrine2/issues/1757
  **/
@@ -17,23 +18,29 @@ class CreditCardData
      */
     protected $id;
 
+    /**
+     * @var
+     * @Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
+
     /** @Column(type="string", length=8) */
     protected $status;
-
+    protected $paymentPreference;
+    protected $billingSchedule;
     /** @Column(type="string", length=65) */
     private $name;
-
     /** @Column(type="string", length=65) */
     private $number;
-
     /** @Column(type="string", length=4) */
     private $cvc;
-
     /** @Column(type="string", length=8) */
     private $expiryDate;
 
-    protected $paymentPreference;
-    protected $billingSchedule;
+    public function __construct($uuid = null)
+    {
+        $this->id = $uuid;
+    }
 
     /**
      * @return mixed
@@ -67,11 +74,6 @@ class CreditCardData
         $this->billingSchedule = $billingSchedule;
     }
 
-    public function __construct($uuid = null)
-    {
-        $this->id = $uuid;
-    }
-
     /**
      * Get id
      *
@@ -80,6 +82,52 @@ class CreditCardData
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @param guid $id
+     *
+     * @return CreditCardData
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @PrePersist()
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime('now');
+        }
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $dateTime)
+    {
+        $this->createdAt = $dateTime;
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -97,13 +145,13 @@ class CreditCardData
     }
 
     /**
-     * Get status
+     * Get name
      *
      * @return string
      */
-    public function getStatus()
+    public function getName()
     {
-        return $this->status;
+        return $this->name;
     }
 
     /**
@@ -121,13 +169,13 @@ class CreditCardData
     }
 
     /**
-     * Get name
+     * Get number
      *
      * @return string
      */
-    public function getName()
+    public function getNumber()
     {
-        return $this->name;
+        return $this->number;
     }
 
     /**
@@ -145,13 +193,13 @@ class CreditCardData
     }
 
     /**
-     * Get number
+     * Get cvc
      *
      * @return string
      */
-    public function getNumber()
+    public function getCvc()
     {
-        return $this->number;
+        return $this->cvc;
     }
 
     /**
@@ -169,13 +217,13 @@ class CreditCardData
     }
 
     /**
-     * Get cvc
+     * Get expiryDate
      *
      * @return string
      */
-    public function getCvc()
+    public function getExpiryDate()
     {
-        return $this->cvc;
+        return $this->expiryDate;
     }
 
     /**
@@ -188,30 +236,6 @@ class CreditCardData
     public function setExpiryDate(string $expiryDate)
     {
         $this->expiryDate = (string) $expiryDate;
-
-        return $this;
-    }
-
-    /**
-     * Get expiryDate
-     *
-     * @return string
-     */
-    public function getExpiryDate()
-    {
-        return $this->expiryDate;
-    }
-
-    /**
-     * Set id
-     *
-     * @param guid $id
-     *
-     * @return CreditCardData
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
 
         return $this;
     }

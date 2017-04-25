@@ -25,9 +25,9 @@ class EmailData
 
     /**
      * @var
-     * @Column(type="datetime")
+     * @Column(type="datetime", name="created_at")
      */
-     protected $timestamp;
+    protected $createdAt;
 
     /**
      * @var
@@ -71,22 +71,7 @@ class EmailData
     }
 
     /**
-     * Set hash
-     *
-     * @param string $hash
-     *
-     *
-     * @return EmailData
-     */
-    public function setHash($hash)
-    {
-        $this->hash = $hash;
-
-        return $this;
-    }
-
-    /**
-     * Get hash
+     * Gets md5 hash string
      * @PrePersist()
      *
      * @return string
@@ -97,6 +82,31 @@ class EmailData
             $this->hash = md5($this->sender . $this->receiver . $this->subject . $this->message);
         }
         return $this->hash;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     *
+     *
+     * @return EmailData
+     */
+    public function setHash(string $hash)
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get sender
+     *
+     * @return string
+     */
+    public function getSender()
+    {
+        return $this->sender;
     }
 
     /**
@@ -114,13 +124,13 @@ class EmailData
     }
 
     /**
-     * Get sender
+     * Get receiver
      *
      * @return string
      */
-    public function getSender()
+    public function getReceiver()
     {
-        return $this->sender;
+        return $this->receiver;
     }
 
     /**
@@ -138,13 +148,13 @@ class EmailData
     }
 
     /**
-     * Get receiver
+     * Get subject
      *
      * @return string
      */
-    public function getReceiver()
+    public function getSubject()
     {
-        return $this->receiver;
+        return $this->subject;
     }
 
     /**
@@ -162,13 +172,13 @@ class EmailData
     }
 
     /**
-     * Get subject
+     * Get message
      *
      * @return string
      */
-    public function getSubject()
+    public function getMessage()
     {
-        return $this->subject;
+        return $this->message;
     }
 
     /**
@@ -186,13 +196,13 @@ class EmailData
     }
 
     /**
-     * Get message
+     * Get headers
      *
      * @return string
      */
-    public function getMessage()
+    public function getHeaders()
     {
-        return $this->message;
+        return $this->headers;
     }
 
     /**
@@ -210,16 +220,6 @@ class EmailData
     }
 
     /**
-     * Get headers
-     *
-     * @return string
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-
-    /**
      * Set timestamp
      *
      * @param \DateTime $timestamp
@@ -227,9 +227,9 @@ class EmailData
      *
      * @return EmailData
      */
-    public function setTimestamp($timestamp)
+    public function setCreatedAt(\DateTime $timestamp)
     {
-        $this->timestamp = $timestamp;
+        $this->createdAt = $timestamp;
 
         return $this;
     }
@@ -242,9 +242,9 @@ class EmailData
      */
     public function getTimestamp()
     {
-        if($this->timestamp === null){
-            $this->timestamp = new \DateTime('now');
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime('now');
         }
-        return $this->timestamp;
+        return $this->createdAt;
     }
 }
