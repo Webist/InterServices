@@ -57,16 +57,16 @@ class Customer implements \App\Spec\Customer
                 ),
         );
 
-        $this->handler->postData($postData, $this->inputHandler->parameter('uuid'));
+        $this->handler->postXhr($postData, $this->inputHandler->parameter('uuid'));
     }
 
     public function postXhr()
     {
         try {
 
-            $this->handler->postData(
+            $this->handler->postXhr(
                 filter_input_array(INPUT_POST),
-                    $this->inputHandler->parameter('uuid'));
+                $this->inputHandler->parameter('uuid'));
 
             $message = [
                 self::RESPONSE_MESSAGE_KEY => 'ok',
@@ -89,13 +89,11 @@ class Customer implements \App\Spec\Customer
     {
         $uuid = $this->inputHandler->parameter('uuid');
 
-        $lay = $this->handler->buildFormHtml($uuid);
-        return $lay->render();
+        return $this->handler->edit($uuid);
     }
 
     public function get()
     {
-        $lay = $this->handler->buildListHtml();
-        return $lay->render();
+        return $this->handler->get();
     }
 }

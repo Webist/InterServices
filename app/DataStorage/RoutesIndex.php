@@ -92,7 +92,7 @@ return [
             ),
         'indexKey' => 'e531c13f9cf22ea38d0ccb29e27f1449',
         'delivery' => 'simple',
-        'class' => '../web/home.php',
+        'class' => '../web/rootpath.php',
         'method' => null,
         'config' => null,
         'handler' => null,

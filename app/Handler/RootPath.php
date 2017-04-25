@@ -28,11 +28,17 @@ class RootPath implements \App\Spec\Main, ORM
         $this->container = $this->main->container();
     }
 
+    public function get()
+    {
+        $view = new \View\RootPath();
+        return $view->get();
+    }
+
     /**
      * @param array $postData
      * @return mixed
      */
-    public function postData(array $postData)
+    public function postXhr(array $postData)
     {
         /** @var \App\Service\DoctrineORM $doctrine */
         $doctrine = $this->container->get(self::DOCTRINE, function(){});

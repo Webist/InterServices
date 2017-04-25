@@ -37,7 +37,7 @@ class Customer implements ORM
      * @param null $uuid
      * @return array
      */
-    public function postData($postData, $uuid = null)
+    public function postXhr($postData, $uuid = null)
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER, function () {
@@ -51,7 +51,7 @@ class Customer implements ORM
      * @param $uuid
      * @return \Html\Composite
      */
-    public function buildFormHtml($uuid)
+    public function edit($uuid)
     {
         /** @var \App\Service\DoctrineORM $doctrine */
         $doctrine = $this->container->get(self::DOCTRINE, function(){});
@@ -102,14 +102,15 @@ class Customer implements ORM
 
         /** @var \App\Service\Html $htmlService */
         $htmlService = $this->container->get(self::HTML, $customerFormContent);
-        return $htmlService->pageBaseContent(include self::DATA_STORAGE_PATH . $this->main->route()['indexKey'] . '.php');
+        $lay = $htmlService->pageBaseContent(include self::DATA_STORAGE_PATH . $this->main->route()['indexKey'] . '.php');
+        return $lay->render();
 
     }
 
     /**
      * @return \Html\Composite
      */
-    public function buildListHtml()
+    public function get()
     {
         /** @var \App\Service\DoctrineORM $doctrine */
         $doctrine = $this->container->get(self::DOCTRINE, function(){});
@@ -123,7 +124,8 @@ class Customer implements ORM
 
         /** @var \App\Service\Html $htmlService */
         $htmlService = $this->container->get(self::HTML, $customerListContent);
-        return $htmlService->pageBaseContent(include self::DATA_STORAGE_PATH . $this->main->route()['indexKey'] . '.php');
+        $lay = $htmlService->pageBaseContent(include self::DATA_STORAGE_PATH . $this->main->route()['indexKey'] . '.php');
+        $lay->render();
     }
 
 }

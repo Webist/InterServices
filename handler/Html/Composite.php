@@ -14,11 +14,6 @@ class Composite
      */
     private $elements = [];
 
-    public function __construct()
-    {
-
-    }
-
     public function setHeadContent(\Html\Element $head)
     {
         $this->headContent = $head;

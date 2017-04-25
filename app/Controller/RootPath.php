@@ -22,9 +22,7 @@ class RootPath implements \App\Spec\RootPath
      */
     public function get()
     {
-        ob_start();
-        include '../web/home.php';
-        return ob_get_clean();
+        return $this->handler->get();
     }
 
     public function post()
@@ -41,6 +39,6 @@ class RootPath implements \App\Spec\RootPath
     {
         \Assert\Assertion::notEmpty($postData = filter_input_array(INPUT_POST));
 
-        return json_encode([self::RESPONSE_MESSAGE_KEY => $this->handler->postData($postData)]);
+        return json_encode([self::RESPONSE_MESSAGE_KEY => $this->handler->postXhr($postData)]);
     }
 }
