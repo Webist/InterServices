@@ -1,7 +1,9 @@
 
 ### SystemAdmin Environment
  
- + Generate complete set MOM structure for MVC
+ Following tasks are in the roadmap  
+ 
+ + Generate complete set Simple, MVC, MOM structure from command line
     1. Route with ```indexKey```
     2. xController with construct, 
         * xInterface extends Global, 

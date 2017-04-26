@@ -1,13 +1,19 @@
-### Back-end app environment - Web Delivery Framework
+### Web Delivery - Simple, MVC, MOM
 
-In this /app directory resides back-end (PHP) development files.
-  
-Main concern of this /app directory is application access 
-to become the web delivery framework.
-The web delivery framework consists of routing, 
-request model/composition and protocol translation in an MVC structure.
+Main concern of this /app directory is the application access 
+to become the web delivery by communicating with components/services.
 
-Six different type of folders meets the requirements of the Machine Object Model.
+It consists of routing, request model/composition and protocol translation.  
+
+With the appliance of MOM (Machine Object Model) 
+objects structure relies strongly on DI (Dependency Injection) principle.
+Therefore the structure is generally, including MVC, component/service oriented.  
+
+There is no framework, which would bring many benefits, to develop in a boxed area.
+Instead architectural principles that challenges the best practices in software development.
+
+Seven different type of folders meets the requirements of the MOM.
+
 
 + Spec  
 Specification data (interfaces, config). 
@@ -26,6 +32,9 @@ External service connection/adapters, microservices
 
 + Exception   
 Controller specific error handlers  
+
++ View  
+Layout, templates composition and rendering model 
 
 
 

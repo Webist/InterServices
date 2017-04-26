@@ -1,18 +1,20 @@
 ### (Web) Delivery methods
 
-+ Simple
-Simple page inclusion.
+Initialization is done as it below.  
+There is no initialisation or bootstrap stage.   
 
-+ MVC (Model View Controller)
++ Simple  
+Simple page inclusion.  
+
++ MVC (Model View Controller)  
 Controller class will be instantiated.  
 Controller method will be invoked.  
 Parameters will be as arguments passed.  
 
-+ MOM (Machine Object Model)
-Service Container will be instantiated.
-MainHandler class will be instantiated.
-Main class will be instantiated.
-Controller-Handler class will be instantiated.
-Controller class will be instantiated.  
++ MOM (Machine Object Model)  
+Service Container will be instantiated.  
+Main class will be instantiated.  
+Controller-Handler class will be instantiated.  
+Controller class will be instantiated.   
 Controller method will be invoked.  
-Parameters will be as arguments passed. 
+Parameters will be as arguments passed.   

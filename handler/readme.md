@@ -1,8 +1,8 @@
 ### External Handlers - Components/Middleware
 
-In this /handler directory resides various components.  
+In this /handler directory resides various components/services.  
 
-A handler deals with specific type of job.
+An handler deals with specific type of job.
 Examples are 
    + Mailer   
    Sends email.
@@ -18,3 +18,4 @@ Examples are
 
 /vendor directory contains also similar handlers.  
 These are developed by external organisations or persons.
+Handlers in this directory are the candidate components for vendor directory.
