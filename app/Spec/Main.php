@@ -8,8 +8,6 @@ interface Main
 
     const DATA_STORAGE_PATH = '../app/DataStorage/';
 
-    const HTML = \App\Service\Html::class;
-
     const MAILER = \App\Service\Mailer::class;
     const EMAIL_TO = 'info@example.com';
 

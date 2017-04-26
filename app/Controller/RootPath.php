@@ -13,7 +13,6 @@ class RootPath implements \App\Spec\RootPath
     public function __construct(InputHandler $inputHandler, \App\Handler\RootPath $handler)
     {
         $this->inputHandler = $inputHandler;
-        /** @var \App\Handler\RootPath $handler */
         $this->handler = $handler;
     }
 
@@ -22,7 +21,11 @@ class RootPath implements \App\Spec\RootPath
      */
     public function get()
     {
-        return $this->handler->get();
+        $view = new \View\Model(
+            \View\RootPath::get($this->handler->get()),
+            $this->handler->main()->pageMetaData()
+        );
+        return $view->render(false);
     }
 
     public function post()
@@ -37,8 +40,12 @@ class RootPath implements \App\Spec\RootPath
 
     public function postXhr()
     {
-        \Assert\Assertion::notEmpty($postData = filter_input_array(INPUT_POST));
-
-        return json_encode([self::RESPONSE_MESSAGE_KEY => $this->handler->postXhr($postData)]);
+        return json_encode(
+            [
+                self::RESPONSE_MESSAGE_KEY => $this->handler->postXhr(
+                    filter_input_array(INPUT_POST),
+                    $this->inputHandler->parameter('uuid'))
+            ]
+        );
     }
 }

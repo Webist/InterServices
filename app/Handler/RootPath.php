@@ -28,10 +28,19 @@ class RootPath implements \App\Spec\Main, ORM
         $this->container = $this->main->container();
     }
 
+    public function main()
+    {
+        return $this->main;
+    }
+
+    public function container()
+    {
+        return $this->main->container();
+    }
+
     public function get()
     {
-        $view = new \View\RootPath();
-        return $view->get();
+        return [];
     }
 
     /**
@@ -40,11 +49,13 @@ class RootPath implements \App\Spec\Main, ORM
      */
     public function postXhr(array $postData)
     {
+        \Assert\Assertion::notEmpty($postData);
+
         /** @var \App\Service\DoctrineORM $doctrine */
         $doctrine = $this->container->get(self::DOCTRINE, function(){});
         $entityManager = $doctrine->entityManager();
 
-        $message = null;
+        $message = '';
         // Define which type of command
         if(array_key_exists('email', $postData)
             && array_key_exists('subject', $postData)
@@ -77,8 +88,7 @@ class RootPath implements \App\Spec\Main, ORM
             $message = $mailerService->invoke();
 
             /** @var \App\Service\Customer $customerService */
-            $customerService = $this->container->get(self::CUSTOMER, function () {
-            });
+            $customerService = $this->container->get(self::CUSTOMER, function () {});
             $customerService->createUserProfileFromEmail($postData, $this->main->uuid()->toString());
         }
 

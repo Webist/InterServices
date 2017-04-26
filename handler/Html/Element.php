@@ -51,6 +51,10 @@ class Element
 
     public function render()
     {
+        if($this->require === null) {
+            return $this->data;
+        }
+
         // original
         ob_start();
         require $this->require;

@@ -5,7 +5,7 @@ namespace App\Handler;
 
 use App\Spec\Database;
 
-class Main implements Database
+class Main implements Database, \App\Spec\Main
 {
     private $route = [];
 
@@ -68,5 +68,10 @@ class Main implements Database
             $this->uuid = \Ramsey\Uuid\Uuid::uuid4();
         }
         return $this->uuid;
+    }
+
+    public function pageMetaData()
+    {
+        return include self::DATA_STORAGE_PATH . $this->route()['indexKey'] . '.php';
     }
 }

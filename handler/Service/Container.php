@@ -34,16 +34,13 @@ class Container
     public function get($serviceObject, \Closure $callable)
     {
         if(!isset($this->services[$serviceObject])){
-
             $reflection = new \ReflectionClass($serviceObject);
-
             // Directly to callback Closures can be injected into the construct of class
             if($reflection->hasMethod('__construct')){
                 $this->services[$serviceObject] = $reflection->newInstance($callable);
             } else {
                 $this->services[$serviceObject] = $reflection->newInstance();
             }
-
         }
         return $this->services[$serviceObject];
     }

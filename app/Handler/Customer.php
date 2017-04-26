@@ -6,7 +6,7 @@ namespace App\Handler;
 
 use App\Spec\ORM;
 
-class Customer implements ORM
+class Customer implements \App\Spec\Customer, ORM
 {
     /**
      * Holds route, input information and access to generic handler
@@ -15,21 +15,22 @@ class Customer implements ORM
     private $main;
 
     /**
-     * Provides instantiation of defined class
-     * @var \Service\Container
+     * Customer constructor.
+     * @param Main $main
      */
-    private $container;
-
-
     public function __construct(Main $main)
     {
         $this->main = $main;
-        $this->container = $this->main->container();
     }
 
     public function main()
     {
         return $this->main;
+    }
+
+    public function container()
+    {
+        return $this->main->container();
     }
 
     /**
@@ -39,8 +40,10 @@ class Customer implements ORM
      */
     public function postXhr($postData, $uuid = null)
     {
+        \Assert\Assertion::notEmpty($postData);
+
         /** @var \App\Service\Customer $customerService */
-        $customerService = $this->container->get(self::CUSTOMER, function () {
+        $customerService = $this->container()->get(self::CUSTOMER, function () {
         });
         return $customerService->mutate(
             $customerService->buildOperations($postData, $uuid)
@@ -49,31 +52,36 @@ class Customer implements ORM
 
     /**
      * @param $uuid
-     * @return \Html\Composite
+     * @param $customerData \App\Spec\Customer::CUSTOMER_DATA
+     * @return array
      */
-    public function edit($uuid)
+    public function edit($uuid, $customerData)
     {
-        /** @var \App\Service\DoctrineORM $doctrine */
-        $doctrine = $this->container->get(self::DOCTRINE, function(){});
-        $entityManager = $doctrine->entityManager();
-
-        $customerData = null;
-        if($uuid) {
-            $repo = $entityManager->getRepository(\Commerce\CustomerData::class);
-            $customerData = $repo->find($uuid);
+        if($customerData !== \App\Spec\Customer::CUSTOMER_EDIT) {
+            throw \InvalidArgumentException('Invlid argument CUSTOMER_EDIT');
         }
 
-        if ($customerData) {
+        /** @var \App\Service\DoctrineORM $doctrine */
+        $doctrine = $this->container()->get(self::DOCTRINE, function(){});
+        $entityManager = $doctrine->entityManager();
+
+        $customer = null;
+        if($uuid) {
+            $repo = $entityManager->getRepository(\Commerce\CustomerData::class);
+            $customer = $repo->find($uuid);
+        }
+
+        if ($customer) {
 
             $repo = $entityManager->getRepository(\Account\UserData::class);
-            $userData = $repo->find($uuid);
+            $customerData['userData'] = $userData = $repo->find($uuid);
 
             $repo = $entityManager->getRepository(\Account\UserProfileData::class);
-            $userProfileData = $repo->find($uuid);
+            $customerData['userProfileData'] = $userProfileData = $repo->find($uuid);
             $userData->setProfileData($userProfileData);
 
             $repo = $entityManager->getRepository(\Payment\CreditCardData::class);
-            $creditCardData = $repo->find($uuid);
+            $customerData['creditCardData'] = $creditCardData = $repo->find($uuid);
             $repo = $entityManager->getRepository(\Payment\PaymentPreferenceData::class);
             $preferenceData = $repo->find($uuid);
             $creditCardData->setPaymentPreference($preferenceData);
@@ -84,48 +92,29 @@ class Customer implements ORM
         } else {
 
             // $customerData = new \Commerce\CustomerData($uuid);
-            $userData = new \Account\UserData($uuid);
-            $userProfileData = new \Account\UserProfileData($uuid);
+            $customerData['userData'] = $userData = new \Account\UserData($uuid);
+            $customerData['userProfileData'] = $userProfileData = new \Account\UserProfileData($uuid);
             $userData->setProfileData($userProfileData);
 
-            $creditCardData = new \Payment\CreditCardData($uuid);
+            $customerData['creditCardData'] = $creditCardData = new \Payment\CreditCardData($uuid);
             $preferenceData = new \Payment\PaymentPreferenceData($uuid);
             $creditCardData->setPaymentPreference($preferenceData);
             $billingSchedule = new \Billing\ScheduleData($uuid);
             $creditCardData->setBillingSchedule($billingSchedule);
         }
 
-        $customerFormContent = function () use ($userData, $userProfileData, $creditCardData) {
-            $customerView = new \View\Customer();
-            return $customerView->formContent($userData, $userProfileData, $creditCardData);
-        };
-
-        /** @var \App\Service\Html $htmlService */
-        $htmlService = $this->container->get(self::HTML, $customerFormContent);
-        $lay = $htmlService->pageBaseContent(include self::DATA_STORAGE_PATH . $this->main->route()['indexKey'] . '.php');
-        return $lay->render();
-
+        return $customerData;
     }
 
     /**
-     * @return \Html\Composite
+     * @return array
      */
     public function get()
     {
         /** @var \App\Service\DoctrineORM $doctrine */
-        $doctrine = $this->container->get(self::DOCTRINE, function(){});
+        $doctrine = $this->container()->get(self::DOCTRINE, function(){});
         $repo = $doctrine->entityManager()->getRepository(\Account\UserProfileData::class);
-        $userProfileData = $repo->findAll();
-
-        $customerListContent = function () use ($userProfileData) {
-            $view = new \View\Customer();
-            return $view->listContent($userProfileData);
-        };
-
-        /** @var \App\Service\Html $htmlService */
-        $htmlService = $this->container->get(self::HTML, $customerListContent);
-        $lay = $htmlService->pageBaseContent(include self::DATA_STORAGE_PATH . $this->main->route()['indexKey'] . '.php');
-        $lay->render();
+        return $repo->findAll();
     }
 
 }

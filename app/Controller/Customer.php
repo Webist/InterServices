@@ -1,11 +1,4 @@
 <?php
-/**
- *
- *
- * A Visitor should be able to Register as new Customer
- * A System Manager should be able to Register a new Customer
- *
- */
 
 namespace App\Controller;
 
@@ -63,7 +56,6 @@ class Customer implements \App\Spec\Customer
     public function postXhr()
     {
         try {
-
             $this->handler->postXhr(
                 filter_input_array(INPUT_POST),
                 $this->inputHandler->parameter('uuid'));
@@ -71,14 +63,14 @@ class Customer implements \App\Spec\Customer
             $message = [
                 self::RESPONSE_MESSAGE_KEY => 'ok',
                 'state' => ['title' => 'Customer form - Saved', 'url' => 'window.location.href'],
-                'uuid' => $this->handler->uuid()
+                'uuid' => $this->handler->main()->uuid()->toString()
             ];
 
         } catch (\App\Exception\Customer $exception) {
             $message = [
                 self::RESPONSE_MESSAGE_KEY => $exception->getMessage(),
                 'state' => ['title' => 'Customer form - Failed', 'url' => 'window.location.href'],
-                'uuid' => $this->handler->uuid()
+                'uuid' => $this->handler->main()->uuid()->toString()
             ];
         }
 
@@ -87,13 +79,22 @@ class Customer implements \App\Spec\Customer
 
     public function edit()
     {
-        $uuid = $this->inputHandler->parameter('uuid');
+        $view = new \View\Model(
+            \View\Customer::edit($this->handler->edit(
+                $this->inputHandler->parameter('uuid'),
+                self::CUSTOMER_EDIT)),
+            $this->handler->main()->pageMetaData()
+        );
+        return $view->render();
 
-        return $this->handler->edit($uuid);
     }
 
     public function get()
     {
-        return $this->handler->get();
+       $view = new \View\Model(
+            \View\Customer::get($this->handler->get()),
+            $this->handler->main()->pageMetaData()
+        );
+       $view->render();
     }
 }

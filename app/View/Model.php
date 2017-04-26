@@ -4,8 +4,41 @@
 namespace View;
 
 
-class BaseContent
+class Model
 {
+    /**
+     * Content data
+     * @var \Html\Element
+     */
+    private $templateData;
+
+    /**
+     * Meta data, other than content data, such as title, keywords
+     * @var array
+     */
+    private $pageMetaData;
+
+    public function __construct(\Html\Element $templateData, array $pageMetaData)
+    {
+        $this->templateData = $templateData;
+        $this->pageMetaData = $pageMetaData;
+    }
+
+    /**
+     * @param bool $withBaseContent current template will be wrapped with baseContent
+     * @return mixed|string
+     */
+    public function render($withBaseContent = true)
+    {
+        if($withBaseContent) {
+            $content = $this->buildContentWith(':pageBaseContent', $this->templateData);
+            return $content->render();
+        }
+
+        return $this->templateData->render();
+    }
+
+
     /**
      * Generic html body content builder to reuse together with a specific body content
      *
@@ -14,16 +47,16 @@ class BaseContent
      * @param array $pageData
      * @return \Html\Composite
      */
-    public static function buildContentWith(string $placeHolder, \Html\Element $content, array $pageData)
+    private function buildContentWith(string $placeHolder, \Html\Element $content)
     {
         $headData = new \Html\HeadData();
-        $headData->setTitle($pageData['head']['title']);
+        $headData->setTitle($this->pageMetaData['head']['title']);
 
         $htmlHead = new \Html\Element($headData);
         $htmlHead->require('../web/metronic/html.head.php');
 
         $bodyData = new \Html\BodyData();
-        $bodyData->setTitle($pageData['body']['title']);
+        $bodyData->setTitle($this->pageMetaData['body']['title']);
 
         $bodyContent = new \Html\Element($bodyData);
         $bodyContent->require('../web/metronic/html.page.php');
