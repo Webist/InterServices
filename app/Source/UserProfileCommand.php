@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Event;
+namespace App\Source;
 
 
 use App\Spec\ORM;
 
-class UserProfile implements ORM
+class UserProfileCommand implements ORM
 {
     private $container;
     public function __construct(\Service\Container $container)
@@ -22,6 +22,7 @@ class UserProfile implements ORM
      */
     public function postXhrOperations(array $postData, string $uuid)
     {
+        /** @var \Doctrine\ORM\EntityManager $entityManager */
         $doctrine = $this->container->get(self::DOCTRINE, function(){});
         $entityManager = $doctrine->entityManager();
 
@@ -48,8 +49,9 @@ class UserProfile implements ORM
             $userData->setName($postData['name']);
             $userData->setPasswd(1);
 
-            $this->createUser($userData, $entityManager);
+            return $this->createUser($userData, $entityManager);
         }
+        return false;
     }
 
     public function createUserProfile(\Account\UserProfileData $userProfileData, $entityManager)

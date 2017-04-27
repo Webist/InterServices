@@ -1,4 +1,4 @@
-#### Source Builds - Repository builds
+#### Source Builds - Query 
 
 Reads, via query, are destined for relational data structures (instead of event store).
 

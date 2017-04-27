@@ -6,11 +6,11 @@ namespace App\Source;
 
 use App\Spec\ORM;
 
-class Customer implements ORM
+class CustomerQuery implements ORM
 {
     private $container;
 
-    public function __construct($container)
+    public function __construct(\Service\Container $container)
     {
         $this->container = $container;
     }

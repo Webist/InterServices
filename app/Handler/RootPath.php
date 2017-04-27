@@ -3,7 +3,6 @@
 namespace App\Handler;
 
 
-
 class RootPath implements \App\Spec\Main
 {
     /**
@@ -48,19 +47,17 @@ class RootPath implements \App\Spec\Main
         \Assert\Assertion::notEmpty($postData);
         \Assert\Assertion::email($postData['email']);
 
-        $message = '';
-        // Define which type of command
-        if(array_key_exists('email', $postData)
-            && array_key_exists('subject', $postData)
-            && array_key_exists('message', $postData)) {
+        \Assert\Assertion::keyExists($postData, 'subject');
+        \Assert\Assertion::keyExists($postData, 'message');
 
-            /** @var \App\Service\Mailer $mailerService */
-            $mailerService = $this->container->get(self::MAILER, function() {});
-            $message = $mailerService->handle($postData);
+        /** @var \App\Service\Mailer $mailerService */
+        $mailerService = $this->container->get(self::MAILER, function () {
+        });
+        $message = $mailerService->handle($postData);
 
-            $customerEvent = new \App\Event\UserProfile($this->container());
-            $customerEvent->postXhrOperations($postData, $this->main->uuid()->toString());
-        }
+        $userProfileCommand = new \App\Source\UserProfileCommand($this->container());
+        $userProfileCommand->postXhrOperations($postData, $this->main->uuid()->toString());
+
         return $message;
     }
 }

@@ -40,8 +40,8 @@ class Customer implements \App\Spec\Customer
         \Assert\Assertion::notEmpty($postData);
         \Assert\Assertion::email($postData['email']);
 
-        $customerEvent = new \App\Event\Customer($this->container());
-        $operations = $customerEvent->postXhrOperations($postData, $uuid);
+        $customerCommand = new \App\Source\CustomerCommand($this->container());
+        $operations = $customerCommand->postXhrOperations($postData, $uuid);
 
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container()->get(self::CUSTOMER, function () {});
@@ -59,8 +59,8 @@ class Customer implements \App\Spec\Customer
             throw \InvalidArgumentException('Invlid argument CUSTOMER_EDIT');
         }
 
-        $customerSource = new \App\Source\Customer($this->container());
-        return $customerSource->formData($uuid);
+        $customerQuery = new \App\Source\CustomerQuery($this->container());
+        return $customerQuery->formData($uuid);
     }
 
     /**
@@ -68,8 +68,8 @@ class Customer implements \App\Spec\Customer
      */
     public function list()
     {
-        $customerSource = new \App\Source\Customer($this->container());
-        $repo = $customerSource->listData();
+        $customerQuery = new \App\Source\CustomerQuery($this->container());
+        $repo = $customerQuery->listData();
         return $repo->findAll();
     }
 

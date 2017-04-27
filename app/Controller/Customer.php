@@ -17,7 +17,7 @@ class Customer implements \App\Spec\Customer
 
     public function test()
     {
-        print 'Test the Customer data save into storage <br/>';
+        print 'Test the CustomerCommand data save into storage <br/>';
 
         $postData = array(
 
@@ -62,14 +62,14 @@ class Customer implements \App\Spec\Customer
 
             $message = [
                 self::RESPONSE_MESSAGE_KEY => 'ok',
-                'state' => ['title' => 'Customer form - Saved', 'url' => 'window.location.href'],
+                'state' => ['title' => 'CustomerCommand form - Saved', 'url' => 'window.location.href'],
                 'uuid' => $this->handler->main()->uuid()->toString()
             ];
 
         } catch (\App\Exception\Customer $exception) {
             $message = [
                 self::RESPONSE_MESSAGE_KEY => $exception->getMessage(),
-                'state' => ['title' => 'Customer form - Failed', 'url' => 'window.location.href'],
+                'state' => ['title' => 'CustomerCommand form - Failed', 'url' => 'window.location.href'],
                 'uuid' => $this->handler->main()->uuid()->toString()
             ];
         }

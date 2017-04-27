@@ -4,7 +4,7 @@
 namespace App\Spec;
 
 
-interface Customer extends Controller
+interface Customer extends Controller, Main
 {
     /**
      * Edit data build definition of a customer
