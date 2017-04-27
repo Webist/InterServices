@@ -6,7 +6,7 @@ namespace View;
 
 class RootPath
 {
-    public static function homePage()
+    public static function homePage($data)
     {
         ob_start();
         include '../web/homePage.php';

@@ -7,7 +7,7 @@ namespace App\Spec;
 interface Customer extends Controller, Main
 {
     /**
-     * Edit data build definition of a customer
+     * Form data build definition
      */
-    const CUSTOMER_EDIT = ['userData', 'userProfileData', 'creditCardData'];
+    const CUSTOMER_FORM = ['userData', 'userProfileData', 'creditCardData'];
 }

@@ -1,13 +1,14 @@
-#### Event builds - Command
+#### Event builds - Event records
 
-Updates, via commands, are destined for event store (instead of relational data store).
+Command/Query operations build for event-type fields are destined in event records-history context (instead of relational data store).
 
-#### Indications of Event fields
+#### Indications of Event-type fields
 Event field indications are recognizable by looking at the command or field name.
 + status  
 + active
 + updatedAt
 + approved
++ ...
 
 These are not source attributes such as name, size of an entity, 
 but state defining indicators to locate the position in the business process.

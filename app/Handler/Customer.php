@@ -33,7 +33,7 @@ class Customer implements \App\Spec\Customer
     /**
      * @param $postData
      * @param null $uuid
-     * @return array
+     * @return string
      */
     public function postXhr($postData, $uuid = null)
     {
@@ -55,8 +55,8 @@ class Customer implements \App\Spec\Customer
      */
     public function form($uuid, $customerData)
     {
-        if($customerData !== \App\Spec\Customer::CUSTOMER_EDIT) {
-            throw \InvalidArgumentException('Invlid argument CUSTOMER_EDIT');
+        if($customerData !== \App\Spec\Customer::CUSTOMER_FORM) {
+            throw new \InvalidArgumentException("Invalid argument `$customerData`");
         }
 
         $customerQuery = new \App\Source\CustomerQuery($this->container());
@@ -69,8 +69,7 @@ class Customer implements \App\Spec\Customer
     public function list()
     {
         $customerQuery = new \App\Source\CustomerQuery($this->container());
-        $repo = $customerQuery->listData();
-        return $repo->findAll();
+        return $customerQuery->listData();
     }
 
 }

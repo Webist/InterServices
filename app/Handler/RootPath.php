@@ -40,9 +40,10 @@ class RootPath implements \App\Spec\Main
 
     /**
      * @param array $postData
-     * @return mixed
+     * @param null $uuid
+     * @return string
      */
-    public function postXhr(array $postData)
+    public function postXhr(array $postData, $uuid = null)
     {
         \Assert\Assertion::notEmpty($postData);
         \Assert\Assertion::email($postData['email']);
@@ -54,10 +55,26 @@ class RootPath implements \App\Spec\Main
         $mailerService = $this->container->get(self::MAILER, function () {
         });
         $message = $mailerService->handle($postData);
-
-        $userProfileCommand = new \App\Source\UserProfileCommand($this->container());
-        $userProfileCommand->postXhrOperations($postData, $this->main->uuid()->toString());
+        try {
+            $this->createUserFromEmailPost($postData);
+        } catch (\Exception $exception) {
+            //
+        }
 
         return $message;
+    }
+
+    /**
+     * Creates user from given email postData
+     * @param array $postData
+     */
+    private function createUserFromEmailPost(array $postData)
+    {
+        $userProfileCommand = new \App\Source\UserProfileCommand($this->container());
+        $operations = $userProfileCommand->postXhrOperations($postData, $this->main->uuid()->toString());
+
+        /** @var \App\Service\Customer $customerService */
+        $customerService = $this->container()->get(self::CUSTOMER, function () {});
+        $customerService->mutate($operations);
     }
 }

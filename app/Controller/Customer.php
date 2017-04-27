@@ -55,26 +55,14 @@ class Customer implements \App\Spec\Customer
 
     public function postXhr()
     {
-        try {
-            $this->handler->postXhr(
-                filter_input_array(INPUT_POST),
-                $this->inputHandler->parameter('uuid'));
-
-            $message = [
-                self::RESPONSE_MESSAGE_KEY => 'ok',
-                'state' => ['title' => 'CustomerCommand form - Saved', 'url' => 'window.location.href'],
-                'uuid' => $this->handler->main()->uuid()->toString()
-            ];
-
-        } catch (\App\Exception\Customer $exception) {
-            $message = [
-                self::RESPONSE_MESSAGE_KEY => $exception->getMessage(),
-                'state' => ['title' => 'CustomerCommand form - Failed', 'url' => 'window.location.href'],
-                'uuid' => $this->handler->main()->uuid()->toString()
-            ];
-        }
-
-        return json_encode($message);
+        return json_encode(
+            [
+                self::RESPONSE_MESSAGE_KEY => $this->handler->postXhr(filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid')),
+                'state' => ['title' => 'Customer', 'url' => ''],
+                'uuid' => $this->handler->main()->uuid()->toString(),
+                'data' => []
+            ]
+        );
     }
 
     public function getForm()
@@ -82,7 +70,7 @@ class Customer implements \App\Spec\Customer
         $view = new \View\Model(
             \View\Customer::form($this->handler->form(
                 $this->inputHandler->parameter('uuid'),
-                self::CUSTOMER_EDIT)),
+                self::CUSTOMER_FORM)),
             $this->handler->main()->pageMetaData()
         );
         return $view->render();
@@ -90,10 +78,11 @@ class Customer implements \App\Spec\Customer
 
     public function getList()
     {
-       $view = new \View\Model(
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        $view = new \View\Model(
             \View\Customer::list($this->handler->list()),
             $this->handler->main()->pageMetaData()
         );
-       return $view->render();
+        return $view->render();
     }
 }

@@ -24,7 +24,7 @@ class Customer
     /**
      * Persists operations to data store
      * @param $operations array
-     * @return array
+     * @return string
      */
     public function mutate($operations)
     {
@@ -32,24 +32,32 @@ class Customer
         $doctrine = new DoctrineORM();
         $entityManager = $doctrine->entityManager();
 
-        $results = [];
-        foreach($operations as $op){
+        try {
 
-            // Entity object
-            $newData = $op->data();
+            foreach($operations as $op){
 
-            $repo = $entityManager->getRepository(get_class($newData));
-            $data = $repo->find($op->data()->getId());
+                // Entity object
+                $newData = $op->data();
 
-            if($data){
-                $entityManager->merge($newData);
-            } else {
-                $entityManager->persist($newData);
+                $repo = $entityManager->getRepository(get_class($newData));
+                $data = $repo->find($op->data()->getId());
+
+                if($data){
+                    $entityManager->merge($newData);
+                } else {
+                    $entityManager->persist($newData);
+                }
+
+                if(!$entityManager->contains($newData)) {
+                    throw new \Exception("Entity could not be managed `".get_class($newData)."`");
+                }
             }
+            $entityManager->flush();
+            return 'ok';
 
-            $results[] = $entityManager->contains($newData);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
         }
-        $entityManager->flush();
-        return $results;
+
     }
 }

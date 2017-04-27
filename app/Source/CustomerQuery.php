@@ -66,7 +66,8 @@ class CustomerQuery implements ORM
     {
         /** @var \App\Service\DoctrineORM $doctrine */
         $doctrine = $this->container->get(self::DOCTRINE, function(){});
-        return $doctrine->entityManager()->getRepository(\Account\UserProfileData::class);
+        return $doctrine->entityManager()->getRepository(\Account\UserProfileData::class)
+            ->findAll();
     }
 
 }

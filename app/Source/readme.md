@@ -1,13 +1,15 @@
-#### Source Builds - Query 
+#### Source Builds - Relational Data Structures
 
-Reads, via query, are destined for relational data structures (instead of event store).
+Command/Query operations build for source-type fields in relational 
+data structure context (instead of event store).
 
-#### Indications of Source fields
+#### Indications of Source-type fields
 Source field indications are recognizable by looking at the command or the field name.  
 + name
 + size
 + is-house
 + has-car
++ ...
 
 These are not event attributes such as status, active, approved,
 but property or trait defining indicators to build the relations in

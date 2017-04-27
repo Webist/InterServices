@@ -72,6 +72,6 @@ class Main implements Database, \App\Spec\Main
 
     public function pageMetaData()
     {
-        return include self::DATA_STORAGE_PATH . $this->route()['indexKey'] . '.php';
+        return include dirname(dirname(__FILE__)) . '/DataStorage/' . $this->route['indexKey'] . '.php';
     }
 }

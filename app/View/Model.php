@@ -44,7 +44,6 @@ class Model
      *
      * @param string $placeHolder
      * @param \Html\Element $content
-     * @param array $pageData
      * @return \Html\Composite
      */
     private function buildContentWith(string $placeHolder, \Html\Element $content)

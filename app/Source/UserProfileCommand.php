@@ -30,6 +30,7 @@ class UserProfileCommand implements ORM
         /** @var \Account\UserProfileData $userProfileData */
         $userProfileData = $repo->findOneBy(['email' => $postData['email']]);
 
+        $operations = [];
         // no-user matched, then create new user
         if (!$userProfileData) {
 
@@ -43,26 +44,15 @@ class UserProfileCommand implements ORM
             $userProfileData->setCountry('');
             $userProfileData->setRemarks('');
 
-            $this->createUserProfile($userProfileData, $entityManager);
+            $operations[] = new \Account\UserProfile($userProfileData, $entityManager);
 
             $userData = new \Account\UserData($uuid);
             $userData->setName($postData['name']);
             $userData->setPasswd(1);
 
-            return $this->createUser($userData, $entityManager);
+            $operations[] = new \Account\User($userData, $entityManager);
         }
-        return false;
-    }
 
-    public function createUserProfile(\Account\UserProfileData $userProfileData, $entityManager)
-    {
-        $userProfile = new \Account\UserProfile($userProfileData, $entityManager);
-        return $userProfile->handle();
-    }
-
-    public function createUser(\Account\UserData $userData, $entityManager)
-    {
-        $user = new \Account\User($userData, $entityManager);
-        return $user->handle();
+        return $operations;
     }
 }

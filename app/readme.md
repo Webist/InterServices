@@ -31,10 +31,10 @@ External service connection/adapters
 File Data Store  
 
 + Source  
-Data providing for Read / Query
+Command/Query operations build for source-type fields in relational data structure context 
  
 + Event  
-Data providing for Write / Command  
+Command/Query operations build for event-type fields in event records-history context
 
 + Exception   
 Controller specific error handlers  

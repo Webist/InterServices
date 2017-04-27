@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-/*
+/**
  * @notice, this file used for generating errors intentionally
  */
 class Test

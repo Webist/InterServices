@@ -42,9 +42,10 @@ class RootPath implements \App\Spec\RootPath
     {
         return json_encode(
             [
-                self::RESPONSE_MESSAGE_KEY => $this->handler->postXhr(
-                    filter_input_array(INPUT_POST),
-                    $this->inputHandler->parameter('uuid'))
+                self::RESPONSE_MESSAGE_KEY => $this->handler->postXhr(filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid')),
+                'state' => ['title' => 'RootPath', 'url' => ''],
+                'uuid' => $this->handler->main()->uuid()->toString(),
+                'data' => []
             ]
         );
     }
