@@ -1,4 +1,4 @@
-### Internal Handler env
+### Internal Handler - Interactor
 
 An internal handler is a injected handler object of a controller.
 Every controller should have its handler representation in this directory.

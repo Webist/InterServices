@@ -19,10 +19,10 @@ class RootPath implements \App\Spec\RootPath
     /**
      * @return string
      */
-    public function get()
+    public function getHomePage()
     {
         $view = new \View\Model(
-            \View\RootPath::get($this->handler->get()),
+            \View\RootPath::homePage($this->handler->homePage()),
             $this->handler->main()->pageMetaData()
         );
         return $view->render(false);

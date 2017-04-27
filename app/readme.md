@@ -12,29 +12,35 @@ Therefore the structure is generally, including MVC, component/service oriented.
 There is no framework, which would bring many benefits, to develop in a boxed area.
 Instead architectural principles that challenges the best practices in software development.
 
-Seven different type of folders meets the requirements of the MOM.
+Nine different type of folders meets the requirements of the MOM.
 
 
 + Spec  
 Specification data (interfaces, config). 
 
 + Handler  
-Controller specific Handlers or Middleware's  
+Controller specific Handlers/Components or Middleware's  
 
 + Controller   
 The entry points 
 
-+ DataStorage  
-Data Store  
-
 + Service  
-External service connection/adapters, microservices  
+External service connection/adapters 
+
++ DataStorage  
+File Data Store  
+
++ Source  
+Data providing for Read / Query
+ 
++ Event  
+Data providing for Write / Command  
 
 + Exception   
 Controller specific error handlers  
 
 + View  
-Layout, templates composition and rendering model 
+Layout, templates composition and rendering
 
 
 

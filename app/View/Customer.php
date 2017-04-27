@@ -10,7 +10,7 @@ class Customer
      * @param array $data
      * @return \Html\Element
      */
-    public static function edit(array $data)
+    public static function form(array $data)
     {
         $formContent = new \Html\Element($data['userData']);
         $formContent->require('../web/metronic/form-customer/form.php');
@@ -38,7 +38,7 @@ class Customer
      * @param $data
      * @return \Html\Element
      */
-    public static function get(array $data)
+    public static function list(array $data)
     {
         $userProfileData = new \Html\Element($data);
         $userProfileData->require('../web/metronic/table-customer/list.php');

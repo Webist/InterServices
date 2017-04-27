@@ -4,11 +4,7 @@ namespace App\Handler;
 
 
 
-use App\Spec\ORM;
-use Mail\EmailData;
-use Mail\EmailSender;
-
-class RootPath implements \App\Spec\Main, ORM
+class RootPath implements \App\Spec\Main
 {
     /**
      * Holds route, input information and access to generic handler
@@ -38,7 +34,7 @@ class RootPath implements \App\Spec\Main, ORM
         return $this->main->container();
     }
 
-    public function get()
+    public function homePage()
     {
         return [];
     }
@@ -50,10 +46,7 @@ class RootPath implements \App\Spec\Main, ORM
     public function postXhr(array $postData)
     {
         \Assert\Assertion::notEmpty($postData);
-
-        /** @var \App\Service\DoctrineORM $doctrine */
-        $doctrine = $this->container->get(self::DOCTRINE, function(){});
-        $entityManager = $doctrine->entityManager();
+        \Assert\Assertion::email($postData['email']);
 
         $message = '';
         // Define which type of command
@@ -61,37 +54,13 @@ class RootPath implements \App\Spec\Main, ORM
             && array_key_exists('subject', $postData)
             && array_key_exists('message', $postData)) {
 
-            \Assert\Assertion::email($postData['email']);
-
-            // Actor, a role that validates
-            $sender = new EmailSender($postData['email']);
-
-            $eMail = new EmailData();
-            $eMail->setSender($sender->getEmail());
-            $eMail->setReceiver(self::EMAIL_TO);
-            $eMail->setMessage("\n" . $postData['message'] ."\r\n");
-            $eMail->setSubject($postData['subject']);
-
-            $headers = 'From: '. $sender->getEmail() . "\r\n" .
-                'Replay-to: ' . $sender->getEmail() .  "\r\n" .
-                'X-Mailer: PHP/' . phpversion();
-
-            $eMail->setHeaders($headers);
-
-            $mailer = function () use ($eMail, $entityManager) {
-                $mailer = new \Mail\Mailer($eMail);
-                $mailer->handle($entityManager);
-            };
-
             /** @var \App\Service\Mailer $mailerService */
-            $mailerService = $this->container->get(self::MAILER, $mailer);
-            $message = $mailerService->invoke();
+            $mailerService = $this->container->get(self::MAILER, function() {});
+            $message = $mailerService->handle($postData);
 
-            /** @var \App\Service\Customer $customerService */
-            $customerService = $this->container->get(self::CUSTOMER, function () {});
-            $customerService->createUserProfileFromEmail($postData, $this->main->uuid()->toString());
+            $customerEvent = new \App\Event\UserProfile($this->container());
+            $customerEvent->postXhrOperations($postData, $this->main->uuid()->toString());
         }
-
         return $message;
     }
 }

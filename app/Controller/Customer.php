@@ -77,24 +77,23 @@ class Customer implements \App\Spec\Customer
         return json_encode($message);
     }
 
-    public function edit()
+    public function getForm()
     {
         $view = new \View\Model(
-            \View\Customer::edit($this->handler->edit(
+            \View\Customer::form($this->handler->form(
                 $this->inputHandler->parameter('uuid'),
                 self::CUSTOMER_EDIT)),
             $this->handler->main()->pageMetaData()
         );
         return $view->render();
-
     }
 
-    public function get()
+    public function getList()
     {
        $view = new \View\Model(
-            \View\Customer::get($this->handler->get()),
+            \View\Customer::list($this->handler->list()),
             $this->handler->main()->pageMetaData()
         );
-       $view->render();
+       return $view->render();
     }
 }

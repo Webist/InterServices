@@ -6,10 +6,10 @@ namespace View;
 
 class RootPath
 {
-    public static function get()
+    public static function homePage()
     {
         ob_start();
-        include '../web/rootpath.php';
+        include '../web/homePage.php';
         return new \Html\Element(ob_get_clean());
     }
 }
