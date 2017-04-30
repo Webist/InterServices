@@ -5,11 +5,11 @@ namespace Mail;
 
 
 /**
- * Class EmailSender
+ * Class EmailSpamFilter
  * @package Mail
  *
  */
-class EmailSender
+class EmailSpamFilter
 {
     private $email;
 

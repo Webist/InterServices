@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Billing;
+namespace Payment;
 
 /**
  * @Entity
  * @Table(name="billing_schedules")
  * @HasLifecycleCallbacks()
  **/
-class ScheduleData
+class BillingScheduleData
 {
     /**
      * @Id
@@ -97,8 +97,4 @@ class ScheduleData
         $this->period = $period;
         return $this;
     }
-
-
-
-
 }

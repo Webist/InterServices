@@ -18,15 +18,21 @@ class Main implements Database, \App\Spec\Main
         $this->route = $route;
         $this->container = $container;
 
-        $this->logVisit([
+        $this->visitorLog([
             'routeId' => $this->route['indexKey'], 'ip' => filter_input(INPUT_SERVER, 'REMOTE_ADDR')
         ]);
     }
 
-    private function logVisit(array $params)
+    /**
+     * A dirty db-logging
+     *
+     * Handler Main visitor log, invokes databaseService, transfer query
+     * @param array $params
+     * @return mixed
+     */
+    private function visitorLog(array $params)
     {
-        // Non-blocking, db logging
-        $visitsLoggerQuery = function (\PDO $pdo) use ($params) {
+        $visitorLogCommand = function (\PDO $pdo) use ($params) {
 
             $query = "INSERT INTO visits SET route_id = :routeId, ip = :ip";
             $dbh = $pdo->prepare($query);
@@ -35,8 +41,8 @@ class Main implements Database, \App\Spec\Main
             );
         };
 
-        /** @var \App\Service\Database $db */
-        $databaseService = $this->container->get(self::DATABASE, $visitsLoggerQuery);
+        /** @var \App\Service\Database $databaseService */
+        $databaseService = $this->container->get(self::DATABASE, $visitorLogCommand);
         return $databaseService->invoke(dirname(__DIR__) . self::DATABASE_LOGS_CREDENTIALS_FILE);
     }
 
@@ -70,7 +76,11 @@ class Main implements Database, \App\Spec\Main
         return $this->uuid;
     }
 
-    public function pageMetaData()
+    /**
+     * Model meta data, includes file storage by using route['indexKey'], php array
+     * @return array
+     */
+    public function modelMetaData()
     {
         return include dirname(dirname(__FILE__)) . '/DataStorage/' . $this->route['indexKey'] . '.php';
     }

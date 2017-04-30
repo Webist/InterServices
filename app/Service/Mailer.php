@@ -4,6 +4,8 @@
 namespace App\Service;
 
 
+use Mail\EmailCommand;
+
 class Mailer implements \App\Spec\Main
 {
     /**
@@ -23,29 +25,41 @@ class Mailer implements \App\Spec\Main
         return call_user_func($this->callback);
     }
 
-    public function handle($postData)
+    /**
+     * @param EmailCommand $eMailCommand
+     * @return EmailReturnValue
+     */
+    public function dispatch(EmailCommand $eMailCommand)
     {
-        // Actor, a role that validates
-        $sender = new \Mail\EmailSender($postData['email']);
-
-        $eMail = new \Mail\EmailData();
-        $eMail->setSender($sender->getEmail());
-        $eMail->setReceiver(self::EMAIL_TO);
-        $eMail->setMessage("\n" . $postData['message'] . "\r\n");
-        $eMail->setSubject($postData['subject']);
-
-        $headers = 'From: ' . $sender->getEmail() . "\r\n" .
-            'Replay-to: ' . $sender->getEmail() . "\r\n" .
-            'X-Mailer: PHP/' . phpversion();
-
-        $eMail->setHeaders($headers);
-
-        /** @var \App\Service\DoctrineORM $doctrine */
-        $doctrine = new DoctrineORM();
+        /** @var \App\Service\ORM $doctrine */
+        $doctrine = new ORM();
         $entityManager = $doctrine->entityManager();
 
-        $mailer = new \Mail\Mailer($eMail);
-        return $mailer->handle($entityManager);
+        $returnValue = new EmailReturnValue();
 
+        try {
+            // when duplicate, then return early
+            $entityManager->persist($eMailCommand);
+            $entityManager->flush();
+
+        } catch (\Exception $exception) {
+
+            $returnValue->addFailureError(get_class($eMailCommand));
+            if (strpos($exception->getMessage(), '1062 Duplicate entry') !== false) {
+                $returnValue->addFailureError('eMail was already sent');
+            }
+            $returnValue->addFailureError($exception->getMessage());
+            return $returnValue;
+        }
+
+        $mailer = new \Mail\Mailer($eMailCommand);
+
+        if($mailer->handle()){
+            $returnValue->addSucceedMessage(get_class($eMailCommand));
+        } else {
+            $returnValue->addFailureError(get_class($eMailCommand));
+        }
+
+        return $returnValue;
     }
 }

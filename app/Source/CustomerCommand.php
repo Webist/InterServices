@@ -4,41 +4,24 @@
 namespace App\Source;
 
 
-use App\Spec\ORM;
-
-class CustomerCommand implements ORM
+class CustomerCommand
 {
-    private $container;
+    private $postData;
+    private $entityManager;
 
-    public function __construct(\Service\Container $container)
+    public function __construct(array $postData, \Doctrine\ORM\EntityManager $entityManager)
     {
-        $this->container = $container;
+        $this->postData = $postData;
+        $this->entityManager = $entityManager;
     }
     /**
      *
-     * @param array $postData
      * @param null $uuid
      * @return array
      */
-    final public function postXhrOperations(array $postData, $uuid = null)
+    final public function postXhrOperations($uuid)
     {
-
-        /** @var \App\Service\DoctrineORM $doctrine */
-        $doctrine = $this->container->get(self::DOCTRINE, function(){});
-        $entityManager = $doctrine->entityManager();
-
-        if (empty($uuid)) {
-
-            // A userProfile might be created after sending an eMail
-            $user = new \Account\User(new \Account\UserData($uuid), $entityManager);
-            $userProfileData = $user->userProfileDataByEmail($postData['email']);
-
-            if($userProfileData){
-                $uuid = $userProfileData->getId();
-            } else {
-                $uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
-            }
-        }
+        $entityManager = $this->entityManager;
 
         $operations = [];
         // Customer operand/entity
@@ -55,50 +38,50 @@ class CustomerCommand implements ORM
 
         // User operand/entity
         $userData = new \Account\UserData($uuid);
-        $userData->setName($postData['username']);
-        $userData->setPasswd($postData['password']);
-        // $userData->setRpasswd($postData['rpassword']);
+        $userData->setName($this->postData['username']);
+        $userData->setPasswd($this->postData['password']);
+        // $userData->setRpasswd($this->postData['rpassword']);
 
         $operations[] = $user = new \Account\User($userData, $entityManager);
 
         // User Profile operand/entity
         $userProfileData = new \Account\UserProfileData($uuid);
-        $userProfileData->setGender($postData['gender']);
-        $userProfileData->setFullName($postData['fullname']);
+        $userProfileData->setGender($this->postData['gender']);
+        $userProfileData->setFullName($this->postData['fullname']);
 
-        $userProfileData->setEmail($postData['email']);
-        $userProfileData->setPhone($postData['phone']);
+        $userProfileData->setEmail($this->postData['email']);
+        $userProfileData->setPhone($this->postData['phone']);
 
-        $userProfileData->setAddress($postData['address']);
-        $userProfileData->setZipcode($postData['zipcode']);
-        $userProfileData->setCity($postData['city']);
-        $userProfileData->setCountry($postData['country']);
+        $userProfileData->setAddress($this->postData['address']);
+        $userProfileData->setZipcode($this->postData['zipcode']);
+        $userProfileData->setCity($this->postData['city']);
+        $userProfileData->setCountry($this->postData['country']);
 
-        $userProfileData->setRemarks($postData['remarks']);
+        $userProfileData->setRemarks($this->postData['remarks']);
 
         $operations[] = $userProfile = new \Account\UserProfile($userProfileData, $entityManager);
 
         // Credit-card info operand/entity
         $creditCardData = new \Payment\CreditCardData($uuid);
-        $creditCardData->setName($postData['card_name']);
-        $creditCardData->setCvc($postData['card_cvc']);
-        $creditCardData->setExpiryDate($postData['card_expiry_date']);
-        $creditCardData->setNumber($postData['card_number']);
+        $creditCardData->setName($this->postData['card_name']);
+        $creditCardData->setCvc($this->postData['card_cvc']);
+        $creditCardData->setExpiryDate($this->postData['card_expiry_date']);
+        $creditCardData->setNumber($this->postData['card_number']);
         $creditCardData->setStatus(0);
 
         // Credit-card payment preference
         $operations[] = $creditCard = new \Payment\CreditCard($creditCardData, $entityManager);
 
         // Payment preferences
-        if (isset($postData['payment'])) {
+        if (isset($this->postData['payment'])) {
 
             $autoPayCC = false;
-            if (in_array("1", $postData['payment'])) {
+            if (in_array("1", $this->postData['payment'])) {
                 $autoPayCC = true;
             }
 
             $notifyMonthly = 0;
-            if (in_array("2", $postData['payment'])) {
+            if (in_array("2", $this->postData['payment'])) {
                 $notifyMonthly = 30;
             }
 
@@ -110,10 +93,48 @@ class CustomerCommand implements ORM
             $operations[] = $pay = new \Payment\Pay($payPreference, $entityManager);
 
             // Notification-schedule billing operand/entity
-            $billingNotifyData = new \Billing\ScheduleData($uuid);
+            $billingNotifyData = new \Payment\BillingScheduleData($uuid);
             $billingNotifyData->setPeriod($notifyMonthly);
 
-            $operations[] = $billingSchedule = new \Billing\Schedule($billingNotifyData, $entityManager);
+            $operations[] = $billingSchedule = new \Payment\Schedule($billingNotifyData, $entityManager);
+        }
+
+        return $operations;
+    }
+
+    /**
+     * Customer email operations, build User, UserProfile, array collection
+     * @param string $uuid
+     * @return array
+     */
+    public function emailPostXhrOperations(string $uuid)
+    {
+        $entityManager = $this->entityManager;
+        $postData = $this->postData;
+
+        $customerQuery = new CustomerQuery([], $entityManager);
+        $userProfileData = $customerQuery->userProfileDataByEmail($postData['email']);
+
+        $operations = [];
+        // no-user matched, then create new user
+        if (!$userProfileData) {
+
+            $userData = $customerQuery->userData($uuid, false);
+            $userData->setName($postData['name']);
+            $userData->setPasswd(1);
+
+            $userProfileData = new \Account\UserProfileData($uuid);
+            $userProfileData->setEmail($postData['email']);
+            $userProfileData->setPhone($postData['phone']);
+            $userProfileData->setFullName('');
+            $userProfileData->setGender(0);
+            $userProfileData->setAddress('');
+            $userProfileData->setCity('');
+            $userProfileData->setCountry('');
+            $userProfileData->setRemarks('');
+
+            $operations[] = new \Account\User($userData, $entityManager);
+            $operations[] = new \Account\UserProfile($userProfileData, $entityManager);
         }
 
         return $operations;

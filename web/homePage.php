@@ -4,7 +4,7 @@
 // Instantiate the object
 $test = new App\Controller\Test();
 // Select the handler
-$pageData = $test->pageDataHandler($route['indexKey']);
+$pageData = $test->renderPageData($route['indexKey']);
 // Get the value
 $title = $pageData->title();
 var_dump($title);

@@ -4,10 +4,7 @@
 namespace App\Spec;
 
 
-interface Customer extends Controller, Main
+interface Customer extends Controller, ORM
 {
-    /**
-     * Form data build definition
-     */
-    const CUSTOMER_FORM = ['userData', 'userProfileData', 'creditCardData'];
+
 }

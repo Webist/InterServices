@@ -6,10 +6,8 @@ namespace App\Spec;
 
 interface ORM extends Database, Main
 {
-    const DOCTRINE = \App\Service\DoctrineORM::class;
-    const DOCTRINE_PATH_TO_ENTITY_FILES = ['app', 'handler'];
+    const ORM = \App\Service\ORM::class;
+    const ORM_PATH_TO_ENTITY_FILES = ['app', 'handler'];
 
-    const DOCTRINE_DEV_MODE = self::DEV_MODE;
-
-    const DOCTRINE_QUERY_LOGGER = \Doctrine\DBAL\Logging\DebugStack::class;
+    const ORM_DEV_MODE = self::DEV_MODE;
 }

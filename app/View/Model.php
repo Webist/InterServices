@@ -10,18 +10,18 @@ class Model
      * Content data
      * @var \Html\Element
      */
-    private $templateData;
+    private $contentData;
 
     /**
      * Meta data, other than content data, such as title, keywords
      * @var array
      */
-    private $pageMetaData;
+    private $metaData;
 
-    public function __construct(\Html\Element $templateData, array $pageMetaData)
+    public function __construct(\Html\Element $contentData, array $metaData)
     {
-        $this->templateData = $templateData;
-        $this->pageMetaData = $pageMetaData;
+        $this->contentData = $contentData;
+        $this->metaData = $metaData;
     }
 
     /**
@@ -31,11 +31,11 @@ class Model
     public function render($withBaseContent = true)
     {
         if($withBaseContent) {
-            $content = $this->buildContentWith(':pageBaseContent', $this->templateData);
+            $content = $this->buildContentWith(':pageBaseContent', $this->contentData);
             return $content->render();
         }
 
-        return $this->templateData->render();
+        return $this->contentData->render();
     }
 
 
@@ -49,13 +49,13 @@ class Model
     private function buildContentWith(string $placeHolder, \Html\Element $content)
     {
         $headData = new \Html\HeadData();
-        $headData->setTitle($this->pageMetaData['head']['title']);
+        $headData->setTitle($this->metaData['head']['title']);
 
         $htmlHead = new \Html\Element($headData);
         $htmlHead->require('../web/metronic/html.head.php');
 
         $bodyData = new \Html\BodyData();
-        $bodyData->setTitle($this->pageMetaData['body']['title']);
+        $bodyData->setTitle($this->metaData['body']['title']);
 
         $bodyContent = new \Html\Element($bodyData);
         $bodyContent->require('../web/metronic/html.page.php');

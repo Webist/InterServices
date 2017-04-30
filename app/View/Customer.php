@@ -21,7 +21,7 @@ class Customer
         $account->require('../web/metronic/form-customer/account.details.php');
         $formContent->addElement(':formAccountDetails', $account);
 
-        $profile = new Element($data['userProfileData']);
+        $profile = new Element($data['userData']->profileData());
         $profile->require('../web/metronic/form-customer/profile.details.php');
         $formContent->addElement(':formProfileDetails', $profile);
 

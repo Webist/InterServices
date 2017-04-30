@@ -29,7 +29,7 @@ For example the following route matches the root URL path with POST request and
 instantiates the RootPath object, following with invoking the post() method.  
 If there are parameters then these parameters will be as arguments passed to the post() method.  
 ```
-RouteBuilder('POST', '/', 'RootPath@post');
+RouteBuilder('POST', '/', 'RootPath@addHomePagePost');
 ```
 
 #### Forward Route, Integrating Destination file with a Controller
@@ -93,7 +93,7 @@ Using the class above from the route-destination file (e.g. home.php) will be lo
     $test = new App\Controller\Test();  
     
     // Select the page data handler by route indexKey
-    $pageData = $test->pageDataHandler($route['indexKey']);  
+    $pageData = $test->renderPageData($route['indexKey']);  
     
     // Get the value
     $title = $pageData->title();  
@@ -109,7 +109,7 @@ In the destination method of the controller class use code like the one below.
 There is no need for echo or print, the outputHandler will take care of it.
 ```
 ob_start();
-$pageDataHandler = $this->handlers->pageDataHandler($route['indexKey']); 
+$renderPageData = $this->handlers->renderPageData($route['indexKey']); 
 include "../web/home.php"
 return ob_get_clean();
 ```
@@ -117,7 +117,7 @@ Notice, since we are using an output handler for the response, output buffering 
 
 And in the file ```home.php```
 ```
-$pageDataHandler->title();
+$renderPageData->title();
 ```
 
 #### Which routing

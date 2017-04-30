@@ -42,12 +42,4 @@ class User
         $entityManager->flush();
         return $entityManager->contains($this->data);
     }
-
-    public function userProfileDataByEmail($email)
-    {
-        $entityManager = $this->entityManager;
-
-        $repo = $entityManager->getRepository(UserProfileData::class);
-        return $repo->findOneBy(['email' => $email]);
-    }
 }

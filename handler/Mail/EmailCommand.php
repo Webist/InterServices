@@ -8,7 +8,7 @@ namespace Mail;
  * @Table("emails")
  * @HasLifecycleCallbacks
  */
-class EmailData
+class EmailCommand
 {
     /**
      * @Id
@@ -60,6 +60,15 @@ class EmailData
     private $headers;
 
 
+    public function __construct(array $data)
+    {
+        $this->sender = $data['email'];
+        $this->receiver = $data['receiver'];
+        $this->message = $data['message'];
+        $this->subject = $data['subject'];
+        $this->headers = $data['headers'];
+    }
+
     /**
      * Get id
      *
@@ -90,7 +99,7 @@ class EmailData
      * @param string $hash
      *
      *
-     * @return EmailData
+     * @return EmailCommand
      */
     public function setHash(string $hash)
     {
@@ -114,7 +123,7 @@ class EmailData
      *
      * @param string $sender
      *
-     * @return EmailData
+     * @return EmailCommand
      */
     public function setSender($sender)
     {
@@ -138,7 +147,7 @@ class EmailData
      *
      * @param string $receiver
      *
-     * @return EmailData
+     * @return EmailCommand
      */
     public function setReceiver($receiver)
     {
@@ -162,7 +171,7 @@ class EmailData
      *
      * @param string $subject
      *
-     * @return EmailData
+     * @return EmailCommand
      */
     public function setSubject($subject)
     {
@@ -186,7 +195,7 @@ class EmailData
      *
      * @param string $message
      *
-     * @return EmailData
+     * @return EmailCommand
      */
     public function setMessage($message)
     {
@@ -210,7 +219,7 @@ class EmailData
      *
      * @param string $headers
      *
-     * @return EmailData
+     * @return EmailCommand
      */
     public function setHeaders($headers)
     {
@@ -225,7 +234,7 @@ class EmailData
      * @param \DateTime $timestamp
      *
      *
-     * @return EmailData
+     * @return EmailCommand
      */
     public function setCreatedAt(\DateTime $timestamp)
     {

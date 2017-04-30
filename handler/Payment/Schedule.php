@@ -1,6 +1,6 @@
 <?php
 
-namespace Billing;
+namespace Payment;
 
 
 use App\Spec\ORM;
@@ -17,7 +17,7 @@ class Schedule implements ORM
      */
     private $entityManager;
 
-    public function __construct(ScheduleData $scheduleData, \Doctrine\ORM\EntityManager $entityManager)
+    public function __construct(BillingScheduleData $scheduleData, \Doctrine\ORM\EntityManager $entityManager)
     {
         $this->data = $scheduleData;
         $this->entityManager = $entityManager;
@@ -32,7 +32,7 @@ class Schedule implements ORM
     {
         $entityManager = $this->entityManager;
 
-        $repo = $entityManager->getRepository(ScheduleData::class);
+        $repo = $entityManager->getRepository(BillingScheduleData::class);
         $data = $repo->find($this->data->getId());
 
         if($data){

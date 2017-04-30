@@ -35,16 +35,16 @@ $route = new Http\Routing\RouteBuilder('GET', '/', '../web/home.php');
 ```
 
 ```
-$route = new Http\Routing\RouteBuilder('POST', '/', 'RootPath@post');
+$route = new Http\Routing\RouteBuilder('POST', '/', 'RootPath@addEmailPostXhr');
+$route->setXRequestedWith(true);
 ```
 
 ```
-$route = new Http\Routing\RouteBuilder('GET', '/test', 'Test@getXhr');
+$route = new Http\Routing\RouteBuilder('GET', '/test', 'Test@renderTestString');
 $route->setXRequestedWith(true);
 ```
 ```
-$route = new Http\Routing\RouteBuilder('POST', '/admin', 'Admin@postXhr');
-$route->setXRequestedWith(true);
+$route = new Http\Routing\RouteBuilder('POST', '/admin', 'Admin@renderForm');
 ```
 
 View the result like this

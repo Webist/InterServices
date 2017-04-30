@@ -8,65 +8,108 @@ use App\Spec\ORM;
 
 class CustomerQuery implements ORM
 {
-    private $container;
+    private $data = [];
+    private $entityManager;
 
-    public function __construct(\Service\Container $container)
+    public function __construct(array $data, \Doctrine\ORM\EntityManager $entityManager)
     {
-        $this->container = $container;
+        $this->data = $data;
+        $this->entityManager = $entityManager;
     }
 
-    public function formData($uuid)
+    public function customerData($uuid)
     {
-        /** @var \App\Service\DoctrineORM $doctrine */
-        $doctrine = $this->container->get(self::DOCTRINE, function(){});
-        $entityManager = $doctrine->entityManager();
-
-        $customer = null;
-        if($uuid) {
-            $repo = $entityManager->getRepository(\Commerce\CustomerData::class);
-            $customer = $repo->find($uuid);
-        }
-
-        if ($customer) {
-
-            $repo = $entityManager->getRepository(\Account\UserData::class);
-            $customerData['userData'] = $userData = $repo->find($uuid);
-
-            $repo = $entityManager->getRepository(\Account\UserProfileData::class);
-            $customerData['userProfileData'] = $userProfileData = $repo->find($uuid);
-            $userData->setProfileData($userProfileData);
-
-            $repo = $entityManager->getRepository(\Payment\CreditCardData::class);
-            $customerData['creditCardData'] = $creditCardData = $repo->find($uuid);
-            $repo = $entityManager->getRepository(\Payment\PaymentPreferenceData::class);
-            $preferenceData = $repo->find($uuid);
-            $creditCardData->setPaymentPreference($preferenceData);
-            $repo = $entityManager->getRepository(\Billing\ScheduleData::class);
-            $billingSchedule = $repo->find($uuid);
-            $creditCardData->setBillingSchedule($billingSchedule);
-
-        } else {
-
-            // $customerData = new \Commerce\CustomerData($uuid);
-            $customerData['userData'] = $userData = new \Account\UserData($uuid);
-            $customerData['userProfileData'] = $userProfileData = new \Account\UserProfileData($uuid);
-            $userData->setProfileData($userProfileData);
-
-            $customerData['creditCardData'] = $creditCardData = new \Payment\CreditCardData($uuid);
-            $preferenceData = new \Payment\PaymentPreferenceData($uuid);
-            $creditCardData->setPaymentPreference($preferenceData);
-            $billingSchedule = new \Billing\ScheduleData($uuid);
-            $creditCardData->setBillingSchedule($billingSchedule);
+        $customerData = new \Commerce\CustomerData($uuid);
+        if ($uuid) {
+            $repo = $this->entityManager->getRepository(\Commerce\CustomerData::class);
+            $customerData = $repo->find($uuid);
         }
         return $customerData;
     }
 
+    public function userProfileData($uuid)
+    {
+        $userProfileData = new \Account\UserProfileData($uuid);
+        if ($uuid) {
+            $repo = $this->entityManager->getRepository(\Account\UserProfileData::class);
+            $userProfileData = $repo->find($uuid);
+        }
+        return $userProfileData;
+    }
+
+    public function userProfileDataByEmail($email)
+    {
+        $repo = $this->entityManager->getRepository(\Account\UserProfileData::class);
+        /** @var \Account\UserProfileData $userProfileData */
+        return $repo->findOneBy(['email' => $email]);
+    }
+
+    public function userData($uuid, $setProfileData = true)
+    {
+        $userData = new \Account\UserData($uuid);
+        if ($uuid) {
+            $repo = $this->entityManager->getRepository(\Account\UserData::class);
+            $userData = $repo->find($uuid);
+        }
+
+        if($setProfileData){
+            $userData->setProfileData($this->userProfileData($uuid));
+        }
+
+        return $userData;
+    }
+
+    public function paymentPreferenceData($uuid)
+    {
+        $paymentPreferenceData = new \Payment\PaymentPreferenceData($uuid);
+        if ($uuid) {
+            $repo = $this->entityManager->getRepository(\Payment\PaymentPreferenceData::class);
+            $paymentPreferenceData = $repo->find($uuid);
+        }
+        return $paymentPreferenceData;
+    }
+
+    public function billingScheduleData($uuid)
+    {
+        $billingScheduleData = new \Payment\BillingScheduleData($uuid);
+        if ($uuid) {
+            $repo = $this->entityManager->getRepository(\Payment\BillingScheduleData::class);
+            $billingScheduleData = $repo->find($uuid);
+        }
+        return $billingScheduleData;
+    }
+
+    public function creditCardData($uuid, $setPaymentPreference = true, $setBillingSchedule = true)
+    {
+        $creditCardData = new \Payment\CreditCardData($uuid);
+        if($uuid){
+            $repo = $this->entityManager->getRepository(\Payment\CreditCardData::class);
+            $creditCardData = $repo->find($uuid);
+        }
+
+        if($setPaymentPreference){
+            $creditCardData->setPaymentPreference($this->paymentPreferenceData($uuid));
+        }
+
+        if($setBillingSchedule){
+            $creditCardData->setBillingSchedule($this->billingScheduleData($uuid));
+        }
+
+        return $creditCardData;
+    }
+
+    public function formData($uuid)
+    {
+        $this->data['customerData'] = $this->customerData($uuid);
+        $this->data['userData'] = $this->userData($uuid);
+        $this->data['creditCardData'] = $this->creditCardData($uuid);
+
+        return $this->data;
+    }
 
     public function listData()
     {
-        /** @var \App\Service\DoctrineORM $doctrine */
-        $doctrine = $this->container->get(self::DOCTRINE, function(){});
-        return $doctrine->entityManager()->getRepository(\Account\UserProfileData::class)
+        return $this->entityManager->getRepository(\Account\UserProfileData::class)
             ->findAll();
     }
 

@@ -23,41 +23,40 @@ class Customer
 
     /**
      * Persists operations to data store
-     * @param $operations array
-     * @return string
+     * @param $operations
+     * @return CustomerReturnValue
      */
-    public function mutate($operations)
+    public function dispatch($operations)
     {
         /** @var \Doctrine\ORM\EntityManager $entityManager */
-        $doctrine = new DoctrineORM();
+        $doctrine = new ORM();
         $entityManager = $doctrine->entityManager();
 
-        try {
+        $customerReturnValue = new CustomerReturnValue();
 
-            foreach($operations as $op){
+        foreach ($operations as $op) {
 
-                // Entity object
-                $newData = $op->data();
+            // Entity object
+            $newData = $op->data();
 
-                $repo = $entityManager->getRepository(get_class($newData));
-                $data = $repo->find($op->data()->getId());
+            $className = get_class($newData);
 
-                if($data){
-                    $entityManager->merge($newData);
-                } else {
-                    $entityManager->persist($newData);
-                }
+            $repo = $entityManager->getRepository($className);
+            $data = $repo->find($op->data()->getId());
 
-                if(!$entityManager->contains($newData)) {
-                    throw new \Exception("Entity could not be managed `".get_class($newData)."`");
-                }
+            if ($data) {
+                $entityManager->merge($newData);
+            } else {
+                $entityManager->persist($newData);
             }
-            $entityManager->flush();
-            return 'ok';
 
-        } catch (\Exception $exception) {
-            return $exception->getMessage();
+            if (!$entityManager->contains($newData)) {
+                $customerReturnValue->addFailureError($className);
+            }
+            $customerReturnValue->addSucceedMessage($className);
         }
+        $entityManager->flush();
 
+        return $customerReturnValue;
     }
 }

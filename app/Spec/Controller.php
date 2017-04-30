@@ -5,5 +5,5 @@ namespace App\Spec;
 
 interface Controller
 {
-    const  RESPONSE_MESSAGE_KEY = 'message';
+    const  CONFIRMATION_MESSAGE_KEY = 'success';
 }

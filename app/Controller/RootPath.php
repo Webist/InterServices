@@ -17,35 +17,45 @@ class RootPath implements \App\Spec\RootPath
     }
 
     /**
+     * Entry point RootPath model page, renders model page, html data
      * @return string
      */
-    public function getHomePage()
+    public function renderModelPage()
     {
         $view = new \View\Model(
-            \View\RootPath::homePage($this->handler->homePage()),
-            $this->handler->main()->pageMetaData()
+            \View\RootPath::modelPage($this->handler->modelPage()),
+            $this->handler->main()->modelMetaData()
         );
         return $view->render(false);
     }
 
-    public function post()
+    /**
+     * Entry point home page post request, adds Home Page Post, exception
+     * @throws NotImplementedException
+     */
+    public function addHomePagePost()
     {
         throw new NotImplementedException(sprintf('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__));
     }
 
-    public function getXhr()
+    /**
+     * Entry point RootPath email post xhr request, adds Email Post Xhr, confirmation message
+     * @return string
+     */
+    public function addEmailPostXhr()
     {
-        throw new NotImplementedException(sprintf('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__));
-    }
+        $returnValue = $this->handler->emailPostXhr(
+            filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid'));
 
-    public function postXhr()
-    {
         return json_encode(
             [
-                self::RESPONSE_MESSAGE_KEY => $this->handler->postXhr(filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid')),
+                self::CONFIRMATION_MESSAGE_KEY => $returnValue->state(),
                 'state' => ['title' => 'RootPath', 'url' => ''],
-                'uuid' => $this->handler->main()->uuid()->toString(),
-                'data' => []
+                'uuid' => $this->handler->uuid(),
+                'data' => [
+                    'succeeds' => $returnValue->getSucceedMessages(),
+                    'errors' => $returnValue->getFailureErrors()
+                ]
             ]
         );
     }

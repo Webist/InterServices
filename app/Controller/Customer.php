@@ -53,35 +53,51 @@ class Customer implements \App\Spec\Customer
         $this->handler->postXhr($postData, $this->inputHandler->parameter('uuid'));
     }
 
-    public function postXhr()
+    /**
+     * Entry point Customer post xhr request, adds Customer Post Xhr, confirmation message
+     * @return string
+     */
+    public function addPostXhr()
     {
+        $returnValue = $this->handler->postXhr(
+            filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid'));
+
         return json_encode(
             [
-                self::RESPONSE_MESSAGE_KEY => $this->handler->postXhr(filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid')),
+                self::CONFIRMATION_MESSAGE_KEY => $returnValue->state(),
                 'state' => ['title' => 'Customer', 'url' => ''],
-                'uuid' => $this->handler->main()->uuid()->toString(),
-                'data' => []
+                'uuid' => $this->handler->uuid(),
+                'data' => [
+                    'succeeds' => $returnValue->getSucceedMessages(),
+                    'errors' => $returnValue->getFailureErrors()
+                ]
             ]
         );
     }
 
-    public function getForm()
+    /**
+     * Entry point Customer form request, renders Form, html data
+     * @return mixed|string
+     */
+    public function renderForm()
     {
         $view = new \View\Model(
             \View\Customer::form($this->handler->form(
-                $this->inputHandler->parameter('uuid'),
-                self::CUSTOMER_FORM)),
-            $this->handler->main()->pageMetaData()
+                $this->inputHandler->parameter('uuid'))),
+            $this->handler->main()->modelMetaData()
         );
         return $view->render();
     }
 
-    public function getList()
+    /**
+     * Entry point Customer list request, renders List, html data
+     * @return mixed|string
+     */
+    public function renderList()
     {
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $view = new \View\Model(
             \View\Customer::list($this->handler->list()),
-            $this->handler->main()->pageMetaData()
+            $this->handler->main()->modelMetaData()
         );
         return $view->render();
     }

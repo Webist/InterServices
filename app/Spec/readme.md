@@ -21,7 +21,7 @@ For example registering a class string can be used to access a facade (a service
 ```php
 interface App\Spec\Controller
 {
-    const  RESPONSE_MESSAGE_KEY = 'message';
+    const  CONFIRMATION_MESSAGE_KEY = 'message';
 }
 ```
 

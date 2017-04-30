@@ -14,8 +14,13 @@ class Admin implements AdminInterface
 
     }
 
-    public function post()
+    /**
+     * Entry point form request, renders Form, exception
+     * @throws NotImplementedException
+     */
+    public function renderForm()
     {
         throw new NotImplementedException(sprintf('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__));
     }
+
 }
