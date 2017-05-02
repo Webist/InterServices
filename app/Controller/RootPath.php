@@ -44,7 +44,7 @@ class RootPath implements \App\Spec\RootPath
      */
     public function addEmailPostXhr()
     {
-        $returnValue = $this->handler->emailPostXhr(
+        $returnValue = $this->handler->emailPostXhrData(
             filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid'));
 
         return json_encode(

@@ -2,6 +2,9 @@
 
 namespace Payment;
 
+
+use App\Spec\DataObject;
+
 /**
  * @Entity
  * @Table(name="credit_cards")
@@ -9,7 +12,7 @@ namespace Payment;
  *
  * improve this https://github.com/doctrine/doctrine2/issues/1757
  **/
-class CreditCardData
+class CreditCardData implements DataObject
 {
     /**
      * @Id

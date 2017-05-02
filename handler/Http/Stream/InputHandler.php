@@ -51,21 +51,22 @@ class InputHandler implements InputInterface, InputHandlerInterface
     }
 
     /**
-     * Gets request method
-     * @return string|null
-     */
-    public function requestMethod()
-    {
-        return filter_input(INPUT_SERVER, self::inputStreamRequestMethod);
-    }
-
-    /**
      * Detects if the input request is ajax
      * @return bool
      */
     public function isAjax()
     {
         return !is_null(filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH'));
+    }
+
+    public function parameter($name)
+    {
+        $methods = $this->parameters();
+        foreach ($methods as $parameters) {
+            if (isset($parameters[$name])) {
+                return $parameters[$name];
+            }
+        }
     }
 
     /**
@@ -82,29 +83,40 @@ class InputHandler implements InputInterface, InputHandlerInterface
         } else {
 
             switch($this->requestMethod()) {
+                // request to receive resource-uri
                 case "GET":
                     $params['GET'] = filter_input_array(INPUT_GET);
+
+                // request to receive headers only
                 case "HEAD":
                     $params['HEAD'] = filter_input_array(INPUT_GET);
+
+                // request to update with the sent body data, server-side defines resource
                 case "POST":
                     $params['POST'] = filter_input_array(INPUT_POST);
                     $params['GET'] = filter_input_array(INPUT_GET);
+
+                // request to replace the sent resource-uri. replace (by new insert)
                 case "PUT":
                     $put = [];
                     parse_str(file_get_contents('php://input'), $put);
                     $params['PUT'] = $put;
+
+                // request to receive request options
+                case "OPTIONS":
+                    // request tho delete given resource-uri
+                case "DELETE":
             }
         }
         return $params;
     }
 
-    public function parameter($name)
+    /**
+     * Gets request method
+     * @return string|null
+     */
+    public function requestMethod()
     {
-        $methods = $this->parameters();
-        foreach($methods as $parameters){
-            if(isset($parameters[$name])){
-                return $parameters[$name];
-            }
-        }
+        return filter_input(INPUT_SERVER, self::inputStreamRequestMethod);
     }
 }

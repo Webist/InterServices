@@ -15,7 +15,7 @@ namespace Service;
  * Class Service
  * @package App\Handler
  */
-class Container
+class Container implements \App\Spec\Container
 {
     /**
      * Holds already instantiated objects. A simple DIC.

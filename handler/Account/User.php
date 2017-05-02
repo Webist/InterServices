@@ -3,7 +3,7 @@
 namespace Account;
 
 
-class User
+class User implements \App\Spec\Command
 {
     /**
      * @var UserData
@@ -11,35 +11,54 @@ class User
     private $data;
 
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var \App\Service\ORM
      */
-    private $entityManager;
+    private $orm;
 
-    public function __construct(UserData $userData, \Doctrine\ORM\EntityManager $entityManager)
+    /**
+     * Enables the feature multiple times persisting before flushing.
+     * @var bool
+     */
+    private $persisted = false;
+
+    public function __construct(\App\Spec\DataObject $dataObject, \App\Service\ORM $orm)
     {
-        $this->data = $userData;
-        $this->entityManager = $entityManager;
+        $this->data = $dataObject;
+        $this->orm = $orm;
     }
 
-    public function data()
+    public function execute()
     {
-        return $this->data;
-    }
-
-    public function handle()
-    {
-        $entityManager = $this->entityManager;
-
-        $repo = $entityManager->getRepository(UserData::class);
-        $data = $repo->find($this->data->getId());
-
-        if($data){
-            $entityManager->merge($this->data);
-        } else {
-            $entityManager->persist($this->data);
+        if (!$this->persisted) {
+            $this->persist();
         }
+        $this->entityManager()->flush();
+        return $this->entityManager()->contains($this->data);
+    }
 
-        $entityManager->flush();
-        return $entityManager->contains($this->data);
+    /**
+     * @return \Account\User
+     */
+    public function persist()
+    {
+        if (($data = $this->foundData())) {
+            $this->data->setCreatedAt($data->getCreatedAt());
+            $this->entityManager()->merge($this->data);
+        } else {
+            $this->entityManager()->persist($this->data);
+        }
+        $this->persisted = true;
+        return $this;
+    }
+
+    public function foundData()
+    {
+        $repo = $this->entityManager()->getRepository(UserData::class);
+        return $repo->find($this->data->getId());
+    }
+
+    private function entityManager()
+    {
+        return $this->orm->entityManager();
     }
 }

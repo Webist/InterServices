@@ -7,7 +7,7 @@ namespace Commerce;
  * @Table(name="customers")
  * @HasLifecycleCallbacks()
  **/
-class CustomerData
+class CustomerData implements \App\Spec\DataObject
 {
     /**
      *
@@ -20,7 +20,7 @@ class CustomerData
 
     /**
      * @var
-     * @Column(type="datetime", name="created_at")
+     * @Column(type="datetime", name="created_at", options={"default"="CURRENT_TIMESTAMP"})
      */
     protected $createdAt;
 

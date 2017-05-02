@@ -5,11 +5,17 @@
 ### Component/Service Orientation - Web Delivery Mechanism 
 See [Robert C Martin - Clean Architecture and Design](https://www.youtube.com/watch?v=Nsjsiz2A9mg)   
 
-As the DI (Dependency Injection) is strictly preferred above inheritance,  
-the development environment is component/service oriented.  
-Specifying upfront is forced to avoid implementing dynamic configuration
-modifications, such as triggers, trough the code.  
-This upfront specification is also a way of avoiding cyclomatic complexity (if, elseif, case, or, ...).
+#### M.O.M [(Machine Object Model)](http://webist.nl/articles/machine-object-model.md)
+The MOM layer is the assembly mechanism that publishes the dependencies by decoupling.  
+It is the host part that takes care of components orientation, before the object orientation.  
+
+Within the MOM concept a relation is similar to following statement;
+```html
+Car hosts Engine
+```
+Within the MOM layer the DI (Dependency Injection) is strictly preferred above inheritance.  
+Encapsulations are done with closure objects.  
+
 
 #### Supported Delivery Mechanism's
 + Simple, the route points to a file

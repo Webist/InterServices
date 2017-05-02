@@ -2,7 +2,10 @@
 
 namespace Commerce;
 
-class Customer
+
+use App\Spec\DataObject;
+
+class Customer implements \App\Spec\Command
 {
     /**
      * @var CustomerData
@@ -10,36 +13,54 @@ class Customer
     private $data;
 
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var \App\Service\ORM
      */
-    private $entityManager;
+    private $orm;
 
-    public function __construct(CustomerData $customerData, \Doctrine\ORM\EntityManager $entityManager)
+    /**
+     * Enables the feature multiple times persisting before flushing.
+     * @var bool
+     */
+    private $persisted = false;
+
+    public function __construct(DataObject $dataObject, \App\Service\ORM $orm)
     {
-        $this->data = $customerData;
-        $this->entityManager = $entityManager;
+        $this->data = $dataObject;
+        $this->orm = $orm;
     }
 
-    public function data()
+    public function execute()
     {
-        return $this->data;
-    }
-
-    public function handle()
-    {
-        $entityManager = $this->entityManager;
-
-        $repo = $entityManager->getRepository(CustomerData::class);
-        $data = $repo->find($this->data->getId());
-
-        if($data){
-            $entityManager->merge($this->data);
-        } else {
-            $entityManager->persist($this->data);
+        if (!$this->persisted) {
+            $this->persist();
         }
-
-        $entityManager->flush();
-        return $entityManager->contains($this->data);
+        $this->entityManager()->flush();
+        return $this->entityManager()->contains($this->data);
     }
 
+    /**
+     * @return \Commerce\Customer
+     */
+    public function persist()
+    {
+        if (($data = $this->foundData())) {
+            $this->data->setCreatedAt($data->getCreatedAt());
+            $this->entityManager()->merge($this->data);
+        } else {
+            $this->entityManager()->persist($this->data);
+        }
+        $this->persisted = true;
+        return $this;
+    }
+
+    public function foundData()
+    {
+        $repo = $this->entityManager()->getRepository(CustomerData::class);
+        return $repo->find($this->data->getId());
+    }
+
+    private function entityManager()
+    {
+        return $this->orm->entityManager();
+    }
 }

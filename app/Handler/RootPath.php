@@ -14,37 +14,28 @@ class RootPath implements \App\Spec\RootPath
     private $uuid;
 
     /**
-     * Provides instantiation of defined class
-     * @var \Service\Container
+     * @var \App\Service\ORM
      */
-    private $container;
+    private $orm;
 
+    /**
+     *
+     * @var \App\Service\Customer
+     */
+    private $service;
+
+    /**
+     * Customer constructor.
+     * @param Main $main
+     */
     public function __construct(Main $main)
     {
         $this->main = $main;
-        $this->container = $this->main->container();
-    }
 
-    public function main()
-    {
-        return $this->main;
-    }
-
-    public function container()
-    {
-        return $this->main->container();
-    }
-
-    public function uuid($id = null)
-    {
-        if(!empty($id)){
-            $this->uuid = $id;
-        }
-
-        if($this->uuid === null) {
-            $this->uuid = $this->main()->uuid()->toString();
-        }
-        return $this->uuid;
+        $this->orm = $this->main->container()->get(\App\Service\ORM::class, function () {
+        });
+        $this->service = $this->main->container()->get(self::ROOTPATH, function () {
+        });
     }
 
     public function modelPage()
@@ -53,13 +44,13 @@ class RootPath implements \App\Spec\RootPath
     }
 
     /**
-     * Handler RootPath email post xhr, dispatches email command, email data transfer
+     * Handler RootPath email post xhr data, dispatches email command, email data transfer
      *
      * @param array $postData
      * @param null $uuid
      * @return \App\Service\EmailReturnValue
      */
-    public function emailPostXhr(array $postData, $uuid = null)
+    public function emailPostXhrData(array $postData, $uuid = null)
     {
         \Assert\Assertion::notEmpty($postData);
         \Assert\Assertion::email($postData['email']);
@@ -91,7 +82,7 @@ class RootPath implements \App\Spec\RootPath
         $this->uuid($emailCommand->getHash());
 
         /** @var \App\Service\Mailer $mailerService */
-        $mailerService = $this->container->get(self::MAILER, function () {
+        $mailerService = $this->main->container()->get(self::MAILER, function () {
         });
         return $mailerService->dispatch($emailCommand);
     }
@@ -103,15 +94,29 @@ class RootPath implements \App\Spec\RootPath
      */
     private function createCustomerFromEmailPost(array $postData)
     {
-        /** @var \App\Service\ORM $orm */
-        $orm = $this->container()->get(self::ORM, function () {
-        });
-
-        $customerCommand = new \App\Source\CustomerCommand($postData, $orm->entityManager());
-        $operations = $customerCommand->emailPostXhrOperations($this->main->uuid()->toString());
+        $customerCommand = new \App\Source\CustomerOperation($postData);
+        $operations = $customerCommand->emailPostXhrOperations($this->main->uuid()->toString(), $this->orm);
 
         /** @var \App\Service\Customer $customerService */
-        $customerService = $this->container()->get(self::CUSTOMER, function () {});
+        $customerService = $this->main->container()->get(self::CUSTOMER, function () {
+        });
         return $customerService->dispatch($operations);
+    }
+
+    public function uuid($id = null)
+    {
+        if (!empty($id)) {
+            $this->uuid = $id;
+        }
+
+        if ($this->uuid === null) {
+            $this->uuid = $this->main()->uuid()->toString();
+        }
+        return $this->uuid;
+    }
+
+    public function main()
+    {
+        return $this->main;
     }
 }

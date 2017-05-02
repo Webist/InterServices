@@ -3,13 +3,16 @@
 
 namespace Payment;
 
+
+use App\Spec\DataObject;
+
 /**
  * @Entity
  * @Table(name="payment_preferences")
  * @HasLifecycleCallbacks()
  *
  **/
-class PaymentPreferenceData
+class PaymentPreferenceData implements DataObject
 {
     /**
      * @Id

@@ -21,42 +21,31 @@ class Customer
         return call_user_func($this->callback);
     }
 
-    /**
-     * Persists operations to data store
-     * @param $operations
-     * @return CustomerReturnValue
-     */
+    public function get($operations)
+    {
+        return call_user_func($operations);
+    }
+
     public function dispatch($operations)
     {
-        /** @var \Doctrine\ORM\EntityManager $entityManager */
-        $doctrine = new ORM();
-        $entityManager = $doctrine->entityManager();
+        $operations = call_user_func($operations);
+        $returnValue = new CustomerReturnValue();
 
-        $customerReturnValue = new CustomerReturnValue();
+        /** @var \App\Spec\Command $operation */
+        foreach ($operations as $operation) {
+            $className = get_class($operation);
 
-        foreach ($operations as $op) {
+            // when multiple persist, to flush later.
+            // $operation->persist();
+            // $toFlush[] = $operation;
 
-            // Entity object
-            $newData = $op->data();
-
-            $className = get_class($newData);
-
-            $repo = $entityManager->getRepository($className);
-            $data = $repo->find($op->data()->getId());
-
-            if ($data) {
-                $entityManager->merge($newData);
+            if (!$operation->execute()) {
+                $returnValue->addFailureError($className);
             } else {
-                $entityManager->persist($newData);
+                $returnValue->addSucceedMessage($className);
             }
-
-            if (!$entityManager->contains($newData)) {
-                $customerReturnValue->addFailureError($className);
-            }
-            $customerReturnValue->addSucceedMessage($className);
         }
-        $entityManager->flush();
 
-        return $customerReturnValue;
+        return $returnValue;
     }
 }

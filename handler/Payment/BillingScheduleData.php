@@ -3,12 +3,15 @@
 
 namespace Payment;
 
+
+use App\Spec\DataObject;
+
 /**
  * @Entity
  * @Table(name="billing_schedules")
  * @HasLifecycleCallbacks()
  **/
-class BillingScheduleData
+class BillingScheduleData implements DataObject
 {
     /**
      * @Id

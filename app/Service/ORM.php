@@ -6,12 +6,13 @@ namespace App\Service;
 class ORM implements \App\Spec\ORM
 {
     private $em;
+
     /**
      * @return \Doctrine\ORM\EntityManager
      */
     public function entityManager()
     {
-        if($this->em === null){
+        if ($this->em === null) {
             $doctrine = new \Connector\Doctrine();
             $doctrine->setConfig(self::ORM_PATH_TO_ENTITY_FILES, self::ORM_DEV_MODE);
             $doctrine->setEventListener(new \Journal\EntityEvent());
@@ -20,11 +21,11 @@ class ORM implements \App\Spec\ORM
             $credentials = $db->credentials(dirname(__DIR__) . self::DATABASE_GYM_CREDENTIALS_FILE);
 
             $dbParams = array(
-                'driver'   => 'pdo_mysql',
+                'driver' => 'pdo_mysql',
                 'host' => $credentials['host'],
-                'user'     => $credentials['username'],
+                'user' => $credentials['username'],
                 'password' => $credentials['passwd'],
-                'dbname'   => $credentials['dbname'],
+                'dbname' => $credentials['dbname'],
             );
             return $this->em = $doctrine->entityManager($dbParams);
         }

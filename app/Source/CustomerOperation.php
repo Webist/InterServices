@@ -4,25 +4,22 @@
 namespace App\Source;
 
 
-class CustomerCommand
+class CustomerOperation
 {
     private $postData;
-    private $entityManager;
 
-    public function __construct(array $postData, \Doctrine\ORM\EntityManager $entityManager)
+    public function __construct(array $postData)
     {
         $this->postData = $postData;
-        $this->entityManager = $entityManager;
     }
     /**
+     * Builds operations from Command objects
      *
      * @param null $uuid
      * @return array
      */
-    final public function postXhrOperations($uuid)
+    final public function postXhrOperations($uuid, \App\Service\ORM $orm)
     {
-        $entityManager = $this->entityManager;
-
         $operations = [];
         // Customer operand/entity
         $customerData = new \Commerce\CustomerData($uuid);
@@ -30,9 +27,9 @@ class CustomerCommand
         $customerData->setLocale('en');
         $customerData->setState(1);
         $customerData->setTimezone('Europa/Amsterdam');
+        // $customerData->setCreatedAt()
 
-        $operations[] = $customer = new \Commerce\Customer($customerData, $entityManager);
-        // return $operations;
+        $operations[] = $customer = new \Commerce\Customer($customerData, $orm);
 
         // @todo password_verify();
 
@@ -42,7 +39,7 @@ class CustomerCommand
         $userData->setPasswd($this->postData['password']);
         // $userData->setRpasswd($this->postData['rpassword']);
 
-        $operations[] = $user = new \Account\User($userData, $entityManager);
+        $operations[] = $user = new \Account\User($userData, $orm);
 
         // User Profile operand/entity
         $userProfileData = new \Account\UserProfileData($uuid);
@@ -59,7 +56,7 @@ class CustomerCommand
 
         $userProfileData->setRemarks($this->postData['remarks']);
 
-        $operations[] = $userProfile = new \Account\UserProfile($userProfileData, $entityManager);
+        $operations[] = $userProfile = new \Account\UserProfile($userProfileData, $orm);
 
         // Credit-card info operand/entity
         $creditCardData = new \Payment\CreditCardData($uuid);
@@ -70,7 +67,7 @@ class CustomerCommand
         $creditCardData->setStatus(0);
 
         // Credit-card payment preference
-        $operations[] = $creditCard = new \Payment\CreditCard($creditCardData, $entityManager);
+        $operations[] = $creditCard = new \Payment\CreditCard($creditCardData, $orm);
 
         // Payment preferences
         if (isset($this->postData['payment'])) {
@@ -90,13 +87,13 @@ class CustomerCommand
             $payPreference->setMethod(1);
             $payPreference->setStatus(0);
 
-            $operations[] = $pay = new \Payment\Pay($payPreference, $entityManager);
+            $operations[] = $pay = new \Payment\PaymentPreference($payPreference, $orm);
 
             // Notification-schedule billing operand/entity
             $billingNotifyData = new \Payment\BillingScheduleData($uuid);
             $billingNotifyData->setPeriod($notifyMonthly);
 
-            $operations[] = $billingSchedule = new \Payment\Schedule($billingNotifyData, $entityManager);
+            $operations[] = $billingSchedule = new \Payment\BillingSchedule($billingNotifyData, $orm);
         }
 
         return $operations;
@@ -105,14 +102,14 @@ class CustomerCommand
     /**
      * Customer email operations, build User, UserProfile, array collection
      * @param string $uuid
+     * @param \App\Service\ORM $orm
      * @return array
      */
-    public function emailPostXhrOperations(string $uuid)
+    public function emailPostXhrOperations(string $uuid, \App\Service\ORM $orm)
     {
-        $entityManager = $this->entityManager;
         $postData = $this->postData;
 
-        $customerQuery = new CustomerQuery([], $entityManager);
+        $customerQuery = new CustomerQuery([], $orm);
         $userProfileData = $customerQuery->userProfileDataByEmail($postData['email']);
 
         $operations = [];
@@ -133,8 +130,8 @@ class CustomerCommand
             $userProfileData->setCountry('');
             $userProfileData->setRemarks('');
 
-            $operations[] = new \Account\User($userData, $entityManager);
-            $operations[] = new \Account\UserProfile($userProfileData, $entityManager);
+            $operations[] = new \Account\User($userData, $orm);
+            $operations[] = new \Account\UserProfile($userProfileData, $orm);
         }
 
         return $operations;

@@ -2,10 +2,11 @@
 
 namespace Payment;
 
-class CreditCard implements \App\Spec\Command
+
+class PaymentPreference implements \App\Spec\Command
 {
     /**
-     * @var CreditCardData
+     * @var PaymentPreferenceData
      */
     private $data;
 
@@ -36,7 +37,7 @@ class CreditCard implements \App\Spec\Command
     }
 
     /**
-     * @return \Payment\CreditCard
+     * @return \Payment\PaymentPreference
      */
     public function persist()
     {
@@ -52,7 +53,7 @@ class CreditCard implements \App\Spec\Command
 
     public function foundData()
     {
-        $repo = $this->entityManager()->getRepository(CreditCardData::class);
+        $repo = $this->entityManager()->getRepository(PaymentPreferenceData::class);
         return $repo->find($this->data->getId());
     }
 

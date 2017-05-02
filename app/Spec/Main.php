@@ -11,5 +11,6 @@ interface Main
     const MAILER = \App\Service\Mailer::class;
     const EMAIL_TO = 'info@example.com';
 
+    const ROOTPATH = \App\Service\RootPath::class;
     const CUSTOMER = \App\Service\Customer::class;
 }

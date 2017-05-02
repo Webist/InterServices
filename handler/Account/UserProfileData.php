@@ -2,12 +2,15 @@
 
 namespace Account;
 
+
+use App\Spec\DataObject;
+
 /**
  * @Entity
  * @Table(name="user_profiles")
  * @HasLifecycleCallbacks()
  **/
-class UserProfileData
+class UserProfileData implements DataObject
 {
     /**
      * @Id

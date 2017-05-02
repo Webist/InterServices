@@ -17,7 +17,7 @@ class Customer implements \App\Spec\Customer
 
     public function test()
     {
-        print 'Test the CustomerCommand data save into storage <br/>';
+        print 'Test the CustomerOperation data save into storage <br/>';
 
         $postData = array(
 
@@ -50,7 +50,7 @@ class Customer implements \App\Spec\Customer
                 ),
         );
 
-        $this->handler->postXhr($postData, $this->inputHandler->parameter('uuid'));
+        $this->handler->postXhrData($postData, $this->inputHandler->parameter('uuid'));
     }
 
     /**
@@ -59,7 +59,7 @@ class Customer implements \App\Spec\Customer
      */
     public function addPostXhr()
     {
-        $returnValue = $this->handler->postXhr(
+        $returnValue = $this->handler->postXhrData(
             filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid'));
 
         return json_encode(
@@ -82,7 +82,7 @@ class Customer implements \App\Spec\Customer
     public function renderForm()
     {
         $view = new \View\Model(
-            \View\Customer::form($this->handler->form(
+            \View\Customer::form($this->handler->formData(
                 $this->inputHandler->parameter('uuid'))),
             $this->handler->main()->modelMetaData()
         );
@@ -96,7 +96,7 @@ class Customer implements \App\Spec\Customer
     public function renderList()
     {
         $view = new \View\Model(
-            \View\Customer::list($this->handler->list()),
+            \View\Customer::list($this->handler->listData()),
             $this->handler->main()->modelMetaData()
         );
         return $view->render();

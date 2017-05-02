@@ -8,7 +8,7 @@ namespace Account;
  * @Table(name="users")
  * @HasLifecycleCallbacks()
  **/
-class UserData
+class UserData implements \App\Spec\DataObject
 {
     /**
      * @Id
