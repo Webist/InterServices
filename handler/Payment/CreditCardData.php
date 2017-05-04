@@ -3,7 +3,6 @@
 namespace Payment;
 
 
-use App\Spec\DataObject;
 
 /**
  * @Entity
@@ -12,7 +11,7 @@ use App\Spec\DataObject;
  *
  * improve this https://github.com/doctrine/doctrine2/issues/1757
  **/
-class CreditCardData implements DataObject
+class CreditCardData implements \App\Contract\Behave\DataObject
 {
     /**
      * @Id

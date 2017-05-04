@@ -3,7 +3,7 @@
 namespace Account;
 
 
-class UserProfile implements \App\Spec\Command
+class UserProfile implements \App\Contract\Behave\React
 {
     /**
      * @var UserProfileData
@@ -21,7 +21,7 @@ class UserProfile implements \App\Spec\Command
      */
     private $persisted = false;
 
-    public function __construct(\App\Spec\DataObject $dataObject, \App\Service\ORM $orm)
+    public function __construct(\App\Contract\Behave\DataObject $dataObject, \App\Service\ORM $orm)
     {
         $this->data = $dataObject;
         $this->orm = $orm;

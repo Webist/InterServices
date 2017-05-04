@@ -4,62 +4,64 @@
 namespace App\Service;
 
 
-use Mail\EmailCommand;
-
-class Mailer implements \App\Spec\Main
+class Mailer
 {
-    /**
-     * Operations holding callable
-     *
-     * @var \Closure
-     */
-    private $callback;
+    private $orm;
 
-    public function __construct(\Closure $callback)
+    private $operations;
+
+    public function emailPostXhrOperations(\App\Event\MailerStatement $operation)
     {
-        $this->callback = $callback;
+        $operation->emailPostXhrReacts(null, $this);
     }
 
-    public function invoke()
+    public function applyReact($key, $react)
     {
-        return call_user_func($this->callback);
+        $this->operations[$key] = $react;
     }
 
     /**
-     * @param EmailCommand $eMailCommand
-     * @return EmailReturnValue
+     * @return \App\ReturnValue\Email
      */
-    public function dispatch(EmailCommand $eMailCommand)
+    public function dispatch()
     {
-        /** @var \App\Service\ORM $doctrine */
-        $doctrine = new ORM();
-        $entityManager = $doctrine->entityManager();
+        $returnValue = new \App\ReturnValue\Email();
 
-        $returnValue = new EmailReturnValue();
+        /** @var \Mail\Mailer $operation */
+        foreach ($this->operations as $operation) {
 
-        try {
-            // when duplicate, then return early
-            $entityManager->persist($eMailCommand);
-            $entityManager->flush();
+            $class = $operation->data();
+            $className = get_class($operation->data());
 
-        } catch (\Exception $exception) {
+            try {
+                $this->orm()->entityManager()->persist($class);
+                $this->orm()->entityManager()->flush();
+            } catch (\Exception $exception) {
 
-            $returnValue->addFailureError(get_class($eMailCommand));
-            if (strpos($exception->getMessage(), '1062 Duplicate entry') !== false) {
-                $returnValue->addFailureError('eMail was already sent');
+                $returnValue->addFailureError($className);
+                if (strpos($exception->getMessage(), '1062 Duplicate entry') !== false) {
+                    $returnValue->addFailureError('eMail was already sent');
+                }
+                $returnValue->addFailureError($exception->getMessage());
+                return $returnValue;
             }
-            $returnValue->addFailureError($exception->getMessage());
-            return $returnValue;
-        }
+            $returnValue->setUuid($operation->uuid());
 
-        $mailer = new \Mail\Mailer($eMailCommand);
-
-        if($mailer->handle()){
-            $returnValue->addSucceedMessage(get_class($eMailCommand));
-        } else {
-            $returnValue->addFailureError(get_class($eMailCommand));
+            if ($operation->execute()) {
+                $returnValue->addSucceedMessage($className);
+            } else {
+                $returnValue->addFailureError($className);
+            }
         }
 
         return $returnValue;
+    }
+
+    public function orm()
+    {
+        if ($this->orm === null) {
+            $this->orm = new \App\Service\ORM();
+        }
+        return $this->orm;
     }
 }

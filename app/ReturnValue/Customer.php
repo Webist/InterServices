@@ -1,15 +1,17 @@
 <?php
 
 
-namespace App\Service;
+namespace App\ReturnValue;
 
 
-class CustomerReturnValue
+class Customer
 {
     private $failureErrors = [];
     private $successMessages = [];
 
     private $state = true;
+
+    private $uuid;
 
     public function addFailureError($message)
     {
@@ -35,5 +37,15 @@ class CustomerReturnValue
     public function state()
     {
         return $this->state;
+    }
+
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
+    }
+
+    public function uuid()
+    {
+        return $this->uuid;
     }
 }

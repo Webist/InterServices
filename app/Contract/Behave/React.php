@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Spec;
+namespace App\Contract\Behave;
 
 
-interface Command
+interface React
 {
     public function __construct(DataObject $dataObject, \App\Service\ORM $orm);
 

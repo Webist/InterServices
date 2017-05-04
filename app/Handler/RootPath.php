@@ -3,39 +3,28 @@
 namespace App\Handler;
 
 
-class RootPath implements \App\Spec\RootPath
+class RootPath implements \App\Contract\Spec\RootPath
 {
     /**
      * Holds route, input information and access to generic handler
-     * @var Main
+     * @var \App\Meta\Main
      */
     private $main;
 
-    private $uuid;
+    /**
+     * @var \App\Container\Service
+     */
+    private $container;
 
     /**
-     * @var \App\Service\ORM
+     * RootPath constructor.
+     * @param \App\Meta\Main $main
+     * @param \App\Container\Service $container
      */
-    private $orm;
-
-    /**
-     *
-     * @var \App\Service\Customer
-     */
-    private $service;
-
-    /**
-     * Customer constructor.
-     * @param Main $main
-     */
-    public function __construct(Main $main)
+    public function __construct(\App\Meta\Main $main, \App\Container\Service $container)
     {
         $this->main = $main;
-
-        $this->orm = $this->main->container()->get(\App\Service\ORM::class, function () {
-        });
-        $this->service = $this->main->container()->get(self::ROOTPATH, function () {
-        });
+        $this->container = $container;
     }
 
     public function modelPage()
@@ -48,7 +37,7 @@ class RootPath implements \App\Spec\RootPath
      *
      * @param array $postData
      * @param null $uuid
-     * @return \App\Service\EmailReturnValue
+     * @return \App\ReturnValue\Email
      */
     public function emailPostXhrData(array $postData, $uuid = null)
     {
@@ -64,55 +53,27 @@ class RootPath implements \App\Spec\RootPath
             // do nothing
         }
 
-        $spamFilter = new \Mail\EmailSpamFilter($postData['email']);
-        $email = $spamFilter->getEmail();
-
-        $emailCommand = new \Mail\EmailCommand(
-            [
-                'email' => $email,
-                'receiver' => self::EMAIL_TO,
-                'message' => "\n" . $postData['message'] . "\r\n",
-                'subject' => $postData['subject'],
-                'headers' => 'From: ' . $email . "\r\n" .
-                    'Replay-to: ' . $email . "\r\n" .
-                    'X-Mailer: PHP/' . phpversion()
-            ]
-        );
-        // use md5 as uuid response
-        $this->uuid($emailCommand->getHash());
-
         /** @var \App\Service\Mailer $mailerService */
-        $mailerService = $this->main->container()->get(self::MAILER, function () {
-        });
-        return $mailerService->dispatch($emailCommand);
+        $mailerService = $this->container->get(self::MAILER);
+        $mailerService->emailPostXhrOperations(new \App\Event\MailerStatement($postData));
+        return $mailerService->dispatch();
     }
 
     /**
      * Handler RootPath create customer from email post, dispatches customer command, customer data transfer
      * @param array $postData
-     * @return \App\Service\CustomerReturnValue
+     * @return \App\ReturnValue\Customer
      */
     private function createCustomerFromEmailPost(array $postData)
     {
-        $customerCommand = new \App\Source\CustomerOperation($postData);
-        $operations = $customerCommand->emailPostXhrOperations($this->main->uuid()->toString(), $this->orm);
-
         /** @var \App\Service\Customer $customerService */
-        $customerService = $this->main->container()->get(self::CUSTOMER, function () {
-        });
-        return $customerService->dispatch($operations);
-    }
+        $customerService = $this->container->get(self::CUSTOMER,
+            new \App\Source\CustomerStatement($postData),
+            new \App\Operator\Customer()
+        );
 
-    public function uuid($id = null)
-    {
-        if (!empty($id)) {
-            $this->uuid = $id;
-        }
-
-        if ($this->uuid === null) {
-            $this->uuid = $this->main()->uuid()->toString();
-        }
-        return $this->uuid;
+        $customerService->emailPostXhrDataOperations(new \App\Source\CustomerStatement($postData), $postData['email']);
+        return $customerService->mutate();
     }
 
     public function main()

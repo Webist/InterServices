@@ -7,19 +7,19 @@ class Admin
 {
     /**
      * Holds route, input information and access to generic handler
-     * @var Main
+     * @var \App\Meta\Main
      */
     private $main;
 
     /**
      * Provides instantiation of defined class
-     * @var \Service\Container
+     * @var \App\Container\Service
      */
     private $container;
 
-    public function __construct(Main $main)
+    public function __construct(\App\Meta\Main $main, \App\Container\Service $container)
     {
         $this->main = $main;
-        $this->container = $this->main->container();
+        $this->container = $container;
     }
 }

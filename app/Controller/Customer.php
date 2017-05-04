@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Http\Stream\InputHandler;
 
-class Customer implements \App\Spec\Customer
+class Customer implements \App\Contract\Spec\Customer
 {
     private $inputHandler;
     private $handler;
@@ -17,7 +17,7 @@ class Customer implements \App\Spec\Customer
 
     public function test()
     {
-        print 'Test the CustomerOperation data save into storage <br/>';
+        print 'Test the CustomerStatement data save into storage <br/>';
 
         $postData = array(
 
@@ -66,7 +66,7 @@ class Customer implements \App\Spec\Customer
             [
                 self::CONFIRMATION_MESSAGE_KEY => $returnValue->state(),
                 'state' => ['title' => 'Customer', 'url' => ''],
-                'uuid' => $this->handler->uuid(),
+                'uuid' => $returnValue->uuid(),
                 'data' => [
                     'succeeds' => $returnValue->getSucceedMessages(),
                     'errors' => $returnValue->getFailureErrors()
@@ -81,9 +81,10 @@ class Customer implements \App\Spec\Customer
      */
     public function renderForm()
     {
+        $formData = $this->handler->formData($this->inputHandler->parameter('uuid'));
+
         $view = new \View\Model(
-            \View\Customer::form($this->handler->formData(
-                $this->inputHandler->parameter('uuid'))),
+            \View\Customer::form($formData),
             $this->handler->main()->modelMetaData()
         );
         return $view->render();

@@ -3,7 +3,7 @@
 namespace App\Service;
 
 
-class ORM implements \App\Spec\ORM
+class ORM implements \App\Contract\Spec\ORM
 {
     private $em;
 
@@ -18,16 +18,18 @@ class ORM implements \App\Spec\ORM
             $doctrine->setEventListener(new \Journal\EntityEvent());
 
             $db = new \Connector\Database();
-            $credentials = $db->credentials(dirname(__DIR__) . self::DATABASE_GYM_CREDENTIALS_FILE);
+            $credentials = $db->credentials(dirname(__DIR__) . '/Contract/Spec/.private.inc',
+                self::DATABASE_RELATIONAL);
 
-            $dbParams = array(
-                'driver' => 'pdo_mysql',
-                'host' => $credentials['host'],
-                'user' => $credentials['username'],
-                'password' => $credentials['passwd'],
-                'dbname' => $credentials['dbname'],
+            return $this->em = $doctrine->entityManager(
+                [
+                    'driver' => 'pdo_mysql',
+                    'host' => $credentials['host'],
+                    'user' => $credentials['username'],
+                    'password' => $credentials['passwd'],
+                    'dbname' => $credentials['dbname'],
+                ]
             );
-            return $this->em = $doctrine->entityManager($dbParams);
         }
         return $this->em;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Spec;
+namespace App\Contract\Spec;
 
 interface Main
 {
@@ -8,9 +8,13 @@ interface Main
 
     const DATA_STORAGE_PATH = '../app/DataStorage/';
 
+    const DATABASE_RELATIONAL = 'gym';
+    const DATABASE_JOURNAL = 'gym';
+    const DATABASE_LOGS = 'logs';
+
     const MAILER = \App\Service\Mailer::class;
     const EMAIL_TO = 'info@example.com';
 
-    const ROOTPATH = \App\Service\RootPath::class;
+    const ROOT_PATH = \App\Service\RootPath::class;
     const CUSTOMER = \App\Service\Customer::class;
 }

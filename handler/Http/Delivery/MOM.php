@@ -3,7 +3,6 @@
 
 namespace Delivery;
 
-use App\Handler\Main;
 
 class MOM
 {
@@ -15,8 +14,10 @@ class MOM
         // Machine Object Model, requires __construct, Interface and Handler.
         $handler = null;
         if ('' != ($classHandlerName)) {
-            $container = new \Service\Container();
-            $handler = new $classHandlerName(new Main($route, $container));
+            $handler = new $classHandlerName(
+                new \App\Meta\Main($route),
+                new \App\Container\Service()
+            );
         }
         $object = $controller->newInstance($inputHandler, $handler);
         $reflectionMethod = new \ReflectionMethod($object, $classActionName);

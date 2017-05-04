@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Spec;
+namespace App\Contract\Spec;
+
 
 
 interface RootPath extends Controller, ORM

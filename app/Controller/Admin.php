@@ -5,9 +5,8 @@ namespace App\Controller;
 use App\Exception\NotImplementedException;
 
 use Http\Stream\InputHandler;
-use App\Spec\Admin as AdminInterface;
 
-class Admin implements AdminInterface
+class Admin implements \App\Contract\Spec\Admin
 {
     public function __construct(InputHandler $inputHandler, \App\Handler\Admin $handler)
     {

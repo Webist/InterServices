@@ -3,9 +3,7 @@
 namespace Commerce;
 
 
-use App\Spec\DataObject;
-
-class Customer implements \App\Spec\Command
+class Customer implements \App\Contract\Behave\React
 {
     /**
      * @var CustomerData
@@ -23,7 +21,7 @@ class Customer implements \App\Spec\Command
      */
     private $persisted = false;
 
-    public function __construct(DataObject $dataObject, \App\Service\ORM $orm)
+    public function __construct(\App\Contract\Behave\DataObject $dataObject, \App\Service\ORM $orm)
     {
         $this->data = $dataObject;
         $this->orm = $orm;

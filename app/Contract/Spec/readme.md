@@ -12,32 +12,31 @@ These specification data, via interfaces, will be available to every implementin
 classes and subclasses. Use it with caution.
 To avoid sensitive pollution split interfaces in two different interface objects.
 
-### `interface` object usage
-+ Specifications;   
+### 2 different ways of `interface` object usage
+1.  Specifications;   
 Specifications are constant value agreements to reuse in the whole system as the type of configuration values.
 Depending on context these might be strategy, settings, initial values.  
 
 For example registering a class string can be used to access a facade (a service object) in MVC setup.
 ```php
-interface App\Spec\Controller
+interface App\Contract\Spec\Controller
 {
-    const  CONFIRMATION_MESSAGE_KEY = 'message';
+    const  CONFIRMATION_MESSAGE_KEY = 'success';
 }
 ```
 
 
-+ Class Methods, behaviour;   
+2. Class Methods, behaviour;   
 Class Methods are behaviour agreement declarations to define a consistent minimum required implementation. 
 ```php
-interface App\Spec\Customer extends Controller
+interface App\Contract\Behave\Customer extends Controller
 {
      function handle();
-     function buildOperations($postData);
 }
 ```
 
 
-### Anti-pattern warning
+### Removing cyclomatic complexity (if, else, switch, ... statements)
 Generally known that an `interface` should specify the behavior.   
 When using an interface for specification; 
 For example the following example specifies  
@@ -62,18 +61,6 @@ The point of using interface here is;
 #### Do not use sensitive data in Interfaces
 Since an interface constant will be visible to all inheriting
 classes and subclasses, there is no hiding.
-
-```css
-Tip :  
-Generally the dot prefixed files are not committed to the public environments.
-Creating a file with dot prefix e.g. `.private.php` with class `interface private {}`
-might be a good solution.  
-
-In any way better than during every request handling checking if a file or directory exists 
-and eventually redirecting the user to installation directory.  
-
-
-```
 
 
 Read more   

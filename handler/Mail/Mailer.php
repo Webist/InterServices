@@ -5,27 +5,37 @@ namespace Mail;
 
 class Mailer
 {
-    private $command;
+    private $data;
     private $handler;
 
-    public function __construct(EmailCommand $emailCommand, $handler = null)
+    public function __construct(EmailData $emailData, $handler = null)
     {
-        $this->command = $emailCommand;
+        $this->data = $emailData;
         $this->handler = $handler;
     }
 
-    public function handle()
+    public function uuid()
+    {
+        return $this->data->getHash();
+    }
+
+    public function data()
+    {
+        return $this->data;
+    }
+
+    public function execute()
     {
         // When no handler given, then native php mailer
         if ($this->handler === null) {
             return mail(
-                $this->command->getReceiver(),
-                $this->command->getSubject(),
-                $this->command->getMessage(),
-                $this->command->getHeaders()
+                $this->data->getReceiver(),
+                $this->data->getSubject(),
+                $this->data->getMessage(),
+                $this->data->getHeaders()
             );
         }
 
-        return $this->handler->handle();
+        return $this->handler->execute();
     }
 }

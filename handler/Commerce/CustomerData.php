@@ -7,7 +7,7 @@ namespace Commerce;
  * @Table(name="customers")
  * @HasLifecycleCallbacks()
  **/
-class CustomerData implements \App\Spec\DataObject
+class CustomerData implements \App\Contract\Behave\DataObject
 {
     /**
      *

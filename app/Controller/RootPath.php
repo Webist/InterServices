@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Exception\NotImplementedException;
 use Http\Stream\InputHandler;
 
-class RootPath implements \App\Spec\RootPath
+class RootPath implements \App\Contract\Spec\RootPath
 {
     private $inputHandler;
     private $handler;
@@ -51,7 +51,7 @@ class RootPath implements \App\Spec\RootPath
             [
                 self::CONFIRMATION_MESSAGE_KEY => $returnValue->state(),
                 'state' => ['title' => 'RootPath', 'url' => ''],
-                'uuid' => $this->handler->uuid(),
+                'uuid' => $returnValue->uuid(),
                 'data' => [
                     'succeeds' => $returnValue->getSucceedMessages(),
                     'errors' => $returnValue->getFailureErrors()

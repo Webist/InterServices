@@ -8,7 +8,7 @@ namespace Mail;
  * @Table("emails")
  * @HasLifecycleCallbacks
  */
-class EmailCommand
+class EmailData
 {
     /**
      * @Id
@@ -99,7 +99,7 @@ class EmailCommand
      * @param string $hash
      *
      *
-     * @return EmailCommand
+     * @return EmailData
      */
     public function setHash(string $hash)
     {
@@ -123,7 +123,7 @@ class EmailCommand
      *
      * @param string $sender
      *
-     * @return EmailCommand
+     * @return EmailData
      */
     public function setSender($sender)
     {
@@ -147,7 +147,7 @@ class EmailCommand
      *
      * @param string $receiver
      *
-     * @return EmailCommand
+     * @return EmailData
      */
     public function setReceiver($receiver)
     {
@@ -171,7 +171,7 @@ class EmailCommand
      *
      * @param string $subject
      *
-     * @return EmailCommand
+     * @return EmailData
      */
     public function setSubject($subject)
     {
@@ -195,7 +195,7 @@ class EmailCommand
      *
      * @param string $message
      *
-     * @return EmailCommand
+     * @return EmailData
      */
     public function setMessage($message)
     {
@@ -219,7 +219,7 @@ class EmailCommand
      *
      * @param string $headers
      *
-     * @return EmailCommand
+     * @return EmailData
      */
     public function setHeaders($headers)
     {
@@ -234,7 +234,7 @@ class EmailCommand
      * @param \DateTime $timestamp
      *
      *
-     * @return EmailCommand
+     * @return EmailData
      */
     public function setCreatedAt(\DateTime $timestamp)
     {

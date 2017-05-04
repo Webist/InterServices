@@ -4,7 +4,9 @@
 namespace App\Source;
 
 
-class CustomerOperation
+use App\Contract\Behave\Statement;
+
+class CustomerStatement implements Statement
 {
     private $postData;
 
@@ -12,15 +14,14 @@ class CustomerOperation
     {
         $this->postData = $postData;
     }
+
     /**
-     * Builds operations from Command objects
-     *
+     * Builds operations from React objects
      * @param null $uuid
-     * @return array
+     * @param $service \App\Service\Customer
      */
-    final public function postXhrOperations($uuid, \App\Service\ORM $orm)
+    final public function postXhrReacts($uuid = null, $service)
     {
-        $operations = [];
         // Customer operand/entity
         $customerData = new \Commerce\CustomerData($uuid);
         $customerData->setStatus(1);
@@ -29,7 +30,7 @@ class CustomerOperation
         $customerData->setTimezone('Europa/Amsterdam');
         // $customerData->setCreatedAt()
 
-        $operations[] = $customer = new \Commerce\Customer($customerData, $orm);
+        $service->applyReact(get_class($customerData), new \Commerce\Customer($customerData, $service->orm()));
 
         // @todo password_verify();
 
@@ -39,7 +40,7 @@ class CustomerOperation
         $userData->setPasswd($this->postData['password']);
         // $userData->setRpasswd($this->postData['rpassword']);
 
-        $operations[] = $user = new \Account\User($userData, $orm);
+        $service->applyReact(get_class($userData), new \Account\User($userData, $service->orm()));
 
         // User Profile operand/entity
         $userProfileData = new \Account\UserProfileData($uuid);
@@ -56,7 +57,7 @@ class CustomerOperation
 
         $userProfileData->setRemarks($this->postData['remarks']);
 
-        $operations[] = $userProfile = new \Account\UserProfile($userProfileData, $orm);
+        $service->applyReact(get_class($userProfileData), new \Account\UserProfile($userProfileData, $service->orm()));
 
         // Credit-card info operand/entity
         $creditCardData = new \Payment\CreditCardData($uuid);
@@ -67,7 +68,7 @@ class CustomerOperation
         $creditCardData->setStatus(0);
 
         // Credit-card payment preference
-        $operations[] = $creditCard = new \Payment\CreditCard($creditCardData, $orm);
+        $service->applyReact(get_class($creditCardData), new \Payment\CreditCard($creditCardData, $service->orm()));
 
         // Payment preferences
         if (isset($this->postData['payment'])) {
@@ -87,53 +88,39 @@ class CustomerOperation
             $payPreference->setMethod(1);
             $payPreference->setStatus(0);
 
-            $operations[] = $pay = new \Payment\PaymentPreference($payPreference, $orm);
+            $service->applyReact(get_class($payPreference), new \Payment\PaymentPreference($payPreference, $service->orm()));
 
             // Notification-schedule billing operand/entity
             $billingNotifyData = new \Payment\BillingScheduleData($uuid);
             $billingNotifyData->setPeriod($notifyMonthly);
 
-            $operations[] = $billingSchedule = new \Payment\BillingSchedule($billingNotifyData, $orm);
+            $service->applyReact(get_class($billingNotifyData), new \Payment\BillingSchedule($billingNotifyData, $service->orm()));
         }
-
-        return $operations;
     }
 
     /**
-     * Customer email operations, build User, UserProfile, array collection
-     * @param string $uuid
-     * @param \App\Service\ORM $orm
-     * @return array
+     * Customer email operations, build User, UserProfile
+     * @param null $uuid
+     * @param $service \App\Service\Customer
      */
-    public function emailPostXhrOperations(string $uuid, \App\Service\ORM $orm)
+    public function emailPostXhrReacts($uuid = null, $service)
     {
-        $postData = $this->postData;
+        $userData = new \Account\UserData($uuid);
+        $userData->setName($this->postData['name']);
+        $userData->setPasswd(1);
 
-        $customerQuery = new CustomerQuery([], $orm);
-        $userProfileData = $customerQuery->userProfileDataByEmail($postData['email']);
+        $service->applyReact(get_class($userData), new \Account\User($userData, $service->orm()));
 
-        $operations = [];
-        // no-user matched, then create new user
-        if (!$userProfileData) {
+        $userProfileData = new \Account\UserProfileData($uuid);
+        $userProfileData->setEmail($this->postData['email']);
+        $userProfileData->setPhone($this->postData['phone']);
+        $userProfileData->setFullName($this->postData['name']);
+        $userProfileData->setGender(0);
+        $userProfileData->setAddress('');
+        $userProfileData->setCity('');
+        $userProfileData->setCountry('');
+        $userProfileData->setRemarks('');
 
-            $userData = $customerQuery->userData($uuid, false);
-            $userData->setName($postData['name']);
-            $userData->setPasswd(1);
-
-            $userProfileData = new \Account\UserProfileData($uuid);
-            $userProfileData->setEmail($postData['email']);
-            $userProfileData->setPhone($postData['phone']);
-            $userProfileData->setFullName('');
-            $userProfileData->setGender(0);
-            $userProfileData->setAddress('');
-            $userProfileData->setCity('');
-            $userProfileData->setCountry('');
-            $userProfileData->setRemarks('');
-
-            $operations[] = new \Account\User($userData, $orm);
-            $operations[] = new \Account\UserProfile($userProfileData, $orm);
-        }
-
-        return $operations;
+        $service->applyReact(get_class($userProfileData), new \Account\UserProfile($userProfileData, $service->orm()));
     }
 }

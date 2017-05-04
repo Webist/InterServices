@@ -3,29 +3,47 @@
 namespace App\Service;
 
 
-class Database
+class Database implements \App\Contract\Spec\Main
 {
-    /**
-     * Holds the callback as it was defined when this service was reflected
-     * @example Query container to execute $visitsLoggerQuery = function($pdo) use ($params) {}
-     *
-     * @var \Closure
-     */
-    private $callback;
+    private $connector;
+    private $operator;
 
-    public function __construct(\Closure $callback)
+    /**
+     * @var \mysqli|\PDO
+     */
+    private $adapter;
+
+    public function __construct(\Connector\Database $connector, \App\Operator\Database $operator)
     {
-        $this->callback = $callback;
+        $this->connector = $connector;
+        $this->operator = $operator;
+
+        if ($this->adapter === null) {
+            $this->adapter = $this->connectionOperations(
+                dirname(__DIR__) . '/Contract/Spec/.private.inc', self::DATABASE_LOGS);
+        }
     }
 
-    /**
-     * Handles the callback
-     * @param null $credentialsFile when used, overrides default credentials file
-     * @return mixed
-     */
-    public function invoke($credentialsFile = null)
+    private function connectionOperations($credentialsFile, $useDatabase)
     {
-        $db = new \Connector\Database();
-        return call_user_func($this->callback, $db->connection($credentialsFile));
+        return $this->connector->connection($credentialsFile, $useDatabase);
+    }
+
+    public function visitorLogOperations(array $params)
+    {
+        $query = "INSERT INTO visits SET route_id = :routeId, ip = :ip";
+        $dbh = $this->adapter->prepare($query);
+
+        $key = md5($query);
+        $this->operator->addParams($key, $params);
+        $this->operator->addStatement($key, $dbh);
+    }
+
+    public function execute()
+    {
+        /** @var \PDOStatement $operation */
+        foreach ($this->operator->getStatements() as $key => $operation) {
+            $operation->execute($this->operator->getParams($key));
+        }
     }
 }

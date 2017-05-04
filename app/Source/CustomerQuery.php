@@ -4,35 +4,38 @@
 namespace App\Source;
 
 
-class CustomerQuery
+use App\Contract\Behave\Statement;
+
+class CustomerQuery implements Statement
 {
     private $data = [];
     /** @var \App\Service\ORM */
     private $orm;
 
-    public function __construct(array $data, \App\Service\ORM $orm)
+    public function __construct(array $data)
     {
         $this->data = $data;
-        $this->orm = $orm;
     }
 
-    public function userProfileDataByEmail($email)
+    /**
+     * @param $uuid
+     * @param $service \App\Service\Customer
+     */
+    public function formDataReacts($uuid, $service)
     {
-        $repo = $this->orm->entityManager()->getRepository(\Account\UserProfileData::class);
-        /** @var \Account\UserProfileData $userProfileData */
-        return $repo->findOneBy(['email' => $email]);
+        $this->orm = $service->orm();
+
+        $customerData = $this->customerData($uuid);
+        $service->applyReact(get_class($customerData), $customerData);
+
+        $userData = $this->userData($uuid);
+        $service->applyReact(get_class($userData), $userData);
+
+        $creditCardData = $this->creditCardData($uuid);
+        $service->applyReact(get_class($creditCardData), $creditCardData);
     }
 
-    public function formDataOperations($uuid)
-    {
-        $this->data['customerData'] = $this->customerData($uuid);
-        $this->data['userData'] = $this->userData($uuid);
-        $this->data['creditCardData'] = $this->creditCardData($uuid);
-
-        return $this->data;
-    }
-
-    public function customerData($uuid)
+    private function customerData($uuid)
     {
         $customerData = new \Commerce\CustomerData($uuid);
         if ($uuid) {
@@ -106,10 +109,37 @@ class CustomerQuery
         return $billingScheduleData;
     }
 
-    public function listDataOperations()
+    /**
+     * @param $uuid
+     * @param $service \App\Service\Customer
+     */
+    public function listDataReacts($uuid, $service)
     {
-        return $this->orm->entityManager()->getRepository(\Account\UserProfileData::class)
-            ->findAll();
+        $this->orm = $service->orm();
+
+        if (empty($uuid)) {
+            $listData = $this->orm->entityManager()->getRepository(\Account\UserProfileData::class)
+                ->findAll();
+        } else {
+            $listData = $this->orm->entityManager()->getRepository(\Account\UserProfileData::class)
+                ->find($uuid);
+        }
+
+        $service->applyReact(\Account\UserProfileData::class, $listData);
+    }
+
+    /**
+     * @param $email
+     * @param $service \App\Service\Customer
+     */
+    public function userProfileDataByEmailReacts($email, $service)
+    {
+        $this->orm = $service->orm();
+
+        $repo = $this->orm->entityManager()->getRepository(\Account\UserProfileData::class);
+        $repo->findOneBy(['email' => $email]);
+
+        $service->applyReact(\Account\UserProfileData::class, $repo->findOneBy(['email' => $email]));
     }
 
 }

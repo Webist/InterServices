@@ -24,17 +24,29 @@ Controller specific Handlers/Components or Middleware's
 + Controller   
 The entry points 
 
++ Meta
+Platform, route, portable data-storage 
+
 + Service  
-External service connection/adapters 
+Connection/adapters, frameworks that hold statements, operations (commands/queries) and execute
+
++ ReturnValue
+Results representation in an object
+
++ Operator
+Commands/Queries holder
+
++ Container
+Service objects holder  
 
 + DataStorage  
 File Data Store  
 
 + Source  
-Command/Query operations build for source-type fields in relational data structure context 
+Command/Query operations build for relational data structure with source-type fields
  
 + Event  
-Command/Query operations build for event-type fields in event records-history context
+Command/Query operations build for event records-history with event-type fields
 
 + Exception   
 Controller specific error handlers  

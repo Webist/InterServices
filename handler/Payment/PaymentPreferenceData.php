@@ -4,7 +4,7 @@
 namespace Payment;
 
 
-use App\Spec\DataObject;
+
 
 /**
  * @Entity
@@ -12,7 +12,7 @@ use App\Spec\DataObject;
  * @HasLifecycleCallbacks()
  *
  **/
-class PaymentPreferenceData implements DataObject
+class PaymentPreferenceData implements \App\Contract\Behave\DataObject
 {
     /**
      * @Id
