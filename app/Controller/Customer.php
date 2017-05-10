@@ -20,6 +20,7 @@ class Customer implements \App\Contract\Spec\Customer
         print 'Test the CustomerStatement data save into storage <br/>';
 
         $postData = array(
+            'uuid' => 'ce27bcce-f0c0-4f60-8479-52ef2e41b4f4',
 
             'username' => 'John707',
             'password' => '12345',
@@ -50,7 +51,7 @@ class Customer implements \App\Contract\Spec\Customer
                 ),
         );
 
-        $this->handler->postXhrData($postData, $this->inputHandler->parameter('uuid'));
+        $this->handler->postXhrData($postData);
     }
 
     /**
@@ -60,7 +61,7 @@ class Customer implements \App\Contract\Spec\Customer
     public function addPostXhr()
     {
         $returnValue = $this->handler->postXhrData(
-            filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid'));
+            filter_input_array(INPUT_POST));
 
         return json_encode(
             [

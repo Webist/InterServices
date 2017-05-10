@@ -18,19 +18,20 @@
                                         </span>
                 </div>
                 <div class="actions">
-                    <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
+                    <a class="btn btn-circle btn-icon-only btn-default" href="javascript:">
                         <i class="icon-cloud-upload"></i>
                     </a>
-                    <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
+                    <a class="btn btn-circle btn-icon-only btn-default" href="javascript:">
                         <i class="icon-wrench"></i>
                     </a>
-                    <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
+                    <a class="btn btn-circle btn-icon-only btn-default" href="javascript:">
                         <i class="icon-trash"></i>
                     </a>
                 </div>
             </div>
             <div class="portlet-body form">
                 <form class="form-horizontal" action="#" id="submit_form" method="POST">
+                    <input type="hidden" name="uuid" value="<?= $this->data->getId() ?>"/>
                     <div class="form-wizard">
                         <div class="form-body">
                             <ul class="nav nav-pills nav-justified steps">
@@ -84,12 +85,12 @@
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
-                                    <a href="javascript:;" class="btn default button-previous">
+                                    <a href="javascript:" class="btn default button-previous">
                                         <i class="fa fa-angle-left"></i> Back </a>
-                                    <a href="javascript:;" class="btn btn-outline green button-next"> Continue
+                                    <a href="javascript:" class="btn btn-outline green button-next"> Continue
                                         <i class="fa fa-angle-right"></i>
                                     </a>
-                                    <a href="javascript:;" class="btn green button-submit"> Submit
+                                    <a href="javascript:" class="btn green button-submit"> Submit
                                         <i class="fa fa-check"></i>
                                     </a>
                                 </div>

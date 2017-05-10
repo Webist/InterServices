@@ -19,7 +19,7 @@ class Main
      */
     private function visitorLog()
     {
-        $databaseService = new \App\Service\Database(new \Connector\Database(), new \App\Operator\Database());
+        $databaseService = new \App\Service\Database(new \Connector\Database());
         $databaseService->visitorLogOperations(
             ['routeId' => $this->route['indexKey'], 'ip' => filter_input(INPUT_SERVER, 'REMOTE_ADDR')]);
         $databaseService->execute();

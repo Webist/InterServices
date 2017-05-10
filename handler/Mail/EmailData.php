@@ -8,7 +8,7 @@ namespace Mail;
  * @Table("emails")
  * @HasLifecycleCallbacks
  */
-class EmailData
+class EmailData implements \App\Contract\Behave\DataObject
 {
     /**
      * @Id
@@ -60,13 +60,9 @@ class EmailData
     private $headers;
 
 
-    public function __construct(array $data)
+    public function __construct($uuid)
     {
-        $this->sender = $data['email'];
-        $this->receiver = $data['receiver'];
-        $this->message = $data['message'];
-        $this->subject = $data['subject'];
-        $this->headers = $data['headers'];
+        $this->id = $uuid;
     }
 
     /**

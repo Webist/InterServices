@@ -26,20 +26,20 @@ class CreditCardData implements \App\Contract\Behave\DataObject
      */
     protected $createdAt;
 
-    /** @Column(type="string", length=8) */
+    /** @Column(type="string", length=8, nullable=true) */
     protected $status;
     protected $paymentPreference;
     protected $billingSchedule;
-    /** @Column(type="string", length=65) */
+    /** @Column(type="string", length=65, nullable=true) */
     private $name;
-    /** @Column(type="string", length=65) */
+    /** @Column(type="string", length=65, nullable=true) */
     private $number;
-    /** @Column(type="string", length=4) */
+    /** @Column(type="string", length=4, nullable=true) */
     private $cvc;
-    /** @Column(type="string", length=8) */
+    /** @Column(type="string", length=8, nullable=true) */
     private $expiryDate;
 
-    public function __construct($uuid = null)
+    public function __construct($uuid)
     {
         $this->id = $uuid;
     }

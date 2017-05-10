@@ -3,7 +3,7 @@
 namespace Commerce;
 
 
-class Customer implements \App\Contract\Behave\React
+class Customer
 {
     /**
      * @var CustomerData
@@ -11,15 +11,15 @@ class Customer implements \App\Contract\Behave\React
     private $data;
 
     /**
-     * @var \App\Service\ORM
-     */
-    private $orm;
-
-    /**
      * Enables the feature multiple times persisting before flushing.
      * @var bool
      */
     private $persisted = false;
+
+    /**
+     * @var \App\Service\ORM
+     */
+    private $orm;
 
     public function __construct(\App\Contract\Behave\DataObject $dataObject, \App\Service\ORM $orm)
     {
@@ -27,38 +27,50 @@ class Customer implements \App\Contract\Behave\React
         $this->orm = $orm;
     }
 
+    public function data()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Hydrates data from data store
+     * @usage UPDATE
+     */
+    public function hydrate()
+    {
+        return $this->data = $this->foundData();
+    }
+
+    public function foundData()
+    {
+        if ($this->data->getId()) {
+            $repo = $this->orm->entityManager()->getRepository(CustomerData::class);
+            return $repo->find($this->data->getId());
+        }
+        return $this->data;
+    }
+
     public function execute()
     {
         if (!$this->persisted) {
             $this->persist();
         }
-        $this->entityManager()->flush();
-        return $this->entityManager()->contains($this->data);
+        $this->orm->entityManager()->flush();
+        return $this->orm->entityManager()->contains($this->data);
     }
 
     /**
-     * @return \Commerce\Customer
+     * @return $this
      */
     public function persist()
     {
-        if (($data = $this->foundData())) {
+        if (!empty($data = $this->foundData())) {
             $this->data->setCreatedAt($data->getCreatedAt());
-            $this->entityManager()->merge($this->data);
+            $this->orm->entityManager()->merge($this->data);
         } else {
-            $this->entityManager()->persist($this->data);
+            $this->orm->entityManager()->persist($this->data);
         }
         $this->persisted = true;
         return $this;
-    }
-
-    public function foundData()
-    {
-        $repo = $this->entityManager()->getRepository(CustomerData::class);
-        return $repo->find($this->data->getId());
-    }
-
-    private function entityManager()
-    {
-        return $this->orm->entityManager();
     }
 }

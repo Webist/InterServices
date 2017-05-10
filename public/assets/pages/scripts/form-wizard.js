@@ -14,7 +14,7 @@ var FormWizard = function () {
 
             $("#country_list").select2({
                 placeholder: "Select",
-                allowClear: true,
+                // allowClear: true,
                 formatResult: format,
                 width: 'auto', 
                 formatSelection: format,

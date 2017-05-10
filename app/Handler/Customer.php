@@ -3,6 +3,7 @@
 namespace App\Handler;
 
 
+
 class Customer implements \App\Contract\Spec\Customer
 {
     /**
@@ -37,22 +38,15 @@ class Customer implements \App\Contract\Spec\Customer
      * @param null $uuid
      * @return \App\ReturnValue\Customer
      */
-    public function postXhrData($postData, $uuid = null)
+    public function postXhrData($postData)
     {
+        \Assert\Assertion::keyExists($postData, 'uuid');
         \Assert\Assertion::notEmpty($postData);
         \Assert\Assertion::email($postData['email']);
 
         /** @var \App\Service\Customer $customerService */
-        $customerService = $this->container->get(self::CUSTOMER,
-            new \App\Source\CustomerStatement($postData),
-            new \App\Operator\Customer()
-        );
-
-        if (empty($uuid)) {
-            $uuid = $customerService->uuidByEmail($postData['email']);
-        }
-
-        $customerService->postXhrDataOperations(new \App\Source\CustomerStatement($postData), $uuid);
+        $customerService = $this->container->get(self::CUSTOMER);
+        $customerService->setLifeCyclePostXhrData($postData);
         return $customerService->mutate();
     }
 
@@ -61,15 +55,12 @@ class Customer implements \App\Contract\Spec\Customer
      * @param $uuid
      * @return array
      */
-    public function formData($uuid)
+    public function formData($uuid = '')
     {
         /** @var \App\Service\Customer $customerService */
-        $customerService = $this->container->get(self::CUSTOMER,
-            new \App\Source\CustomerStatement([]),
-            new \App\Operator\Customer()
-        );
-        $customerService->formDataOperations(new \App\Source\CustomerQuery([]), $uuid);
-        return $customerService->get();
+        $customerService = $this->container->get(self::CUSTOMER);
+        $customerService->setLifeCycleFormData($uuid);
+        return $customerService->operations();
     }
 
     /**
@@ -77,14 +68,11 @@ class Customer implements \App\Contract\Spec\Customer
      * @param null $uuid
      * @return mixed
      */
-    public function listData($uuid = null)
+    public function listData($uuid = '')
     {
         /** @var \App\Service\Customer $customerService */
-        $customerService = $this->container->get(self::CUSTOMER,
-            new \App\Source\CustomerStatement([]),
-            new \App\Operator\Customer()
-        );
-        $customerService->listDataOperations(new \App\Source\CustomerQuery([]), $uuid);
-        return $customerService->get();
+        $customerService = $this->container->get(self::CUSTOMER);
+        $customerService->setLifeCycleListData($uuid);
+        return $customerService->operations();
     }
 }

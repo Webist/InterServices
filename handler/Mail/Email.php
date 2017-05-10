@@ -1,12 +1,13 @@
 <?php
 
-namespace Account;
+
+namespace Mail;
 
 
-class UserProfile
+class Email
 {
     /**
-     * @var UserProfileData
+     * @var EmailData
      */
     private $data;
 
@@ -27,12 +28,6 @@ class UserProfile
         $this->orm = $orm;
     }
 
-    public function findAll()
-    {
-        $repo = $this->orm->entityManager()->getRepository(UserProfileData::class);
-        return $repo->findAll();
-    }
-
     public function data()
     {
         return $this->data;
@@ -47,10 +42,13 @@ class UserProfile
         return $this->data = $this->foundData();
     }
 
+    /**
+     * @return \App\Contract\Behave\DataObject|EmailData|null|object
+     */
     public function foundData()
     {
         if ($this->data->getId()) {
-            $repo = $this->orm->entityManager()->getRepository(UserProfileData::class);
+            $repo = $this->orm->entityManager()->getRepository(EmailData::class);
             return $repo->find($this->data->getId());
         }
         return $this->data;

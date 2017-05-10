@@ -6,7 +6,7 @@
         </label>
         <div class="col-md-4">
             <input type="text" class="form-control" name="username"
-                   value="<?= $this->data->getName() ?>"/>
+                   value="<?= $this->data->getUsername() ?>"/>
             <span class="help-block"> Provide your username </span>
         </div>
     </div>

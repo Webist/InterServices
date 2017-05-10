@@ -3,6 +3,7 @@
 
 namespace Account;
 
+
 /**
  * @Entity
  * @Table(name="users")
@@ -24,7 +25,7 @@ class UserData implements \App\Contract\Behave\DataObject
     protected $createdAt;
 
     /**
-     * @Column(type="string", length=65)
+     * @Column(type="string", length=65, nullable=true)
      */
     protected $name;
 
@@ -32,12 +33,17 @@ class UserData implements \App\Contract\Behave\DataObject
      * The below length depends on the "algorithm" you use for encoding
      * the password, but this works well with bcrypt.
      *
-     * @Column(type="string", length=64)
-     * @Assert\NotEmpty
+     * @Column(type="string", length=64, nullable=true)
      *
      * https://github.com/jeremykendall/password-validator
      */
     protected $passwd;
+
+    /**
+     * @var
+     * @Column(type="string", length=65, nullable=true)
+     */
+    protected $username;
 
     /*
      * @OneToMany(targetEntity="UserProfileData", mappedBy="userData")
@@ -121,6 +127,16 @@ class UserData implements \App\Contract\Behave\DataObject
     }
 
     /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
      * Set username
      *
      * @param string $username
@@ -132,16 +148,6 @@ class UserData implements \App\Contract\Behave\DataObject
         $this->username = (string) $username;
 
         return $this;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
     }
 
     /**
@@ -166,54 +172,6 @@ class UserData implements \App\Contract\Behave\DataObject
         $this->passwd = (string) $passwd;
 
         return $this;
-    }
-
-    /**
-     * Set fullname
-     *
-     * @param string $fullname
-     *
-     * @return UserData
-     */
-    public function setFullname(string $fullname)
-    {
-        $this->fullname = (string) $fullname;
-
-        return $this;
-    }
-
-    /**
-     * Get fullname
-     *
-     * @return string
-     */
-    public function getFullname()
-    {
-        return $this->fullname;
-    }
-
-    /**
-     * Set email
-     *
-     * @param \email $email
-     *
-     * @return UserData
-     */
-    public function setEmail(string $email)
-    {
-        $this->email = (string) $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return \email
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**

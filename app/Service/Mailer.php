@@ -7,54 +7,69 @@ namespace App\Service;
 class Mailer
 {
     private $orm;
+    private $operations = [];
 
-    private $operations;
-
-    public function emailPostXhrOperations(\App\Event\MailerStatement $operation)
+    public function operations()
     {
-        $operation->emailPostXhrReacts(null, $this);
-    }
-
-    public function applyReact($key, $react)
-    {
-        $this->operations[$key] = $react;
+        return $this->operations;
     }
 
     /**
-     * @return \App\ReturnValue\Email
+     * Sets operations cycle post xhr data
+     * @param array $postData
      */
-    public function dispatch()
+    public function setLifeCyclePostXhrData(array $postData)
     {
-        $returnValue = new \App\ReturnValue\Email();
-
-        /** @var \Mail\Mailer $operation */
-        foreach ($this->operations as $operation) {
-
-            $class = $operation->data();
-            $className = get_class($operation->data());
-
-            try {
-                $this->orm()->entityManager()->persist($class);
-                $this->orm()->entityManager()->flush();
-            } catch (\Exception $exception) {
-
-                $returnValue->addFailureError($className);
-                if (strpos($exception->getMessage(), '1062 Duplicate entry') !== false) {
-                    $returnValue->addFailureError('eMail was already sent');
-                }
-                $returnValue->addFailureError($exception->getMessage());
-                return $returnValue;
-            }
-            $returnValue->setUuid($operation->uuid());
-
-            if ($operation->execute()) {
-                $returnValue->addSucceedMessage($className);
-            } else {
-                $returnValue->addFailureError($className);
-            }
+        if (empty($postData['uuid'])) {
+            $postData['uuid'] = uniqid();
         }
+        $uuid = $postData['uuid'];
 
-        return $returnValue;
+        $authorize = new \Mail\Authorize($postData['email']);
+        $this->operations[\Mail\Authorize::class] = $authorize;
+
+
+        $emailData = new \Mail\EmailData($uuid);
+        $emailData->setSender($postData['email']);
+        $emailData->setReceiver($postData['email_to']);
+        $emailData->setSubject($postData['subject']);
+        $emailData->setMessage($postData['message']);
+        $emailData->setHeaders('From: ' . $postData['email'] . "\r\n" .
+            'Replay-to: ' . $postData['email'] . "\r\n" .
+            'X-Mailer: PHP/' . phpversion());
+
+        $email = new \Mail\Email($emailData, $this->orm());
+        $this->operations[\Mail\Email::class] = $email;
+
+
+        $emailSend = new \Mail\EmailSend($emailData);
+        $this->operations[\Mail\EmailSend::class] = $emailSend;
+
+        //-----------------
+        $customerService = new \App\Service\Customer();
+
+        $postData['uuid'] = \Ramsey\Uuid\Uuid::uuid4()->toString();
+        $postData['username'] = '';
+        $postData['password'] = '';
+        $postData['gender'] = 0;
+        $postData['fullname'] = $postData['name'];
+        $postData['email'] = $emailData->getSender();
+        $postData['address'] = '';
+        $postData['zipcode'] = '';
+        $postData['city'] = '';
+        $postData['country'] = '';
+        $postData['remarks'] = "Created by eMail\r\n post uuid\r\n" . $uuid . "\r\n subject\r\n" . $postData['subject'] . "\r\n message\r\n" . $postData['message'];
+        $postData['card_name'] = '';
+        $postData['card_cvc'] = '';
+        $postData['card_expiry_date'] = '';
+        $postData['card_number'] = '';
+
+        $customerService->setLifeCyclePostXhrData($postData);
+
+        // customerService has no execute!,
+        foreach ($customerService->operations() as $operation) {
+            $this->operations[get_class($operation)] = $operation;
+        }
     }
 
     public function orm()
@@ -63,5 +78,21 @@ class Mailer
             $this->orm = new \App\Service\ORM();
         }
         return $this->orm;
+    }
+
+    public function dispatch()
+    {
+        $returnValue = new \Mail\ReturnValue();
+
+        foreach ($this->operations as $operation => $statement) {
+
+            if (!$statement->execute()) {
+                $returnValue->addFailureError($operation);
+            } else {
+                $returnValue->addSucceedMessage($operation);
+            }
+        }
+
+        return $returnValue;
     }
 }

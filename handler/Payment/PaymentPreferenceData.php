@@ -27,16 +27,16 @@ class PaymentPreferenceData implements \App\Contract\Behave\DataObject
      */
     protected $createdAt;
 
-    /** @Column(type="string", length=8) */
+    /** @Column(type="string", length=8, nullable=true) */
     protected $status;
 
-    /** @Column(type="string", length=22) */
+    /** @Column(type="string", length=22, nullable=true) */
     protected $method;
 
-    /** @Column(name="auto_pay", type="boolean") */
+    /** @Column(name="auto_pay", type="boolean", nullable=true) */
     protected $autoPay;
 
-    public function __construct($uuid = null)
+    public function __construct($uuid)
     {
         $this->id = $uuid;
     }

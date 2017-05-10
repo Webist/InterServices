@@ -938,6 +938,7 @@ var_dump($title);
         <div class="row">
             <div class="col-md-9 col-sm-6 form no-side-padding">
                 <form action="#" method="post" id="sky-form3" class="sky-form contact-style">
+                    <input type="hidden" name="uuid" value="<?= uniqid() ?>"/>
                     <fieldset>
                         <div class="row margin-bottom-30">
                             <div class="col-md-6 col-md-offset-0">

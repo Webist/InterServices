@@ -27,32 +27,32 @@ class CustomerData implements \App\Contract\Behave\DataObject
     /**
      *
      * @var
-     * @Column(type="string", length=8)
+     * @Column(type="string", length=8, nullable=true)
      */
     protected $status;
 
     /**
      *
      *
-     * @Column(type="string", length=8)
+     * @Column(type="string", length=8, nullable=true)
      */
     private $state;
 
     /**
      * 
      * @var
-     * @Column(type="string", length=22)
+     * @Column(type="string", length=22, nullable=true)
      */
     private $timezone;
 
     /**
      *
      *
-     * @Column(type="string", length=6)
+     * @Column(type="string", length=6, nullable=true)
      */
     private $locale;
 
-    public function __construct($uuid = null)
+    public function __construct($uuid)
     {
         $this->id = $uuid;
     }

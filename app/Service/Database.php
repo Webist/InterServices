@@ -6,44 +6,42 @@ namespace App\Service;
 class Database implements \App\Contract\Spec\Main
 {
     private $connector;
-    private $operator;
 
     /**
      * @var \mysqli|\PDO
      */
     private $adapter;
 
-    public function __construct(\Connector\Database $connector, \App\Operator\Database $operator)
+    private $operators = [];
+
+    public function __construct(\Connector\Database $connector)
     {
         $this->connector = $connector;
-        $this->operator = $operator;
 
         if ($this->adapter === null) {
-            $this->adapter = $this->connectionOperations(
-                dirname(__DIR__) . '/Contract/Spec/.private.inc', self::DATABASE_LOGS);
+            $this->adapter = $this->connector->connection(dirname(__DIR__) . '/Contract/Spec/.private.inc',
+                self::DATABASE_LOGS);
         }
     }
 
-    private function connectionOperations($credentialsFile, $useDatabase)
+    public function operators()
     {
-        return $this->connector->connection($credentialsFile, $useDatabase);
+        return $this->operators;
     }
 
     public function visitorLogOperations(array $params)
     {
         $query = "INSERT INTO visits SET route_id = :routeId, ip = :ip";
-        $dbh = $this->adapter->prepare($query);
 
         $key = md5($query);
-        $this->operator->addParams($key, $params);
-        $this->operator->addStatement($key, $dbh);
+        $this->operators['statements'][$key] = $this->adapter->prepare($query);
+        $this->operators['params'][$key] = $params;
     }
 
     public function execute()
     {
-        /** @var \PDOStatement $operation */
-        foreach ($this->operator->getStatements() as $key => $operation) {
-            $operation->execute($this->operator->getParams($key));
+        foreach ($this->operators['statements'] as $key => $operation) {
+            $operation->execute($this->operators['params'][$key]);
         }
     }
 }

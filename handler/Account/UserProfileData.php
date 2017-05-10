@@ -26,57 +26,55 @@ class UserProfileData implements \App\Contract\Behave\DataObject
     protected $createdAt;
 
     /**
-     * @Column(type="string", length=65)
+     * @Column(type="string", length=65, nullable=true)
      * @Assert\Email
      */
     protected $email;
 
     /**
-     * @Column(name="fullname", type="string", length=65)
+     * @Column(name="fullname", type="string", length=65, nullable=true)
      */
     protected $fullName;
 
     /**
-     * @Column(type="string", length=65)
+     * @Column(type="string", length=65, nullable=true)
      */
     private $phone;
 
     /**
-     * @Column(name="gender", type="string", length=8)
+     * @Column(name="gender", type="string", length=8, nullable=true)
      * @Enum({"male", "female", "trans"})
      */
     private $gender;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     private $address;
 
     /**
-     * @Column(type="string", length=8)
+     * @Column(type="string", length=8, nullable=true)
      * @var string
      */
     private $zipcode = '';
 
     /**
-     * @Column(type="string", length=65)
+     * @Column(type="string", length=65, nullable=true)
      */
     private $city;
 
     /**
-     * @Column(type="string", length=65)
+     * @Column(type="string", length=65, nullable=true)
      */
     private $country;
 
     /**
-     * @Column(type="text")
+     * @Column(type="text", nullable=true)
      */
     private $remarks;
 
 
-    private $creditCard;
-
-    public function __construct($uuid = null)
+    public function __construct($uuid)
     {
         $this->id = $uuid;
     }

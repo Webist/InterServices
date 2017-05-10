@@ -34,12 +34,10 @@ class RootPath implements \App\Contract\Spec\RootPath
 
     /**
      * Handler RootPath email post xhr data, dispatches email command, email data transfer
-     *
      * @param array $postData
-     * @param null $uuid
-     * @return \App\ReturnValue\Email
+     * @return $this
      */
-    public function emailPostXhrData(array $postData, $uuid = null)
+    public function emailPostXhrData(array $postData)
     {
         \Assert\Assertion::notEmpty($postData);
         \Assert\Assertion::email($postData['email']);
@@ -47,35 +45,17 @@ class RootPath implements \App\Contract\Spec\RootPath
         \Assert\Assertion::keyExists($postData, 'subject');
         \Assert\Assertion::keyExists($postData, 'message');
 
-        try {
-            $this->createCustomerFromEmailPost($postData);
-        } catch (\Exception $exception) {
-            // do nothing
-        }
+        $postData['email_to'] = self::EMAIL_TO;
 
         /** @var \App\Service\Mailer $mailerService */
         $mailerService = $this->container->get(self::MAILER);
-        $mailerService->emailPostXhrOperations(new \App\Event\MailerStatement($postData));
+        $mailerService->setLifeCyclePostXhrData($postData);
         return $mailerService->dispatch();
     }
 
     /**
-     * Handler RootPath create customer from email post, dispatches customer command, customer data transfer
-     * @param array $postData
-     * @return \App\ReturnValue\Customer
+     * @return \App\Meta\Main
      */
-    private function createCustomerFromEmailPost(array $postData)
-    {
-        /** @var \App\Service\Customer $customerService */
-        $customerService = $this->container->get(self::CUSTOMER,
-            new \App\Source\CustomerStatement($postData),
-            new \App\Operator\Customer()
-        );
-
-        $customerService->emailPostXhrDataOperations(new \App\Source\CustomerStatement($postData), $postData['email']);
-        return $customerService->mutate();
-    }
-
     public function main()
     {
         return $this->main;

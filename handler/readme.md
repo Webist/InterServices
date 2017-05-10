@@ -4,7 +4,7 @@ In this /handler directory resides various components/services.
 
 An handler deals with specific type of job.
 Examples are 
-   + Mailer   
+   + EmailSend  
    Sends email.
    + Http  
    Reads http input and dispatches a route.

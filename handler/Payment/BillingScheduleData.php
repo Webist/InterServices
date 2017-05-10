@@ -4,12 +4,11 @@
 namespace Payment;
 
 
-
-
 /**
  * @Entity
  * @Table(name="billing_schedules")
  * @HasLifecycleCallbacks()
+ *
  **/
 class BillingScheduleData implements \App\Contract\Behave\DataObject
 {
@@ -20,18 +19,13 @@ class BillingScheduleData implements \App\Contract\Behave\DataObject
      */
     protected $id;
 
-    /**
-     * @var
-     * @Column(type="datetime", name="created_at")
-     */
+    /** @Column(type="datetime", name="created_at") */
     protected $createdAt;
 
-    /**
-     * @Column(type="smallint")
-     */
+    /** @Column(type="smallint", length=65, nullable=true) */
     protected $period;
 
-    public function __construct($uuid = null)
+    public function __construct($uuid)
     {
         $this->id = $uuid;
     }
@@ -51,12 +45,11 @@ class BillingScheduleData implements \App\Contract\Behave\DataObject
      *
      * @param guid $id
      *
-     * @return ScheduleData
+     * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
-
         return $this;
     }
 
@@ -70,7 +63,6 @@ class BillingScheduleData implements \App\Contract\Behave\DataObject
             $this->createdAt = new \DateTime('now');
         }
         return $this->createdAt;
-
     }
 
     /**

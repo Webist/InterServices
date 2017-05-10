@@ -5,51 +5,49 @@ to become the web delivery by communicating with components/services.
 
 It consists of routing, request model/composition and protocol translation.  
 
-With the appliance of MOM (Machine Object Model) 
+With the appliance of [MOM (Machine Object Model)](http://webist.nl/articles/machine-object-model.md)
 objects structure relies strongly on DI (Dependency Injection) principle.
 Therefore the structure is generally, including MVC, component/service oriented.  
 
 There is no framework, which would bring many benefits, to develop in a boxed area.
 Instead architectural principles that challenges the best practices in software development.
 
-Nine different type of folders meets the requirements of the MOM.
+Different type of folders meets the requirements of the MOM.
 
 
 + Spec  
-Specification data (interfaces, config). 
+Specifications, configurations by interfaces. 
 
 + Handler  
 Controller specific Handlers/Components or Middleware's  
 
 + Controller   
-The entry points 
+Entry points 
 
-+ Meta
++ Meta   
 Platform, route, portable data-storage 
 
 + Service  
-Connection/adapters, frameworks that hold statements, operations (commands/queries) and execute
+Operations, collection of handlers and execution. Instantiates such as 
+Query & Command, Connection/Adapter, Mail handler.
 
-+ ReturnValue
-Results representation in an object
++ ReturnValue   
+Results representation in an object, used by Service executions.
 
-+ Operator
-Commands/Queries holder
-
-+ Container
++ Container  ``` @deprecated ```   
 Service objects holder  
 
 + DataStorage  
 File Data Store  
 
-+ Source  
++ Source  ``` @empty ```   
 Command/Query operations build for relational data structure with source-type fields
  
-+ Event  
++ Event  ``` @empty ```   
 Command/Query operations build for event records-history with event-type fields
 
 + Exception   
-Controller specific error handlers  
+Error handlers  
 
 + View  
 Layout, templates composition and rendering

@@ -14,7 +14,7 @@ class Database
         'port' => '',
         'dbname' => ''
     ];
-    private static $protocol;
+
     private static $adapter;
     /**
      * @var \PDO|\mysqli
@@ -30,7 +30,6 @@ class Database
      */
     public function connection(string $credentialsFile, string $useDatabase, $protocol = 'mysql', $adapter = \PDO::class)
     {
-        self::$protocol = $protocol;
         self::$adapter = $adapter;
 
         $credentials = $this->credentials($credentialsFile, $useDatabase);
@@ -38,7 +37,7 @@ class Database
             switch (self::$adapter) {
                 case 'PDO' :
                     $this->connection = new \PDO(
-                        self::$protocol . ':dbname=' . $credentials['dbname'] . ';host=' . $credentials['host'] . ';port=' . $credentials['port'],
+                        $protocol . ':dbname=' . $credentials['dbname'] . ';host=' . $credentials['host'] . ';port=' . $credentials['port'],
                         $credentials['username'],
                         $credentials['passwd']
                     );
@@ -60,10 +59,11 @@ class Database
     /**
      * @param $credentialsFile
      * @param $useDatabase
+     * @param string $protocol
      * @return array
      * @throws \Exception
      */
-    public function credentials($credentialsFile, $useDatabase)
+    public function credentials($credentialsFile, $useDatabase, $protocol = 'mysql')
     {
         if (!file_exists($credentialsFile)) {
             throw new \Exception(sprintf('Not found, file `%s` for %s ', $credentialsFile, __METHOD__));
@@ -76,23 +76,25 @@ class Database
         $dbCredentials = explode("\n", $content);
         foreach ($dbCredentials as $line) {
             if (!empty(trim($line))
-                && substr($line, 0, strlen(self::$protocol)) === self::$protocol
+                && substr($line, 0, strlen($protocol)) === $protocol
                 && substr($line, -(strlen($useDatabase))) === $useDatabase
             ) {
-                return $this->parseDSN($line);
+                return $this->parseDSN($line, $protocol);
             }
         }
         return [];
     }
 
     /**
+     *
      * @param string $dsn mysql://root:passwd@127.0.0.1:3306\test
+     * @param $protocol
      * @return array
      */
-    private function parseDSN(string $dsn)
+    private function parseDSN(string $dsn, $protocol)
     {
         $matches = [];
-        preg_match('/^(?P<' . self::$protocol . '>\w+)(:\/\/)(?P<username>\w+)(:(?P<passwd>\w+))?@(?P<host>[.\w]+)(:(?P<port>\d+))?\\\\(?P<dbname>\w+)$/im', $dsn, $matches);
+        preg_match('/^(?P<' . $protocol . '>\w+)(:\/\/)(?P<username>\w+)(:(?P<passwd>\w+))?@(?P<host>[.\w]+)(:(?P<port>\d+))?\\\\(?P<dbname>\w+)$/im', $dsn, $matches);
 
         $values = [];
         foreach (self::CREDENTIALS as $key => $value) {

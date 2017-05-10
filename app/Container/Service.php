@@ -4,6 +4,8 @@
 namespace App\Container;
 
 /**
+ * @deprecated By strict applying MOM there is no need for re-instantiation of a Service object http://webist.nl/articles/machine-object-model.md
+ *
  * A simple Dependency Injection Container
  * Here is explained why better than Static methods or Singleton
  * https://www.imarc.com/blog/dependency-injection
@@ -26,20 +28,13 @@ class Service
     /**
      * Instantiates a Service object, a framework, and remembers to initiate once only
      * @param $serviceObject
-     * @param \App\Contract\Behave\Statement|null $statement
-     * @param \App\Contract\Behave\Operator|null $operator
      * @return mixed
      */
-    public function get($serviceObject, \App\Contract\Behave\Statement $statement = null, \App\Contract\Behave\Operator $operator = null)
+    public function get($serviceObject)
     {
         if (!isset($this->services[$serviceObject])) {
             $reflection = new \ReflectionClass($serviceObject);
-            if ($reflection->hasMethod('__construct')) {
-                $this->services[$serviceObject] = $reflection->newInstance($statement, $operator);
-            } else {
-                // A service might to choose implement statements via methods
-                $this->services[$serviceObject] = $reflection->newInstance();
-            }
+            $this->services[$serviceObject] = $reflection->newInstance();
         }
         return $this->services[$serviceObject];
     }

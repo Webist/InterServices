@@ -26,7 +26,6 @@ class Resolver implements ResolverInterface, RoutingInterface
         }
 
         $route[self::CLASS_FIELD_NAME] = $this->nameServer->getClassName($route[self::CLASS_FIELD_NAME]);
-        $route[self::CLASS_ACTION_FIELD_NAME] = $route[self::CLASS_ACTION_FIELD_NAME];
         $route[self::INTER_FIELD_NAME] = $this->nameServer->getInterfaceName($route[self::INTER_FIELD_NAME]);
         $route[self::HANDLER_FIELD_NAME] = $this->nameServer->getHandlerName($route[self::HANDLER_FIELD_NAME]);
 
