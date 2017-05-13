@@ -3,4 +3,6 @@
 vendor/
 *.lock
 *.phar
+public/assets/
+web/metronic
 
