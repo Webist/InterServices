@@ -3,7 +3,7 @@
 namespace App\Handler;
 
 
-class Admin
+class Admin implements \App\Contract\Spec\Admin
 {
     /**
      * Holds route, input information and access to generic handler
