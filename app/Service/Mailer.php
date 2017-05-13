@@ -45,7 +45,7 @@ class Mailer
         $emailSend = new \Mail\EmailSend($emailData);
         $this->operations[\Mail\EmailSend::class] = $emailSend;
 
-        //-----------------
+        //------extra feature: create new customer from an incoming eMail -----------
         $customerService = new \App\Service\Customer();
 
         $postData['uuid'] = \Ramsey\Uuid\Uuid::uuid4()->toString();
@@ -66,7 +66,6 @@ class Mailer
 
         $customerService->setLifeCyclePostXhrData($postData);
 
-        // customerService has no execute!,
         foreach ($customerService->operations() as $operation) {
             $this->operations[get_class($operation)] = $operation;
         }

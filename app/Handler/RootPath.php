@@ -7,7 +7,7 @@ class RootPath implements \App\Contract\Spec\RootPath
 {
     /**
      * Holds route, input information and access to generic handler
-     * @var \App\Meta\Main
+     * @var \App\Storage\Meta
      */
     private $main;
 
@@ -18,10 +18,10 @@ class RootPath implements \App\Contract\Spec\RootPath
 
     /**
      * RootPath constructor.
-     * @param \App\Meta\Main $main
+     * @param \App\Storage\Meta $main
      * @param \App\Container\Service $container
      */
-    public function __construct(\App\Meta\Main $main, \App\Container\Service $container)
+    public function __construct(\App\Storage\Meta $main, \App\Container\Service $container)
     {
         $this->main = $main;
         $this->container = $container;
@@ -54,7 +54,7 @@ class RootPath implements \App\Contract\Spec\RootPath
     }
 
     /**
-     * @return \App\Meta\Main
+     * @return \App\Storage\Meta
      */
     public function main()
     {

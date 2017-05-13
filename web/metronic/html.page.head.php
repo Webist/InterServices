@@ -10,7 +10,7 @@
     <div class="page-toolbar">
         <!-- BEGIN THEME PANEL -->
         <div class="btn-group btn-theme-panel">
-            <a href="javascript:;" class="btn dropdown-toggle" data-toggle="dropdown">
+            <a href="javascript:" class="btn dropdown-toggle" data-toggle="dropdown">
                 <i class="icon-settings"></i>
             </a>
             <div class="dropdown-menu theme-panel pull-right dropdown-custom hold-on-click">

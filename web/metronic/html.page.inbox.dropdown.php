@@ -1,7 +1,7 @@
 <li class="separator hide"> </li>
 <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 <li class="dropdown dropdown-extended dropdown-inbox dropdown-dark" id="header_inbox_bar">
-    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+    <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
         <i class="icon-envelope-open"></i>
         <span class="badge badge-danger"> 4 </span>
     </a>

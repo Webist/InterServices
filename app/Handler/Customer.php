@@ -8,7 +8,7 @@ class Customer implements \App\Contract\Spec\Customer
 {
     /**
      * Holds route, input information and access to generic handler
-     * @var \App\Meta\Main
+     * @var \App\Storage\Meta
      */
     private $main;
 
@@ -19,9 +19,9 @@ class Customer implements \App\Contract\Spec\Customer
 
     /**
      * Customer constructor.
-     * @param \App\Meta\Main $main
+     * @param \App\Storage\Meta $main
      */
-    public function __construct(\App\Meta\Main $main, \App\Container\Service $container)
+    public function __construct(\App\Storage\Meta $main, \App\Container\Service $container)
     {
         $this->main = $main;
         $this->container = $container;

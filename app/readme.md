@@ -1,6 +1,6 @@
 ### Web Delivery - Simple, MVC, MOM
 
-Main concern of this /app directory is the application access 
+Meta concern of this /app directory is the application access 
 to become the web delivery by communicating with components/services.
 
 It consists of routing, request model/composition and protocol translation.  
@@ -15,30 +15,26 @@ Instead architectural principles that challenges the best practices in software 
 Different type of folders meets the requirements of the MOM.
 
 
++ Controller   
+Entry points 
+
 + Spec  
 Specifications, configurations by interfaces. 
 
 + Handler  
-Controller specific Handlers/Components or Middleware's  
-
-+ Controller   
-Entry points 
-
-+ Meta   
-Platform, route, portable data-storage 
+InterActor-Managers, controller specific handlers  
 
 + Service  
-Operations, collection of handlers and execution. Instantiates such as 
-Query & Command, Connection/Adapter, Mail handler.
+Service-Managers, business lifeCycle handlers  
 
 + ReturnValue   
-Results representation in an object, used by Service executions.
+Results representation in an object, used by Service executions.  
 
 + Container  ``` @deprecated ```   
 Service objects holder  
 
-+ DataStorage  
-File Data Store  
++ Storage  
+Saved data location for meta data - such as platform, route information -,  portable - usually xml -, cache, logs 
 
 + Source  ``` @empty ```   
 Command/Query operations build for relational data structure with source-type fields

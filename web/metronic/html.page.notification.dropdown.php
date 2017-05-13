@@ -3,7 +3,7 @@
 <!-- DOC: Apply "dropdown-hoverable" class after "dropdown" and remove data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to enable hover dropdown mode -->
 <!-- DOC: Remove "dropdown-hoverable" and add data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to the below A element with dropdown-toggle class -->
 <li class="dropdown dropdown-extended dropdown-notification dropdown-dark" id="header_notification_bar">
-    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+    <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
         <i class="icon-bell"></i>
         <span class="badge badge-success"> 7 </span>
     </a>
@@ -16,7 +16,7 @@
         <li>
             <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
                 <li>
-                    <a href="javascript:;">
+                    <a href="javascript:">
                         <span class="time">just now</span>
                         <span class="details">
                                                         <span class="label label-sm label-icon label-success">
@@ -25,7 +25,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
+                    <a href="javascript:">
                         <span class="time">3 mins</span>
                         <span class="details">
                                                         <span class="label label-sm label-icon label-danger">
@@ -34,7 +34,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
+                    <a href="javascript:">
                         <span class="time">10 mins</span>
                         <span class="details">
                                                         <span class="label label-sm label-icon label-warning">
@@ -43,7 +43,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
+                    <a href="javascript:">
                         <span class="time">14 hrs</span>
                         <span class="details">
                                                         <span class="label label-sm label-icon label-info">
@@ -52,7 +52,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
+                    <a href="javascript:">
                         <span class="time">2 days</span>
                         <span class="details">
                                                         <span class="label label-sm label-icon label-danger">
@@ -61,7 +61,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
+                    <a href="javascript:">
                         <span class="time">3 days</span>
                         <span class="details">
                                                         <span class="label label-sm label-icon label-danger">
@@ -70,7 +70,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
+                    <a href="javascript:">
                         <span class="time">4 days</span>
                         <span class="details">
                                                         <span class="label label-sm label-icon label-warning">
@@ -79,7 +79,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
+                    <a href="javascript:">
                         <span class="time">5 days</span>
                         <span class="details">
                                                         <span class="label label-sm label-icon label-info">
@@ -88,7 +88,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
+                    <a href="javascript:">
                         <span class="time">9 days</span>
                         <span class="details">
                                                         <span class="label label-sm label-icon label-danger">

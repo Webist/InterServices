@@ -323,7 +323,7 @@
             </ul>
         </li><?php /**/ ?>
         <li class="nav-item active open">
-            <a href="javascript:;" class="nav-link nav-toggle">
+            <a href="javascript:" class="nav-link nav-toggle">
                 <i class="icon-user"></i>
                 <span class="title">Customer Management</span>
                 <span class="selected"></span>

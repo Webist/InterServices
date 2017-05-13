@@ -15,7 +15,7 @@ class MOM
         $handler = null;
         if ('' != ($classHandlerName)) {
             $handler = new $classHandlerName(
-                new \App\Meta\Main($route),
+                new \App\Storage\Meta($route),
                 new \App\Container\Service()
             );
         }

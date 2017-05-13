@@ -13,7 +13,7 @@ class Test
      */
     public function renderTestString()
     {
-        return "This is the TestController::index class ".PHP_EOL;
+        return "This is the controller Test class " . PHP_EOL;
     }
 
     public function renderPageData($indexKey)

@@ -13,7 +13,7 @@ Parameters will be as arguments passed.
 
 + MOM (Machine Object Model)  
 Service Container will be instantiated.  
-Main class will be instantiated.  
+Meta class will be instantiated.  
 Controller-Handler class will be instantiated.  
 Controller class will be instantiated.   
 Controller method will be invoked.  

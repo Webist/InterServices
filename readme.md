@@ -1,30 +1,41 @@
-### InterServices 
+### MOM Web Delivery
 
-A [many-frameworks](app/Service/readme.md) [web delivery mechanism](app/readme.md).
-
-### Component/Service Orientation - Web Delivery Mechanism 
-See [Robert C Martin - Clean Architecture and Design](https://www.youtube.com/watch?v=Nsjsiz2A9mg)   
-
-#### M.O.M [(Machine Object Model)](http://webist.nl/articles/machine-object-model.md)
-The MOM layer is the assembly mechanism that publishes the dependencies by decoupling.  
-It is the host part that takes care of components orientation, before the object orientation.  
-
-Within the MOM concept a relation is similar to following statement;
-```html
-Car hosts Engine
-```
-Within the MOM layer the DI (Dependency Injection) is strictly preferred above inheritance.  
-Encapsulations are done with closure objects.  
+MOM Web Delivery is based on component orientation mechanism M.O.M [(Machine Object Model)](http://webist.nl/articles/machine-object-model.md).
 
 
-#### Supported Delivery Mechanism's
-+ Simple, the route points to a file
-+ MVC, the route points to the Controller
-   + any Controller object might extend a BaseController to use a framework
-   + NotFoundException of routing can be utilized for exclusive environments, such as fall-back to a framework environment
-+ M.O.M, the route points to the Controller that implements specification Interface and injects an Interactor/Handler 
-   + any Controller object might extend a BaseController to use a framework
-   + NotFoundException of routing can be utilized for exclusive environments, as fall-back to a framework environment
+The MVC pattern remains same within the MOM Web Delivery.  
+However the relationships are primarily based on compositional inheritance.  
+Basically there is no parent-child relationship, composition only. 
+ 
+An easy analogy of MVC within the MOM Web Delivery could be;  
+
++ Controller layer represents the *Project*
++ Model layer represents the *Manager*
++ View layer represents the *Results*
+
+#### Controller Layer
+The controller layer is responsible for incoming HTTP requests and a suitable response.  
+By default it hosts an InterActor.  
+
+A controller can represent a Project.  
+It is an activity to create something, within a restricted space.  
+Characteristics of the project is that it distinguishes itself by once-only process.  
+Activities of the controller is usually regulated by managers and conducted in collaboration of service delivering components/organisations.
+#### Model Layer
+The model layer is responsible for the InterAction and the LifeCycle of the business logic.  
+
+
+A model layer represents two main roles, the InterAction-Manager and the Service-Manager.  
+InterAction-Manager takes care of regulation by for example requirement validation, 
+interacts with services by aggregation and transfers the response to the controller layer.   
+Service-Manager takes care of the operations.  
+Such as creating the statements by commands and queries and let it execute by a persistent layer.    
+#### View Layer
+The view layer provides composition tools such as a DOM builder for HTML, XML.  
+
+A view layer accepts input data and requires DOM template inclusions. 
+A view layer is typically used by the controller layer to render a response in certain format.
+
 
 
 #### Development and Version 

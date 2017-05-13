@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Meta;
+namespace App\Storage;
 
 
-class Main
+class Meta
 {
     private $route = [];
 
@@ -32,6 +32,6 @@ class Main
 
     public function modelMetaData()
     {
-        return include dirname(dirname(__FILE__)) . '/DataStorage/' . $this->route['indexKey'] . '.php';
+        return include 'Routes/' . $this->route['indexKey'] . '.php';
     }
 }
