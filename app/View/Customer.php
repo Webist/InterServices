@@ -4,13 +4,13 @@
 namespace View;
 
 
-use Html\Element;
+use Dom\Html\Element;
 
 class Customer
 {
     /**
      * @param array $data
-     * @return \Html\Element
+     * @return \Dom\Html\Element
      */
     public static function form(array $data)
     {
@@ -38,7 +38,7 @@ class Customer
 
     /**
      * @param $data
-     * @return \Html\Element
+     * @return \Dom\Html\Element
      */
     public static function list(array $data)
     {

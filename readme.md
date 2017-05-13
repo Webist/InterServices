@@ -5,38 +5,45 @@ MOM Web Delivery is based on component orientation mechanism M.O.M [(Machine Obj
 
 The MVC pattern remains same within the MOM Web Delivery.  
 However the relationships are based on compositional inheritance.  
-Basically there is no parent-child relationship, relationships are composition only. 
+Basically there is no parent-child relationship, composition only. 
  
-An easy analogy of MVC within the MOM Web Delivery could be;  
+An easy analogy of MVC within the MOM Web Delivery should be as follows;  
 
 + Controller layer represents the *Project*
 + Model layer represents the *Manager*
 + View layer represents the *Results*
 
 #### Controller Layer
-The controller layer is responsible for incoming HTTP requests and a deliver a suitable response.  
-The controller hosts by default an InterActor, called Handler.  
+The controller layer is responsible for incoming HTTP requests and deliver a suitable response.  
 
-A controller can represent a Project.  
-A project is an activity within a restricted space to create something.  
-Characteristics of the project is that it distinguishes itself by once-only process.  
+A controller hosts by default an InputHandler and an InterActor.  
 
-Activities of the project, and so the controller, is usually regulated 
-by InterActor-Managers and conducted in collaboration of Service-Managers.
+
+Considering, by analogy, a controller is a Project.  
+It is an activity within a restricted space to create something, 
+it distinguishes itself by once-only process.  
+Activities are the incoming requests and regulated by an InterActor-Manager.  
+
 #### Model Layer
 The model layer is responsible for the InterAction and the LifeCycle of the business logic.  
 
+A model by default hosts a meta information provider and a Service-Container.  
 
-A model layer represents two main roles, the InterAction-Manager and the Service-Manager.  
-InterAction-Manager takes care of regulation by for example requirement validation, 
-interacts with services by aggregation and transfers the response to the controller layer.   
-Service-Manager takes care of the operations.  
-Such as creating the statements by commands and queries and let it execute by a persistence layer.    
+
+Considering, by analogy, a model consists of one or multiple Managers.
+An InterAction manager takes care of regulation and might aggregate multiple service-managers.  
+
+A service-manager, in collaboration with InterAction manager, takes care of operations, 
+such as creating statements by commands and queries and execute or let it execute by a persistence layer.
+ 
 #### View Layer
 The view layer provides composition tools such as a DOM builder for HTML, XML.  
 
-A view layer accepts input data and requires DOM template inclusions. 
-A view layer is typically used by the controller layer to render a response in certain format.  
+A view model accepts input data and requires DOM template inclusions. 
+It is typically used by the controller layer to render a response in certain format.  
+
+Considering, by analogy, a view model is a Results provider.
+It demonstrates the outcomes in certain format.
 
 
 

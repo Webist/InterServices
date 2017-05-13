@@ -1,7 +1,8 @@
 <?php
 
 
-namespace Html;
+namespace Dom\Html;
+
 
 
 class BodyData implements ElementInterface

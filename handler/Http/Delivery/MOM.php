@@ -11,7 +11,7 @@ class MOM
         // A Regular route
         $controller = new \ReflectionClass($className);
 
-        // Machine Object Model, requires __construct, Interface and Handler.
+        // Machine Object Model, requires __construct, Interface and InterActor.
         $handler = null;
         if ('' != ($classHandlerName)) {
             $handler = new $classHandlerName(

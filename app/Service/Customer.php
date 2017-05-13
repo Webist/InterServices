@@ -178,7 +178,7 @@ class Customer
 
     public function mutate($persistOnly = false)
     {
-        $returnValue = new \App\ReturnValue\Customer();
+        $returnValue = new \Commerce\ReturnValue();
 
         foreach ($this->operations as $operation => $statement) {
             if ($persistOnly) {

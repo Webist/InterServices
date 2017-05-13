@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Handler;
+namespace App\InterActor;
 
 
 class RootPath implements \App\Contract\Spec\RootPath
@@ -9,7 +9,7 @@ class RootPath implements \App\Contract\Spec\RootPath
      * Holds route, input information and access to generic handler
      * @var \App\Storage\Meta
      */
-    private $main;
+    private $meta;
 
     /**
      * @var \App\Container\Service
@@ -18,12 +18,12 @@ class RootPath implements \App\Contract\Spec\RootPath
 
     /**
      * RootPath constructor.
-     * @param \App\Storage\Meta $main
+     * @param \App\Storage\Meta $meta
      * @param \App\Container\Service $container
      */
-    public function __construct(\App\Storage\Meta $main, \App\Container\Service $container)
+    public function __construct(\App\Storage\Meta $meta, \App\Container\Service $container)
     {
-        $this->main = $main;
+        $this->meta = $meta;
         $this->container = $container;
     }
 
@@ -33,19 +33,14 @@ class RootPath implements \App\Contract\Spec\RootPath
     }
 
     /**
-     * Handler RootPath email post xhr data, dispatches email command, email data transfer
+     * InterActor RootPath email post xhr data, dispatches email command, email data transfer
      * @param array $postData
      * @return $this
      */
     public function emailPostXhrData(array $postData)
     {
-        \Assert\Assertion::notEmpty($postData);
-        \Assert\Assertion::email($postData['email']);
-
-        \Assert\Assertion::keyExists($postData, 'subject');
-        \Assert\Assertion::keyExists($postData, 'message');
-
-        $postData['email_to'] = self::EMAIL_TO;
+        $mailerAction = new \App\Contract\Action\Mailer($postData);
+        $postData = $mailerAction->assertEmailPostXhrData();
 
         /** @var \App\Service\Mailer $mailerService */
         $mailerService = $this->container->get(self::MAILER);
@@ -56,8 +51,8 @@ class RootPath implements \App\Contract\Spec\RootPath
     /**
      * @return \App\Storage\Meta
      */
-    public function main()
+    public function meta()
     {
-        return $this->main;
+        return $this->meta;
     }
 }

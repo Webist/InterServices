@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\ReturnValue;
+namespace Commerce;
 
 
-class Customer
+class ReturnValue
 {
     private $failureErrors = [];
     private $successMessages = [];

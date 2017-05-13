@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Html;
+namespace Dom\Html;
 
 
 class HeadData implements ElementInterface

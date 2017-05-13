@@ -10,6 +10,6 @@ class RootPath
     {
         ob_start();
         include '../web/homePage.php';
-        return new \Html\Element(ob_get_clean());
+        return new \Dom\Html\Element(ob_get_clean());
     }
 }

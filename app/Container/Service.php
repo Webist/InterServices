@@ -15,7 +15,7 @@ namespace App\Container;
  *
  *
  * Class Service
- * @package App\Handler
+ * @package App\InterActor
  */
 class Service
 {

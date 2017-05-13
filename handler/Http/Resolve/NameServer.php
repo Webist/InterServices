@@ -13,7 +13,7 @@ class NameServer
 {
     private const CONTROLLER_PATH_NAME = "App\\Controller\\";
     private const INTER_PATH_NAME = "App\\Spec\\";
-    private const HANDLER_PATH_NAME = "App\\Handler\\";
+    private const HANDLER_PATH_NAME = "App\\InterActor\\";
 
     public function getClassName($classFieldName)
     {

@@ -8,7 +8,7 @@ class Model
 {
     /**
      * Content data
-     * @var \Html\Element
+     * @var \Dom\Html\Element
      */
     private $contentData;
 
@@ -18,7 +18,7 @@ class Model
      */
     private $metaData;
 
-    public function __construct(\Html\Element $contentData, array $metaData)
+    public function __construct(\Dom\Html\Element $contentData, array $metaData)
     {
         $this->contentData = $contentData;
         $this->metaData = $metaData;
@@ -43,81 +43,81 @@ class Model
      * Generic html body content builder to reuse together with a specific body content
      *
      * @param string $placeHolder
-     * @param \Html\Element $content
-     * @return \Html\Composite
+     * @param \Dom\Html\Element $content
+     * @return \Dom\Html\Composite
      */
-    private function buildContentWith(string $placeHolder, \Html\Element $content)
+    private function buildContentWith(string $placeHolder, \Dom\Html\Element $content)
     {
-        $headData = new \Html\HeadData();
+        $headData = new \Dom\Html\HeadData();
         $headData->setTitle($this->metaData['head']['title']);
 
-        $htmlHead = new \Html\Element($headData);
+        $htmlHead = new \Dom\Html\Element($headData);
         $htmlHead->require('../web/metronic/html.head.php');
 
-        $bodyData = new \Html\BodyData();
+        $bodyData = new \Dom\Html\BodyData();
         $bodyData->setTitle($this->metaData['body']['title']);
 
-        $bodyContent = new \Html\Element($bodyData);
+        $bodyContent = new \Dom\Html\Element($bodyData);
         $bodyContent->require('../web/metronic/html.page.php');
 
-        $pageHeader = new \Html\Element($bodyData);
+        $pageHeader = new \Dom\Html\Element($bodyData);
         $pageHeader->require('../web/metronic/html.page.header.php');
 
         /* ---- DO NOT REMOVE THE temp DISABLED CONTENT BELOW ---- */
         // subcontent
-        // $pageActions = new \Html\Element($bodyData);
+        // $pageActions = new \Dom\Html\Element($bodyData);
         // $pageActions->require('../web/metronic/html.page.actions.php');
         // $pageHeader->addElement(':pageActions', $pageActions);
 
-        // $searchBox = new \Html\Element($bodyData);
+        // $searchBox = new \Dom\Html\Element($bodyData);
         // $searchBox->require('../web/metronic/html.page.searchbox.php');
         // $pageHeader->addElement('pageSearchBox', $searchBox);
 
-        // $notificationDropDown = new \Html\Element($bodyData);
+        // $notificationDropDown = new \Dom\Html\Element($bodyData);
         // $notificationDropDown->require('../web/metronic/html.page.notification.dropdown.php');
         // $pageHeader->addElement(':pageNotificationDropdown', $notificationDropDown);
 
-        // $inboxDropDown = new \Html\Element($bodyData);
+        // $inboxDropDown = new \Dom\Html\Element($bodyData);
         // $inboxDropDown->require('../web/metronic/html.page.inbox.dropdown.php');
         // $pageHeader->addElement(':pageInboxDropDown', $inboxDropDown);
 
-        // $tasksDropDown = new \Html\Element($bodyData);
+        // $tasksDropDown = new \Dom\Html\Element($bodyData);
         // $tasksDropDown->require('../web/metronic/html.page.tasks.dropdown.php');
         // $pageHeader->addElement(':pageTasksDropDown', $tasksDropDown);
 
-        // $userLogin = new \Html\Element($bodyData);
+        // $userLogin = new \Dom\Html\Element($bodyData);
         // $userLogin->require('../web/metronic/html.page.user.login.dropdown.php');
         // $pageHeader->addElement(':pageUserLoginDropDown', $userLogin);
 
         $bodyContent->addElement(':pageHeader', $pageHeader);
 
-        $pageSideBar = new \Html\Element($bodyData);
+        $pageSideBar = new \Dom\Html\Element($bodyData);
         $pageSideBar->require('../web/metronic/html.page.sidebar.php');
         $bodyContent->addElement(':pageSidebar', $pageSideBar);
 
-        // $pageHead = new \Html\Element($bodyData);
+        // $pageHead = new \Dom\Html\Element($bodyData);
         // $pageHead->require('../web/metronic/html.page.head.php');
         // $bodyContent->addElement(':pageHead', $pageHead);
 
-        $breadCrumb = new \Html\Element($bodyData);
+        $breadCrumb = new \Dom\Html\Element($bodyData);
         $breadCrumb->require('../web/metronic/html.page.breadcrumb.php');
         $bodyContent->addElement(':pageBreadCrumb', $breadCrumb);
 
-        $scripts = new \Html\Element($bodyData);
+        $scripts = new \Dom\Html\Element($bodyData);
         $scripts->require('../web/metronic/html.page.scripts.php');
         $bodyContent->addElement(':pageScripts', $scripts);
 
-        // $quickSidebar = new \Html\Element($bodyData);
+        // $quickSidebar = new \Dom\Html\Element($bodyData);
         // $quickSidebar->require('../web/metronic/html.page.quick.sidebar.php');
         // $bodyContent->addElement(':pageQuickSideBar', $quickSidebar);
 
-        // $quickNav = new \Html\Element($bodyData);
+        // $quickNav = new \Dom\Html\Element($bodyData);
         // $quickNav->require('../web/metronic/html.page.quick.nav.php');
         // $bodyContent->addElement(':pageQuickNav', $quickNav);
 
         $bodyContent->addElement($placeHolder, $content);
 
-        $lay = new \Html\Composite();
+        $lay = new \Dom\Html\Composite();
         $lay->setHeadContent($htmlHead);
         $lay->addElement($bodyContent);
         return $lay;

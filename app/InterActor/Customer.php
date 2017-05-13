@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Handler;
+namespace App\InterActor;
 
 
 
@@ -10,7 +10,7 @@ class Customer implements \App\Contract\Spec\Customer
      * Holds route, input information and access to generic handler
      * @var \App\Storage\Meta
      */
-    private $main;
+    private $meta;
 
     /**
      * @var \App\Container\Service
@@ -19,30 +19,29 @@ class Customer implements \App\Contract\Spec\Customer
 
     /**
      * Customer constructor.
-     * @param \App\Storage\Meta $main
+     * @param \App\Storage\Meta $meta
      */
-    public function __construct(\App\Storage\Meta $main, \App\Container\Service $container)
+    public function __construct(\App\Storage\Meta $meta, \App\Container\Service $container)
     {
-        $this->main = $main;
+        $this->meta = $meta;
         $this->container = $container;
     }
 
-    public function main()
+    public function meta()
     {
-        return $this->main;
+        return $this->meta;
     }
 
     /**
-     * Handler Customer post xhr data, dispatches command operations, update
+     * InterActor Customer post xhr data, dispatches command operations, update
      * @param $postData
      * @param null $uuid
-     * @return \App\ReturnValue\Customer
+     * @return \Commerce\ReturnValue
      */
     public function postXhrData($postData)
     {
-        \Assert\Assertion::keyExists($postData, 'uuid');
-        \Assert\Assertion::notEmpty($postData);
-        \Assert\Assertion::email($postData['email']);
+        $customerAction = new \App\Contract\Action\Customer($postData);
+        $customerAction->assertPostXhrData();
 
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
@@ -51,7 +50,7 @@ class Customer implements \App\Contract\Spec\Customer
     }
 
     /**
-     * Handler Customer form data, queries uuid, array collection
+     * InterActor Customer form data, queries uuid, array collection
      * @param $uuid
      * @return array
      */
@@ -64,7 +63,7 @@ class Customer implements \App\Contract\Spec\Customer
     }
 
     /**
-     * Handler Customer list data, queries, array collection
+     * InterActor Customer list data, queries, array collection
      * @param null $uuid
      * @return mixed
      */

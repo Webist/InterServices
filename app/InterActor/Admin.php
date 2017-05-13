@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Handler;
+namespace App\InterActor;
 
 
 class Admin implements \App\Contract\Spec\Admin
@@ -9,7 +9,7 @@ class Admin implements \App\Contract\Spec\Admin
      * Holds route, input information and access to generic handler
      * @var \App\Storage\Meta
      */
-    private $main;
+    private $meta;
 
     /**
      * Provides instantiation of defined class
@@ -17,9 +17,9 @@ class Admin implements \App\Contract\Spec\Admin
      */
     private $container;
 
-    public function __construct(\App\Storage\Meta $main, \App\Container\Service $container)
+    public function __construct(\App\Storage\Meta $meta, \App\Container\Service $container)
     {
-        $this->main = $main;
+        $this->meta = $meta;
         $this->container = $container;
     }
 }

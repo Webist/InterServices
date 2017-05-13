@@ -1,7 +1,7 @@
 <?php
 
 require_once 'PHPUnit/Extensions/Story/TestCase.php';
-require_once '../app/Handler/Customer.php';
+require_once '../app/InterActor/Customer.php';
 
 
 class customerSpec extends PHPUnit_Extensions_Story_TestCase

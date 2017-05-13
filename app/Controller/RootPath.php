@@ -10,7 +10,7 @@ class RootPath implements \App\Contract\Spec\RootPath
     private $inputHandler;
     private $handler;
 
-    public function __construct(InputHandler $inputHandler, \App\Handler\RootPath $handler)
+    public function __construct(InputHandler $inputHandler, \App\InterActor\RootPath $handler)
     {
         $this->inputHandler = $inputHandler;
         $this->handler = $handler;
@@ -24,7 +24,7 @@ class RootPath implements \App\Contract\Spec\RootPath
     {
         $view = new \View\Model(
             \View\RootPath::modelPage($this->handler->modelPage()),
-            $this->handler->main()->modelMetaData()
+            $this->handler->meta()->modelMetaData()
         );
         return $view->render(false);
     }

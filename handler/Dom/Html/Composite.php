@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Html;
+namespace Dom\Html;
 
 
 class Composite
@@ -14,7 +14,7 @@ class Composite
      */
     private $elements = [];
 
-    public function setHeadContent(\Html\Element $head)
+    public function setHeadContent(\Dom\Html\Element $head)
     {
         $this->headContent = $head;
     }

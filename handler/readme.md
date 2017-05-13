@@ -1,4 +1,4 @@
-### External Handlers - Components/Middleware
+### Services - Frameworks
 
 In this /handler directory resides various components/services.  
 

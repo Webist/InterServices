@@ -27,9 +27,6 @@ InterActor-Managers, controller specific handlers
 + Service  
 Service-Managers, business lifeCycle handlers  
 
-+ ReturnValue   
-Results representation in an object, used by Service executions.  
-
 + Container  ``` @deprecated ```   
 Service objects holder  
 

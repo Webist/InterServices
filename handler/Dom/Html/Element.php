@@ -1,7 +1,6 @@
 <?php
 
-
-namespace Html;
+namespace Dom\Html;
 
 
 /**
@@ -11,7 +10,7 @@ namespace Html;
 class Element
 {
     /**
-     * @var ElementInterface
+     * @var \Dom\Html\ElementInterface
      */
     private $data;
 

@@ -9,7 +9,7 @@ class Customer implements \App\Contract\Spec\Customer
     private $inputHandler;
     private $handler;
 
-    public function __construct(InputHandler $inputHandler, \App\Handler\Customer $handler)
+    public function __construct(InputHandler $inputHandler, \App\InterActor\Customer $handler)
     {
         $this->inputHandler = $inputHandler;
         $this->handler = $handler;
@@ -86,7 +86,7 @@ class Customer implements \App\Contract\Spec\Customer
 
         $view = new \View\Model(
             \View\Customer::form($formData),
-            $this->handler->main()->modelMetaData()
+            $this->handler->meta()->modelMetaData()
         );
         return $view->render();
     }
@@ -99,7 +99,7 @@ class Customer implements \App\Contract\Spec\Customer
     {
         $view = new \View\Model(
             \View\Customer::list($this->handler->listData()),
-            $this->handler->main()->modelMetaData()
+            $this->handler->meta()->modelMetaData()
         );
         return $view->render();
     }
