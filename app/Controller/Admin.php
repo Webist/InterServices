@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Exception\NotImplementedException;
+use Exceptions\NotImplementedException;
 
 use Http\Stream\InputHandler;
 
@@ -15,7 +15,7 @@ class Admin implements \App\Contract\Spec\Admin
 
     /**
      * Entry point form request, renders Form, exception
-     * @throws NotImplementedException
+     * @throws \Exceptions\NotImplementedException
      */
     public function renderForm()
     {

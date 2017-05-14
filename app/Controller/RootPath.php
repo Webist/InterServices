@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Exception\NotImplementedException;
+use Exceptions\NotImplementedException;
 use Http\Stream\InputHandler;
 
 class RootPath implements \App\Contract\Spec\RootPath
@@ -31,7 +31,7 @@ class RootPath implements \App\Contract\Spec\RootPath
 
     /**
      * Entry point home page post request, adds Home Page Post, exception
-     * @throws NotImplementedException
+     * @throws \Exceptions\NotImplementedException
      */
     public function addHomePagePost()
     {
@@ -44,8 +44,7 @@ class RootPath implements \App\Contract\Spec\RootPath
      */
     public function addEmailPostXhr()
     {
-        $returnValue = $this->actor->emailPostXhrData(
-            filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid'));
+        $returnValue = $this->actor->emailPostXhrData(filter_input_array(INPUT_POST));
 
         return json_encode(
             [

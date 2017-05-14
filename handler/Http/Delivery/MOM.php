@@ -6,7 +6,7 @@ namespace Delivery;
 
 class MOM
 {
-    public function __invoke($className, $classHandlerName, $classActionName, $route, $inputHandler)
+    public function __invoke($className, $classHandlerName, $classActionName, $route, \Http\Stream\InputHandler $inputHandler)
     {
         // A Regular route
         $controller = new \ReflectionClass($className);
@@ -16,7 +16,7 @@ class MOM
         if ('' != ($classHandlerName)) {
             $handler = new $classHandlerName(
                 new \App\Storage\Meta($route),
-                new \App\Container\Service()
+                new \App\Service\Container()
             );
         }
         $object = $controller->newInstance($inputHandler, $handler);

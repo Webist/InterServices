@@ -1,12 +1,13 @@
 ### InterActor
 
-An InterActor is a controller activity handler.  
+An InterActor is a controller specific activity manager.  
 Every controller should have its handler representation in this directory.
 
 An InterActor is useful for;
-+ Fetching meta data specifications
-+ Request validation, preferably outsourcing
++ Fetching meta data
 + Triggering activity logging
-+ Exchanging request data with external services
-+ Providing data the controller
++ Regulation by such as validation, preferably via outsourcing
++ Dispatching request to external services
++ Providing response to the controller
+
 

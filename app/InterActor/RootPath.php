@@ -12,16 +12,16 @@ class RootPath implements \App\Contract\Spec\RootPath
     private $meta;
 
     /**
-     * @var \App\Container\Service
+     * @var \App\Service\Container
      */
     private $container;
 
     /**
      * RootPath constructor.
      * @param \App\Storage\Meta $meta
-     * @param \App\Container\Service $container
+     * @param \App\Service\Container $container
      */
-    public function __construct(\App\Storage\Meta $meta, \App\Container\Service $container)
+    public function __construct(\App\Storage\Meta $meta, \App\Service\Container $container)
     {
         $this->meta = $meta;
         $this->container = $container;
@@ -35,7 +35,7 @@ class RootPath implements \App\Contract\Spec\RootPath
     /**
      * InterActor RootPath email post xhr data, dispatches email command, email data transfer
      * @param array $postData
-     * @return $this
+     * @return \Mail\ReturnValue
      */
     public function emailPostXhrData(array $postData)
     {

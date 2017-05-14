@@ -13,11 +13,11 @@ class Admin implements \App\Contract\Spec\Admin
 
     /**
      * Provides instantiation of defined class
-     * @var \App\Container\Service
+     * @var \App\Service\Container
      */
     private $container;
 
-    public function __construct(\App\Storage\Meta $meta, \App\Container\Service $container)
+    public function __construct(\App\Storage\Meta $meta, \App\Service\Container $container)
     {
         $this->meta = $meta;
         $this->container = $container;

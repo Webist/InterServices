@@ -13,7 +13,7 @@ class Customer implements \App\Contract\Spec\Customer
     private $meta;
 
     /**
-     * @var \App\Container\Service
+     * @var \App\Service\Container
      */
     private $container;
 
@@ -21,7 +21,7 @@ class Customer implements \App\Contract\Spec\Customer
      * Customer constructor.
      * @param \App\Storage\Meta $meta
      */
-    public function __construct(\App\Storage\Meta $meta, \App\Container\Service $container)
+    public function __construct(\App\Storage\Meta $meta, \App\Service\Container $container)
     {
         $this->meta = $meta;
         $this->container = $container;

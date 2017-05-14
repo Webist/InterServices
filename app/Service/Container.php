@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Container;
+namespace App\Service;
 
 /**
  * @deprecated By strict applying MOM there is no need for re-instantiation of a Service object http://webist.nl/articles/machine-object-model.md
@@ -17,7 +17,7 @@ namespace App\Container;
  * Class Service
  * @package App\InterActor
  */
-class Service
+class Container
 {
     /**
      * Holds already instantiated Service objects. A simple DIC.
