@@ -18,3 +18,5 @@ It is a matter of creating a simple file in this directory to include the compon
 ```
 
 
+[../../web/readme.md](../../web/readme.md)  
+[../../public/readme.md](../../public/readme.md)

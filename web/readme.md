@@ -84,4 +84,4 @@ Notice, since we are using an output handler for the response, output buffering 
 + Request method is about SET (POST, PUT etc) to be be handled first, before the output generation.
 
 
-   
+[../handler/Http/Routing/readme.md](../handler/Http/Routing/readme.md)

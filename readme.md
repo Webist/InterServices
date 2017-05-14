@@ -19,7 +19,7 @@ The controller layer is responsible for incoming HTTP requests and deliver a sui
 A controller hosts by default an InputHandler and an InterActor.  
 
 
-Considering, by analogy, a controller is a Project.  
+By analogy, a controller is a Project.  
 It is an activity within a restricted space to create something, 
 it distinguishes itself by once-only process.  
 Activities are the incoming requests and regulated by an InterActor-Manager.  
@@ -30,7 +30,7 @@ The model layer is responsible for the InterAction and the LifeCycle of the busi
 A model by default hosts a meta information provider and a Service-Container.  
 
 
-Considering, by analogy, a model consists of one or multiple Managers.
+By analogy, a model consists of one or multiple Managers.
 An InterAction manager takes care of regulation and might aggregate multiple service-managers.  
 
 A service-manager, in collaboration with InterAction manager, takes care of operations, 
@@ -42,10 +42,10 @@ The view layer provides composition tools such as a DOM builder for HTML, XML.
 A view model accepts input data and requires DOM template inclusions. 
 It is typically used by the controller layer to render a response in certain format.  
 
-Considering, by analogy, a view model is a Results provider.
+By analogy, a view model is a Results provider.
 It demonstrates the outcomes in certain format.
 
-
+[app/readme.md](app/readme.md)
 
 #### Development and Version 
 Development is, as of May 2017, in early stages. 

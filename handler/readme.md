@@ -7,3 +7,5 @@ Specific type of job handlers.
 These are developed by external organisations or persons.
 Handlers in this directory are the candidate components for vendor directory.
 ```
+
+[Mail/readme.md](Mail/readme.md)
