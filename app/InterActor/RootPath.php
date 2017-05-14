@@ -39,12 +39,14 @@ class RootPath implements \App\Contract\Spec\RootPath
      */
     public function emailPostXhrData(array $postData)
     {
-        $mailerAction = new \App\Contract\Action\Mailer($postData);
-        $postData = $mailerAction->assertEmailPostXhrData();
+        $postData['email_to'] = self::EMAIL_TO;
 
         /** @var \App\Service\Mailer $mailerService */
         $mailerService = $this->container->get(self::MAILER);
-        $mailerService->setLifeCyclePostXhrData($postData);
+        // Query
+        $mailerService->maintainLifeCyclePostXhrData($postData);
+        // Command
+        $mailerService->setLifeCyclePostXhrData();
         return $mailerService->dispatch();
     }
 

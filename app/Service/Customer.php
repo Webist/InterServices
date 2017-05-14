@@ -5,7 +5,13 @@ namespace App\Service;
 class Customer
 {
     private $orm;
+    private $queries = [];
     private $operations = [];
+
+    public function queries()
+    {
+        return $this->queries;
+    }
 
     public function operations()
     {
@@ -13,17 +19,19 @@ class Customer
     }
 
     /**
-     * Sets operations cycle form data read
+     * Maintains the form data request
+     *
+     * A request, as an intent, goes trough strategical process.
+     * It will be validated, sanitized, planned (prioritized),
+     * policies applied (such as bad word policy),
+     * converted to internal language
+     * and (partly or whole) accepted or rejected.
      * @param string $uuid
      */
-    public function setLifeCycleFormData($uuid = '')
+    public function maintainLifeCycleFormData($uuid = '')
     {
-        if (empty($uuid)) {
-            // $uuid = $this->uuid();
-        }
-
         $customer = new \Commerce\Customer(new \Commerce\CustomerData($uuid), $this->orm());
-        $this->operations[\Commerce\CustomerData::class] = $customer->foundData();
+        $this->queries[\Commerce\CustomerData::class] = $customer->foundData();
 
 
         $user = new \Account\User(new \Account\UserData($uuid), $this->orm());
@@ -32,7 +40,7 @@ class Customer
         $userProfile = new \Account\UserProfile(new \Account\UserProfileData($uuid), $this->orm());
         $userData->setProfileData($userProfile->foundData());
 
-        $this->operations[\Account\UserData::class] = $userData;
+        $this->queries[\Account\UserData::class] = $userData;
 
 
         $creditCard = new \Payment\CreditCard(new \Payment\CreditCardData($uuid), $this->orm());
@@ -44,10 +52,10 @@ class Customer
         $billing = new \Payment\BillingSchedule(new \Payment\BillingScheduleData($uuid), $this->orm());
         $creditCardData->setBillingSchedule($billing->foundData());
 
-        $this->operations[\Payment\CreditCardData::class] = $creditCardData;
+        $this->queries[\Payment\CreditCardData::class] = $creditCardData;
     }
 
-    public function orm()
+    private function orm()
     {
         if ($this->orm === null) {
             $this->orm = new \App\Service\ORM();
@@ -56,23 +64,30 @@ class Customer
     }
 
     /**
-     * Sets operations cycle list data read
+     * Maintains the list data request
      * @param string $uuid
      */
-    public function setLifeCycleListData($uuid = '')
+    public function maintainLifeCycleListData($uuid = '')
     {
-        $userProfile = new \Account\UserProfile(
-            new \Account\UserProfileData($uuid),
-            $this->orm());
-        $this->operations[\Account\UserProfileData::class] = $userProfile->findAll();
+        $userProfile = new \Account\UserProfile(new \Account\UserProfileData($uuid), $this->orm());
+        $this->queries[\Account\UserProfileData::class] = $userProfile->findAll();
     }
 
     /**
-     * Sets operations cycle post xhr data create
+     * Maintains the post xhr data request
+     *
+     * A request, as an intent, goes trough strategical process.
+     * It will be validated, sanitized, planned (prioritized),
+     * policies applied (such as bad word policy),
+     * converted to internal language
+     * and (partly or whole) accepted or rejected.
+     *
      * @param array $postData
      */
-    public function setLifeCyclePostXhrData(array $postData)
+    public function maintainLifeCyclePostXhrData(array $postData)
     {
+        \Assert\Assertion::keyExists($postData, 'uuid');
+        \Assert\Assertion::email($postData['email']);
 
         // UPDATE, based on eMail
         if (empty($postData['uuid'])) {
@@ -101,10 +116,7 @@ class Customer
         $customerData->setTimezone('Europa/Amsterdam');
         // $customerData->setCreatedAt()
 
-        $customer = new \Commerce\Customer(
-            $customerData,
-            $this->orm());
-        $this->operations[\Commerce\Customer::class] = $customer;
+        $this->queries[\Commerce\CustomerData::class] = $customerData;
 
         // --------
         $userData = new \Account\UserData($uuid);
@@ -112,10 +124,7 @@ class Customer
         $userData->setPasswd($postData['password']);
         // $userData->setRpasswd($postData['rpassword']);
 
-        $user = new \Account\User(
-            $userData,
-            $this->orm());
-        $this->operations[\Account\User::class] = $user;
+        $this->queries[\Account\UserData::class] = $userData;
 
         // --------
         $userProfileData = new \Account\UserProfileData($uuid);
@@ -129,8 +138,7 @@ class Customer
         $userProfileData->setCountry($postData['country']);
         $userProfileData->setRemarks($postData['remarks']);
 
-        $userProfile = new \Account\UserProfile($userProfileData, $this->orm());
-        $this->operations[\Account\UserProfile::class] = $userProfile;
+        $this->queries[\Account\UserProfileData::class] = $userProfileData;
 
         // ---------
         $creditCardData = new \Payment\CreditCardData($uuid);
@@ -140,10 +148,7 @@ class Customer
         $creditCardData->setNumber($postData['card_number']);
         $creditCardData->setStatus(0);
 
-        $creditCard = new \Payment\CreditCard(
-            $creditCardData,
-            $this->orm());
-        $this->operations[\Payment\CreditCard::class] = $creditCard;
+        $this->queries[\Payment\CreditCardData::class] = $customerData;
 
         // ----------
         $autoPayCC = false;
@@ -151,31 +156,66 @@ class Customer
             $autoPayCC = true;
         }
 
-        $notifyMonthly = 0;
-        if (isset($postData['payment']) && in_array("2", $postData['payment'])) {
-            $notifyMonthly = 30;
-        }
         $payPreference = new \Payment\PaymentPreferenceData($uuid);
         $payPreference->setAutopay($autoPayCC);
         $payPreference->setMethod(1);
         $payPreference->setStatus(0);
 
-        $paymentPreference = new \Payment\PaymentPreference(
-            $payPreference,
-            $this->orm());
-        $this->operations[\Payment\PaymentPreference::class] = $paymentPreference;
+        $this->queries[\Payment\PaymentPreferenceData::class] = $payPreference;
 
         // ---------
+        $notifyMonthly = 0;
+        if (isset($postData['payment']) && in_array("2", $postData['payment'])) {
+            $notifyMonthly = 30;
+        }
+
         $billingNotifyData = new \Payment\BillingScheduleData($uuid);
         $billingNotifyData->setPeriod($notifyMonthly);
 
+        $this->queries[\Payment\BillingScheduleData::class] = $billingNotifyData;
+    }
+
+    /**
+     * Sets operations cycle post xhr data create
+     */
+    public function setLifeCyclePostXhrData()
+    {
+        $customer = new \Commerce\Customer(
+            $this->queries[\Commerce\CustomerData::class],
+            $this->orm());
+        $this->operations[\Commerce\Customer::class] = $customer;
+
+        $user = new \Account\User(
+            $this->queries[\Account\UserData::class],
+            $this->orm());
+        $this->operations[\Account\User::class] = $user;
+
+        $userProfile = new \Account\UserProfile(
+            $this->queries[\Account\UserProfileData::class],
+            $this->orm());
+        $this->operations[\Account\UserProfile::class] = $userProfile;
+
+        $creditCard = new \Payment\CreditCard(
+            $this->queries[\Payment\CreditCardData::class],
+            $this->orm());
+        $this->operations[\Payment\CreditCard::class] = $creditCard;
+
+        $paymentPreference = new \Payment\PaymentPreference(
+            $this->queries[\Payment\PaymentPreferenceData::class],
+            $this->orm());
+        $this->operations[\Payment\PaymentPreference::class] = $paymentPreference;
+
         $billingSchedule = new \Payment\BillingSchedule(
-            $billingNotifyData,
+            $this->queries[\Payment\BillingScheduleData::class],
             $this->orm());
         $this->operations[\Payment\BillingSchedule::class] = $billingSchedule;
 
     }
 
+    /**
+     * @param bool $persistOnly
+     * @return \Commerce\ReturnValue
+     */
     public function mutate($persistOnly = false)
     {
         $returnValue = new \Commerce\ReturnValue();

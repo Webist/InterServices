@@ -2,7 +2,7 @@
 
 namespace Page\Data;
 
-class Handler
+class Render
 {
     private $indexKey;
     private $pageData = [];

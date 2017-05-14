@@ -40,12 +40,12 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function postXhrData($postData)
     {
-        $customerAction = new \App\Contract\Action\Customer($postData);
-        $customerAction->assertPostXhrData();
-
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        $customerService->setLifeCyclePostXhrData($postData);
+        // Query
+        $customerService->maintainLifeCyclePostXhrData($postData);
+        // Command
+        $customerService->setLifeCyclePostXhrData();
         return $customerService->mutate();
     }
 
@@ -58,20 +58,22 @@ class Customer implements \App\Contract\Spec\Customer
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        $customerService->setLifeCycleFormData($uuid);
-        return $customerService->operations();
+        // Query
+        $customerService->maintainLifeCycleFormData($uuid);
+        return $customerService->queries();
     }
 
     /**
      * InterActor Customer list data, queries, array collection
-     * @param null $uuid
-     * @return mixed
+     * @param string $uuid
+     * @return array
      */
     public function listData($uuid = '')
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        $customerService->setLifeCycleListData($uuid);
-        return $customerService->operations();
+        // Query
+        $customerService->maintainLifeCycleListData($uuid);
+        return $customerService->queries();
     }
 }

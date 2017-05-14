@@ -19,9 +19,12 @@ class Meta
      */
     private function visitorLog()
     {
-        $databaseService = new \App\Service\Database(new \Connector\Database());
-        $databaseService->visitorLogOperations(
+        $databaseService = new \App\Service\Database();
+        // Query
+        $databaseService->maintainVisitorLog(
             ['routeId' => $this->route['indexKey'], 'ip' => filter_input(INPUT_SERVER, 'REMOTE_ADDR')]);
+        // Command
+        $databaseService->setLifeCycleVisitorLog();
         $databaseService->execute();
     }
 
@@ -30,7 +33,7 @@ class Meta
         return $this->route;
     }
 
-    public function modelMetaData()
+    public function data()
     {
         return include 'Routes/' . $this->route['indexKey'] . '.php';
     }

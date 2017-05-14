@@ -8,12 +8,12 @@ use Http\Stream\InputHandler;
 class RootPath implements \App\Contract\Spec\RootPath
 {
     private $inputHandler;
-    private $handler;
+    private $actor;
 
-    public function __construct(InputHandler $inputHandler, \App\InterActor\RootPath $handler)
+    public function __construct(InputHandler $inputHandler, \App\InterActor\RootPath $actor)
     {
         $this->inputHandler = $inputHandler;
-        $this->handler = $handler;
+        $this->actor = $actor;
     }
 
     /**
@@ -23,8 +23,8 @@ class RootPath implements \App\Contract\Spec\RootPath
     public function renderModelPage()
     {
         $view = new \View\Model(
-            \View\RootPath::modelPage($this->handler->modelPage()),
-            $this->handler->meta()->modelMetaData()
+            \View\RootPath::modelPage($this->actor->modelPage()),
+            $this->actor->meta()->data()
         );
         return $view->render(false);
     }
@@ -44,7 +44,7 @@ class RootPath implements \App\Contract\Spec\RootPath
      */
     public function addEmailPostXhr()
     {
-        $returnValue = $this->handler->emailPostXhrData(
+        $returnValue = $this->actor->emailPostXhrData(
             filter_input_array(INPUT_POST), $this->inputHandler->parameter('uuid'));
 
         return json_encode(

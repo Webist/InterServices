@@ -7,7 +7,13 @@ namespace App\Service;
 class Mailer
 {
     private $orm;
+    private $queries = [];
     private $operations = [];
+
+    public function queries()
+    {
+        return $this->queries;
+    }
 
     public function operations()
     {
@@ -15,19 +21,32 @@ class Mailer
     }
 
     /**
-     * Sets operations cycle post xhr data
+     * Maintains the post xhr data request
+     *
+     * A request, as an intent, goes trough strategical process.
+     * It will be validated, sanitized, planned (prioritized),
+     * policies applied (such as bad word policy),
+     * converted to internal language
+     * and (partly or whole) accepted or rejected.
+     *
      * @param array $postData
      */
-    public function setLifeCyclePostXhrData(array $postData)
+    public function maintainLifeCyclePostXhrData(array $postData)
     {
+        \Assert\Assertion::notEmpty($postData);
+        \Assert\Assertion::email($postData['email']);
+
+        \Assert\Assertion::keyExists($postData, 'subject');
+        \Assert\Assertion::keyExists($postData, 'message');
+
         if (empty($postData['uuid'])) {
             $postData['uuid'] = uniqid();
         }
         $uuid = $postData['uuid'];
 
         $authorize = new \Mail\Authorize($postData['email']);
-        $this->operations[\Mail\Authorize::class] = $authorize;
 
+        $this->queries[\Mail\Authorize::class] = $authorize;
 
         $emailData = new \Mail\EmailData($uuid);
         $emailData->setSender($postData['email']);
@@ -38,14 +57,9 @@ class Mailer
             'Replay-to: ' . $postData['email'] . "\r\n" .
             'X-Mailer: PHP/' . phpversion());
 
-        $email = new \Mail\Email($emailData, $this->orm());
-        $this->operations[\Mail\Email::class] = $email;
+        $this->queries[\Mail\EmailData::class] = $emailData;
 
-
-        $emailSend = new \Mail\EmailSend($emailData);
-        $this->operations[\Mail\EmailSend::class] = $emailSend;
-
-        //------extra feature: create new customer from an incoming eMail -----------
+        // Extra feature, create customer form an incoming email
         $customerService = new \App\Service\Customer();
 
         $postData['uuid'] = \Ramsey\Uuid\Uuid::uuid4()->toString();
@@ -53,7 +67,7 @@ class Mailer
         $postData['password'] = '';
         $postData['gender'] = 0;
         $postData['fullname'] = $postData['name'];
-        $postData['email'] = $emailData->getSender();
+        $postData['email'] = $postData['email'];
         $postData['address'] = '';
         $postData['zipcode'] = '';
         $postData['city'] = '';
@@ -64,14 +78,37 @@ class Mailer
         $postData['card_expiry_date'] = '';
         $postData['card_number'] = '';
 
-        $customerService->setLifeCyclePostXhrData($postData);
+        $customerService->maintainLifeCyclePostXhrData($postData);
 
-        foreach ($customerService->operations() as $operation) {
+        $this->queries[\App\Service\Customer::class] = $customerService;
+    }
+
+    /**
+     * Sets operations cycle post xhr data
+     *
+     */
+    public function setLifeCyclePostXhrData()
+    {
+        // Validate data
+        $this->operations[\Mail\Authorize::class] = $this->queries[\Mail\Authorize::class];
+
+        // Save into database
+        $this->operations[\Mail\Email::class] = new \Mail\Email($this->queries[\Mail\Authorize::class], $this->orm());
+
+        // Send mail
+        $this->operations[\Mail\EmailSend::class] = new \Mail\EmailSend($this->queries[\Mail\Authorize::class]);
+
+        // Extra feature, create customer form an incoming email
+        /** @var \App\Service\Customer $customerService */
+        $customerService = $this->queries[\App\Service\Customer::class];
+        $customerService->setLifeCyclePostXhrData();
+
+        foreach ($this->queries[\App\Service\Customer::class]->operations() as $operation) {
             $this->operations[get_class($operation)] = $operation;
         }
     }
 
-    public function orm()
+    private function orm()
     {
         if ($this->orm === null) {
             $this->orm = new \App\Service\ORM();

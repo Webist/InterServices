@@ -1,6 +1,6 @@
 ### External Services Env
 
-Services live inside a domain and independed form their execution envrionments.
+Services live inside a domain and independent form their execution environments.
 A service share's schema, contract and not class.
 The compatibility of a service is based on policy (business rules), not on business logic (process).
 
@@ -26,16 +26,18 @@ Services comply to;
 
 Services are accessible as;
 + Web service (http://.../UserService.wsdl)
-+ Globally within app Envrionment
++ Globally within app Environment
 + Single operand (microServices)
 
 Service Actions (operations/methods) (generally) are;
-+ get / query (parameters, response), list / selections
-+ mutate (parameters, response)
-+ dispatch (to an handler) 
-+ invoke (callbacks)
-+ notify (commpand pattern, pub/sub (leave a message, trigger a listener)) 
-+ errors
++ maintainLifeCycle
++ setLifeCycle
++ mutate / dispatch
+Via ReturnValue object
++ state
++ getSucceedMessages
++ getFailureErrors
++ uuid
 
 Composition of reusable's
 + DRY  

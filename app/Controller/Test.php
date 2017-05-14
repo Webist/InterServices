@@ -19,7 +19,7 @@ class Test
     public function renderPageData($indexKey)
     {
         // in a MOM structure the indexKey and fetching data function would be built in $this->handler
-        $renderPageData = new \Page\Data\Handler($indexKey);
+        $renderPageData = new \Page\Data\Render($indexKey);
         return $renderPageData;
     }
 }

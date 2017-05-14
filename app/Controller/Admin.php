@@ -8,7 +8,7 @@ use Http\Stream\InputHandler;
 
 class Admin implements \App\Contract\Spec\Admin
 {
-    public function __construct(InputHandler $inputHandler, \App\InterActor\Admin $handler)
+    public function __construct(InputHandler $inputHandler, \App\InterActor\Admin $actor)
     {
 
     }

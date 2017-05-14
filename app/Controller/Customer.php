@@ -7,12 +7,12 @@ use Http\Stream\InputHandler;
 class Customer implements \App\Contract\Spec\Customer
 {
     private $inputHandler;
-    private $handler;
+    private $actor;
 
-    public function __construct(InputHandler $inputHandler, \App\InterActor\Customer $handler)
+    public function __construct(InputHandler $inputHandler, \App\InterActor\Customer $actor)
     {
         $this->inputHandler = $inputHandler;
-        $this->handler = $handler;
+        $this->actor = $actor;
     }
 
     public function test()
@@ -51,7 +51,7 @@ class Customer implements \App\Contract\Spec\Customer
                 ),
         );
 
-        $this->handler->postXhrData($postData);
+        $this->actor->postXhrData($postData);
     }
 
     /**
@@ -60,7 +60,7 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function addPostXhr()
     {
-        $returnValue = $this->handler->postXhrData(
+        $returnValue = $this->actor->postXhrData(
             filter_input_array(INPUT_POST));
 
         return json_encode(
@@ -82,11 +82,11 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function renderForm()
     {
-        $formData = $this->handler->formData($this->inputHandler->parameter('uuid'));
+        $formData = $this->actor->formData($this->inputHandler->parameter('uuid'));
 
         $view = new \View\Model(
             \View\Customer::form($formData),
-            $this->handler->meta()->modelMetaData()
+            $this->actor->meta()->data()
         );
         return $view->render();
     }
@@ -98,8 +98,8 @@ class Customer implements \App\Contract\Spec\Customer
     public function renderList()
     {
         $view = new \View\Model(
-            \View\Customer::list($this->handler->listData()),
-            $this->handler->meta()->modelMetaData()
+            \View\Customer::list($this->actor->listData()),
+            $this->actor->meta()->data()
         );
         return $view->render();
     }

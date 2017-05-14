@@ -5,23 +5,16 @@ namespace App\Service;
 
 class Database implements \App\Contract\Spec\Main
 {
-    private $connector;
-
     /**
      * @var \mysqli|\PDO
      */
     private $adapter;
-
+    private $queries = [];
     private $operators = [];
 
-    public function __construct(\Connector\Database $connector)
+    public function queries()
     {
-        $this->connector = $connector;
-
-        if ($this->adapter === null) {
-            $this->adapter = $this->connector->connection(dirname(__DIR__) . '/Contract/Spec/.private.inc',
-                self::DATABASE_LOGS);
-        }
+        return $this->queries;
     }
 
     public function operators()
@@ -29,19 +22,39 @@ class Database implements \App\Contract\Spec\Main
         return $this->operators;
     }
 
-    public function visitorLogOperations(array $params)
+    public function maintainVisitorLog(array $params)
     {
-        $query = "INSERT INTO visits SET route_id = :routeId, ip = :ip";
+        \Assert\Assertion::keyExists($params, 'routeId');
+        \Assert\Assertion::keyExists($params, 'ip');
 
+        $query = "INSERT INTO visits SET route_id = :routeId, ip = :ip";
         $key = md5($query);
-        $this->operators['statements'][$key] = $this->adapter->prepare($query);
-        $this->operators['params'][$key] = $params;
+        $this->queries[$key]['statement'] = $query;
+        $this->queries[$key]['params'] = $params;
+    }
+
+    public function setLifeCycleVisitorLog()
+    {
+        foreach ($this->queries as $key => $query) {
+            $this->operators[$key]['statement'] = $this->adapter()->prepare($query['statement']);
+            $this->operators[$key]['params'] = $query['params'];
+        }
+    }
+
+    private function adapter()
+    {
+        if ($this->adapter === null) {
+            $connector = new \Connector\Database();
+            $this->adapter = $connector->connection(dirname(__DIR__) . '/Contract/Spec/.private.inc',
+                self::DATABASE_LOGS);
+        }
+        return $this->adapter;
     }
 
     public function execute()
     {
-        foreach ($this->operators['statements'] as $key => $operation) {
-            $operation->execute($this->operators['params'][$key]);
+        foreach ($this->operators as $key => $operator) {
+            $operator['statement']->execute($operator['params']);
         }
     }
 }

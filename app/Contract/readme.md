@@ -2,7 +2,7 @@
 
 Initial specification data with Interface constants.
 
-Interface constants hold *configuration* among the other settings data.
+Interface constants hold the *configuration*, among the other settings, data.
 
 
 #### Interface, best practices
