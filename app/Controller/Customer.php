@@ -2,14 +2,13 @@
 
 namespace App\Controller;
 
-use Http\Stream\InputHandler;
 
 class Customer implements \App\Contract\Spec\Customer
 {
     private $inputHandler;
     private $actor;
 
-    public function __construct(InputHandler $inputHandler, \App\InterActor\Customer $actor)
+    public function __construct(\Http\Stream\InputHandler $inputHandler, \App\InterActor\Customer $actor)
     {
         $this->inputHandler = $inputHandler;
         $this->actor = $actor;
@@ -51,17 +50,16 @@ class Customer implements \App\Contract\Spec\Customer
                 ),
         );
 
-        $this->actor->postXhrData($postData);
+        $this->actor->postXhrArrayMap($postData);
     }
 
     /**
-     * Entry point Customer post xhr request, adds Customer Post Xhr, confirmation message
+     * Entry point post xhr request, adds Post Xhr, confirmation message
      * @return string
      */
     public function addPostXhr()
     {
-        $returnValue = $this->actor->postXhrData(
-            filter_input_array(INPUT_POST));
+        $returnValue = $this->actor->postXhrArrayMap(filter_input_array(INPUT_POST));
 
         return json_encode(
             [
@@ -77,29 +75,29 @@ class Customer implements \App\Contract\Spec\Customer
     }
 
     /**
-     * Entry point Customer form request, renders Form, html data
+     * Entry point form request, renders Form, html data
      * @return mixed|string
      */
     public function renderForm()
     {
-        $formData = $this->actor->formData($this->inputHandler->parameter('uuid'));
+        $formData = $this->actor->formUnit($this->inputHandler->parameter('uuid'));
 
         $view = new \View\Model(
             \View\Customer::form($formData),
-            $this->actor->meta()->data()
+            $this->actor->meta()->arrayMap()
         );
         return $view->render();
     }
 
     /**
-     * Entry point Customer list request, renders List, html data
+     * Entry point list request, renders List, html data
      * @return mixed|string
      */
     public function renderList()
     {
         $view = new \View\Model(
-            \View\Customer::list($this->actor->listData()),
-            $this->actor->meta()->data()
+            \View\Customer::list($this->actor->listUnit()),
+            $this->actor->meta()->arrayMap()
         );
         return $view->render();
     }

@@ -1,17 +1,18 @@
 <?php
+
 return [
     'match' =>
         array(
-            'routeType' => 0,
+            'routeType' => 1,
             'request_' =>
                 array(
-                    'REQUEST_URI' => '/customers',
-                    'REQUEST_METHOD' => 'GET',
+                    'REQUEST_URI' => '/',
+                    'REQUEST_METHOD' => 'POST',
                     'REQUEST_SCHEME' => NULL,
                 ),
             'http_' =>
                 array(
-                    'HTTP_X_REQUESTED_WITH' => false,
+                    'HTTP_X_REQUESTED_WITH' => true,
                     'HTTP_HOST' => NULL,
                     'HTTP_USER_AGENT' => NULL,
                     'HTTP_ACCEPT' => NULL,
@@ -36,16 +37,16 @@ return [
                         array(),
                 ),
         ),
-    'indexKey' => '7aa37bca37d1814768019721800fd9fb',
+    'indexKey' => '863670182b0fdceabe6eb0052e080fd7',
     'delivery' => 'MOM',
-    'class' => 'Customer',
-    'method' => 'renderList',
-    'config' => 'Customer',
-    'handler' => 'Customer',
+    'class' => 'RootPath',
+    'method' => 'addPostXhrEmail',
+    'config' => 'RootPath',
+    'handler' => 'RootPath',
     'head' => array(
-        'title' => 'Customers List'
+        'title' => 'Home'
     ),
     'body' => array(
-        'title' => '<h1>Customers List</h1>'
+        'title' => '<h1>Home</h1>'
     ),
 ];

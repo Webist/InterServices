@@ -4,6 +4,8 @@ namespace App\Service;
 
 class Customer
 {
+    private const SECTIONS = ['form' => [], 'list' => []];
+    private const SECTIONS_MESSAGE = ['error' => 'Given sectionName `%s` is not allowed'];
     private $orm;
     private $queries = [];
     private $operations = [];
@@ -19,29 +21,43 @@ class Customer
     }
 
     /**
-     * Maintains the form data request
+     * Maintain unit, build queries array, lifeCycle
      *
      * A request, as an intent, goes trough strategical process.
      * It will be validated, sanitized, planned (prioritized),
      * policies applied (such as bad word policy),
      * converted to internal language
      * and (partly or whole) accepted or rejected.
+     *
      * @param string $uuid
+     * @param string $sectionName
+     * @return bool
+     * @throws \Exception
      */
-    public function maintainLifeCycleFormData($uuid = '')
+    public function maintainUnit($uuid = '', $sectionName = 'form'): bool
     {
-        $customer = new \Commerce\Customer(new \Commerce\CustomerData($uuid), $this->orm());
-        $this->queries[\Commerce\CustomerData::class] = $customer->foundData();
+        if (!isset(self::SECTIONS[$sectionName])) {
+            throw new \Exception(sprintf(self::SECTIONS_MESSAGE['error'], $sectionName));
+        }
 
+        $userProfile = new \Account\UserProfile(new \Account\UserProfileData($uuid), $this->orm());
+
+        // list build
+        if ($sectionName == 'list') {
+            $this->queries[\Account\UserProfileData::class] = $userProfile->findAll();
+            return true;
+        }
+
+        // form build
+        $customer = new \Commerce\Customer(new \Commerce\CustomerData($uuid), $this->orm());
+
+        $this->queries[\Commerce\CustomerData::class] = $customer->foundData();
 
         $user = new \Account\User(new \Account\UserData($uuid), $this->orm());
         $userData = $user->foundData();
-
-        $userProfile = new \Account\UserProfile(new \Account\UserProfileData($uuid), $this->orm());
         $userData->setProfileData($userProfile->foundData());
 
         $this->queries[\Account\UserData::class] = $userData;
-
 
         $creditCard = new \Payment\CreditCard(new \Payment\CreditCardData($uuid), $this->orm());
         $creditCardData = $creditCard->foundData();
@@ -53,6 +69,7 @@ class Customer
         $creditCardData->setBillingSchedule($billing->foundData());
 
         $this->queries[\Payment\CreditCardData::class] = $creditCardData;
+        return true;
     }
 
     private function orm()
@@ -64,49 +81,40 @@ class Customer
     }
 
     /**
-     * Maintains the list data request
-     * @param string $uuid
-     */
-    public function maintainLifeCycleListData($uuid = '')
-    {
-        $userProfile = new \Account\UserProfile(new \Account\UserProfileData($uuid), $this->orm());
-        $this->queries[\Account\UserProfileData::class] = $userProfile->findAll();
-    }
-
-    /**
-     * Maintains the post xhr data request
+     * Maintain array map, build queries array, lifeCycle
      *
-     * A request, as an intent, goes trough strategical process.
+     * Maintaining the lifeCycle of a request, as an intent, goes trough strategical process.
      * It will be validated, sanitized, planned (prioritized),
      * policies applied (such as bad word policy),
-     * converted to internal language
+     * eventually converted to internal language
      * and (partly or whole) accepted or rejected.
      *
-     * @param array $postData
+     * @param array $arrayMap
+     * @return bool
      */
-    public function maintainLifeCyclePostXhrData(array $postData)
+    public function maintainArrayMap(array $arrayMap): bool
     {
-        \Assert\Assertion::keyExists($postData, 'uuid');
-        \Assert\Assertion::email($postData['email']);
+        \Assert\Assertion::keyExists($arrayMap, 'uuid');
+        \Assert\Assertion::email($arrayMap['email']);
 
         // UPDATE, based on eMail
-        if (empty($postData['uuid'])) {
+        if (empty($arrayMap['uuid'])) {
 
-            if (!empty($postData['email'])) {
+            if (!empty($arrayMap['email'])) {
                 $repo = $this->orm()->entityManager()->getRepository(\Account\UserProfileData::class);
-                $userProfileData = $repo->findOneBy(['email' => $postData['email']]);
+                $userProfileData = $repo->findOneBy(['email' => $arrayMap['email']]);
                 if ($userProfileData) {
-                    $postData['uuid'] = $userProfileData->getId();
+                    $arrayMap['uuid'] = $userProfileData->getId();
                 }
             }
         }
 
         // CREATE, based on empty uuid, after internal data
-        if (empty($postData['uuid'])) {
-            $postData['uuid'] = \Ramsey\Uuid\Uuid::uuid4()->toString();
+        if (empty($arrayMap['uuid'])) {
+            $arrayMap['uuid'] = \Ramsey\Uuid\Uuid::uuid4()->toString();
         }
 
-        $uuid = $postData['uuid'];
+        $uuid = $arrayMap['uuid'];
 
         // -------
         $customerData = new \Commerce\CustomerData($uuid);
@@ -120,39 +128,39 @@ class Customer
 
         // --------
         $userData = new \Account\UserData($uuid);
-        $userData->setUsername($postData['username']);
-        $userData->setPasswd($postData['password']);
-        // $userData->setRpasswd($postData['rpassword']);
+        $userData->setUsername($arrayMap['username']);
+        $userData->setPasswd($arrayMap['password']);
+        // $userData->setRpasswd($arrayMap['rpassword']);
 
         $this->queries[\Account\UserData::class] = $userData;
 
         // --------
         $userProfileData = new \Account\UserProfileData($uuid);
-        $userProfileData->setGender($postData['gender']);
-        $userProfileData->setFullName($postData['fullname']);
-        $userProfileData->setEmail($postData['email']);
-        $userProfileData->setPhone($postData['phone']);
-        $userProfileData->setAddress($postData['address']);
-        $userProfileData->setZipcode($postData['zipcode']);
-        $userProfileData->setCity($postData['city']);
-        $userProfileData->setCountry($postData['country']);
-        $userProfileData->setRemarks($postData['remarks']);
+        $userProfileData->setGender($arrayMap['gender']);
+        $userProfileData->setFullName($arrayMap['fullname']);
+        $userProfileData->setEmail($arrayMap['email']);
+        $userProfileData->setPhone($arrayMap['phone']);
+        $userProfileData->setAddress($arrayMap['address']);
+        $userProfileData->setZipcode($arrayMap['zipcode']);
+        $userProfileData->setCity($arrayMap['city']);
+        $userProfileData->setCountry($arrayMap['country']);
+        $userProfileData->setRemarks($arrayMap['remarks']);
 
         $this->queries[\Account\UserProfileData::class] = $userProfileData;
 
         // ---------
         $creditCardData = new \Payment\CreditCardData($uuid);
-        $creditCardData->setName($postData['card_name']);
-        $creditCardData->setCvc($postData['card_cvc']);
-        $creditCardData->setExpiryDate($postData['card_expiry_date']);
-        $creditCardData->setNumber($postData['card_number']);
+        $creditCardData->setName($arrayMap['card_name']);
+        $creditCardData->setCvc($arrayMap['card_cvc']);
+        $creditCardData->setExpiryDate($arrayMap['card_expiry_date']);
+        $creditCardData->setNumber($arrayMap['card_number']);
         $creditCardData->setStatus(0);
 
         $this->queries[\Payment\CreditCardData::class] = $customerData;
 
         // ----------
         $autoPayCC = false;
-        if (isset($postData['payment']) && in_array("1", $postData['payment'])) {
+        if (isset($arrayMap['payment']) && in_array("1", $arrayMap['payment'])) {
             $autoPayCC = true;
         }
 
@@ -165,7 +173,7 @@ class Customer
 
         // ---------
         $notifyMonthly = 0;
-        if (isset($postData['payment']) && in_array("2", $postData['payment'])) {
+        if (isset($arrayMap['payment']) && in_array("2", $arrayMap['payment'])) {
             $notifyMonthly = 30;
         }
 
@@ -173,13 +181,21 @@ class Customer
         $billingNotifyData->setPeriod($notifyMonthly);
 
         $this->queries[\Payment\BillingScheduleData::class] = $billingNotifyData;
+
+        return true;
     }
 
     /**
-     * Sets operations cycle post xhr data create
+     * Set operations, build operations array, lifeCycle
+     * @return bool
+     * @throws \Exception
      */
-    public function setLifeCyclePostXhrData()
+    public function setArrayMapOperations(): bool
     {
+        if (empty($this->queries)) {
+            throw new \Exception('Array Map Operations not allowed before maintain Array Map');
+        }
+
         $customer = new \Commerce\Customer(
             $this->queries[\Commerce\CustomerData::class],
             $this->orm());
@@ -210,13 +226,14 @@ class Customer
             $this->orm());
         $this->operations[\Payment\BillingSchedule::class] = $billingSchedule;
 
+        return true;
     }
 
     /**
      * @param bool $persistOnly
      * @return \Commerce\ReturnValue
      */
-    public function mutate($persistOnly = false)
+    public function execute($persistOnly = false)
     {
         $returnValue = new \Commerce\ReturnValue();
 

@@ -28,33 +28,45 @@ Fits better Back-end web/http development.
 
 
 #### Adding route by example
-1. With the following snippet, generate a route.
 
-```
-$route = new Http\Routing\RouteBuilder('GET', '/', '../web/home.php');
-```
+Below are de example snippets for generating a route.
+Such a snippet can be pasted in a file, for example /public/index.php, 
+to generate.  
 
+After running this a new file in the directory `/app/Storage/Routes` should appear.  
+
+
+Example :  
+Method: POST  
+Path: /  
+Controller: RootPath  
+Method:  addPostXhrEmail  
 ```
-$route = new Http\Routing\RouteBuilder('POST', '/', 'RootPath@addEmailPostXhr');
-$route->setXRequestedWith(true);
+$route = new Http\Routing\RouteBuilder('POST', '/', 'RootPath@addPostXhrEmail');
+$route->setXRequestedWith(true);  
+
+var_export($route->buildRoute(true));
 ```
 
 ```
 $route = new Http\Routing\RouteBuilder('GET', '/test', 'Test@renderTestString');
-$route->setXRequestedWith(true);
+$route->setXRequestedWith(true);  
+
+var_export($route->buildRoute(true));
 ```
 ```
-$route = new Http\Routing\RouteBuilder('POST', '/admin', 'Admin@renderForm');
+$route = new Http\Routing\RouteBuilder('POST', '/admin', 'Admin@renderForm');  
+
+var_export($route->buildRoute(true));
+```
+A Forward route example
+```
+$route = new Http\Routing\RouteBuilder('GET', '/', '../web/home.php');  
+
+var_export($route->buildRoute(true));
 ```
 
-View the result like this
-```
-var_export($route->build());
-```
 
-2. Copy and Paste the result into RoutesCollection.php  
-   2a. pasted result will not have index key, type '' => before the array() 
-   and fill the '' with indexKey
    
 Now it can be tested via the webserver. 
 Accessing via the browser is most convenient way.

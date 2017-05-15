@@ -7,21 +7,21 @@ namespace View;
 class Model
 {
     /**
-     * Content data
+     * Content array map
      * @var \Dom\Html\Element
      */
-    private $contentData;
+    private $contentArrayMap;
 
     /**
-     * Meta data, other than content data, such as title, keywords
+     * Meta array map, other than content data, such as title, keywords
      * @var array
      */
-    private $metaData;
+    private $metaArrayMap;
 
-    public function __construct(\Dom\Html\Element $contentData, array $metaData)
+    public function __construct(\Dom\Html\Element $contentArrayMap, array $metaArrayMap)
     {
-        $this->contentData = $contentData;
-        $this->metaData = $metaData;
+        $this->contentArrayMap = $contentArrayMap;
+        $this->metaArrayMap = $metaArrayMap;
     }
 
     /**
@@ -31,11 +31,11 @@ class Model
     public function render($withBaseContent = true)
     {
         if($withBaseContent) {
-            $content = $this->buildContentWith(':pageBaseContent', $this->contentData);
+            $content = $this->buildContentWith(':pageBaseContent', $this->contentArrayMap);
             return $content->render();
         }
 
-        return $this->contentData->render();
+        return $this->contentArrayMap->render();
     }
 
 
@@ -49,70 +49,70 @@ class Model
     private function buildContentWith(string $placeHolder, \Dom\Html\Element $content)
     {
         $headData = new \Dom\Html\HeadData();
-        $headData->setTitle($this->metaData['head']['title']);
+        $headData->setTitle($this->metaArrayMap['head']['title']);
 
         $htmlHead = new \Dom\Html\Element($headData);
-        $htmlHead->require('../web/metronic/html.head.php');
+        $htmlHead->require(dirname(dirname(__DIR__)) . '/web/metronic/html.head.php');
 
         $bodyData = new \Dom\Html\BodyData();
-        $bodyData->setTitle($this->metaData['body']['title']);
+        $bodyData->setTitle($this->metaArrayMap['body']['title']);
 
         $bodyContent = new \Dom\Html\Element($bodyData);
-        $bodyContent->require('../web/metronic/html.page.php');
+        $bodyContent->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.php');
 
         $pageHeader = new \Dom\Html\Element($bodyData);
-        $pageHeader->require('../web/metronic/html.page.header.php');
+        $pageHeader->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.header.php');
 
         /* ---- DO NOT REMOVE THE temp DISABLED CONTENT BELOW ---- */
         // subcontent
         // $pageActions = new \Dom\Html\Element($bodyData);
-        // $pageActions->require('../web/metronic/html.page.actions.php');
+        // $pageActions->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.actions.php');
         // $pageHeader->addElement(':pageActions', $pageActions);
 
         // $searchBox = new \Dom\Html\Element($bodyData);
-        // $searchBox->require('../web/metronic/html.page.searchbox.php');
+        // $searchBox->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.searchbox.php');
         // $pageHeader->addElement('pageSearchBox', $searchBox);
 
         // $notificationDropDown = new \Dom\Html\Element($bodyData);
-        // $notificationDropDown->require('../web/metronic/html.page.notification.dropdown.php');
+        // $notificationDropDown->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.notification.dropdown.php');
         // $pageHeader->addElement(':pageNotificationDropdown', $notificationDropDown);
 
         // $inboxDropDown = new \Dom\Html\Element($bodyData);
-        // $inboxDropDown->require('../web/metronic/html.page.inbox.dropdown.php');
+        // $inboxDropDown->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.inbox.dropdown.php');
         // $pageHeader->addElement(':pageInboxDropDown', $inboxDropDown);
 
         // $tasksDropDown = new \Dom\Html\Element($bodyData);
-        // $tasksDropDown->require('../web/metronic/html.page.tasks.dropdown.php');
+        // $tasksDropDown->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.tasks.dropdown.php');
         // $pageHeader->addElement(':pageTasksDropDown', $tasksDropDown);
 
         // $userLogin = new \Dom\Html\Element($bodyData);
-        // $userLogin->require('../web/metronic/html.page.user.login.dropdown.php');
+        // $userLogin->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.user.login.dropdown.php');
         // $pageHeader->addElement(':pageUserLoginDropDown', $userLogin);
 
         $bodyContent->addElement(':pageHeader', $pageHeader);
 
         $pageSideBar = new \Dom\Html\Element($bodyData);
-        $pageSideBar->require('../web/metronic/html.page.sidebar.php');
+        $pageSideBar->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.sidebar.php');
         $bodyContent->addElement(':pageSidebar', $pageSideBar);
 
         // $pageHead = new \Dom\Html\Element($bodyData);
-        // $pageHead->require('../web/metronic/html.page.head.php');
+        // $pageHead->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.head.php');
         // $bodyContent->addElement(':pageHead', $pageHead);
 
         $breadCrumb = new \Dom\Html\Element($bodyData);
-        $breadCrumb->require('../web/metronic/html.page.breadcrumb.php');
+        $breadCrumb->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.breadcrumb.php');
         $bodyContent->addElement(':pageBreadCrumb', $breadCrumb);
 
         $scripts = new \Dom\Html\Element($bodyData);
-        $scripts->require('../web/metronic/html.page.scripts.php');
+        $scripts->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.scripts.php');
         $bodyContent->addElement(':pageScripts', $scripts);
 
         // $quickSidebar = new \Dom\Html\Element($bodyData);
-        // $quickSidebar->require('../web/metronic/html.page.quick.sidebar.php');
+        // $quickSidebar->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.quick.sidebar.php');
         // $bodyContent->addElement(':pageQuickSideBar', $quickSidebar);
 
         // $quickNav = new \Dom\Html\Element($bodyData);
-        // $quickNav->require('../web/metronic/html.page.quick.nav.php');
+        // $quickNav->require(dirname(dirname(__DIR__)) . '/web/metronic/html.page.quick.nav.php');
         // $bodyContent->addElement(':pageQuickNav', $quickNav);
 
         $bodyContent->addElement($placeHolder, $content);

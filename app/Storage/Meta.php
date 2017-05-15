@@ -20,11 +20,9 @@ class Meta
     private function visitorLog()
     {
         $databaseService = new \App\Service\Database();
-        // Query
-        $databaseService->maintainVisitorLog(
+        $databaseService->maintainArrayMap(
             ['routeId' => $this->route['indexKey'], 'ip' => filter_input(INPUT_SERVER, 'REMOTE_ADDR')]);
-        // Command
-        $databaseService->setLifeCycleVisitorLog();
+        $databaseService->setArrayMapOperations();
         $databaseService->execute();
     }
 
@@ -33,7 +31,7 @@ class Meta
         return $this->route;
     }
 
-    public function data()
+    public function arrayMap()
     {
         return include 'Routes/' . $this->route['indexKey'] . '.php';
     }

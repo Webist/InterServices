@@ -27,29 +27,6 @@ class RootPath implements \App\Contract\Spec\RootPath
         $this->container = $container;
     }
 
-    public function modelPage()
-    {
-        return [];
-    }
-
-    /**
-     * InterActor RootPath email post xhr data, dispatches email command, email data transfer
-     * @param array $postData
-     * @return \Mail\ReturnValue
-     */
-    public function emailPostXhrData(array $postData)
-    {
-        $postData['email_to'] = self::EMAIL_TO;
-
-        /** @var \App\Service\Mailer $mailerService */
-        $mailerService = $this->container->get(self::MAILER);
-        // Query
-        $mailerService->maintainLifeCyclePostXhrData($postData);
-        // Command
-        $mailerService->setLifeCyclePostXhrData();
-        return $mailerService->dispatch();
-    }
-
     /**
      * @return \App\Storage\Meta
      */
@@ -57,4 +34,29 @@ class RootPath implements \App\Contract\Spec\RootPath
     {
         return $this->meta;
     }
+
+    /**
+     * @return array
+     */
+    public function contentArrayMap()
+    {
+        return [];
+    }
+
+    /**
+     * email array map, maintains array map, executes operations
+     * @param array $arrayMap
+     * @return \Mail\ReturnValue
+     */
+    public function emailArrayMap(array $arrayMap): \Mail\ReturnValue
+    {
+        $arrayMap['email_to'] = self::EMAIL_TO;
+
+        /** @var \App\Service\Mailer $mailerService */
+        $mailerService = $this->container->get(self::MAILER);
+        $mailerService->maintainArrayMap($arrayMap);
+        $mailerService->setArrayMapOperations();
+        return $mailerService->execute();
+    }
+
 }

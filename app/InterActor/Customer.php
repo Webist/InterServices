@@ -20,6 +20,7 @@ class Customer implements \App\Contract\Spec\Customer
     /**
      * Customer constructor.
      * @param \App\Storage\Meta $meta
+     * @param \App\Service\Container $container
      */
     public function __construct(\App\Storage\Meta $meta, \App\Service\Container $container)
     {
@@ -33,47 +34,42 @@ class Customer implements \App\Contract\Spec\Customer
     }
 
     /**
-     * InterActor Customer post xhr data, dispatches command operations, update
-     * @param $postData
-     * @param null $uuid
+     * Post xhr data, maintains array map, executes operations
+     * @param $arrayMap
      * @return \Commerce\ReturnValue
      */
-    public function postXhrData($postData)
+    public function postXhrArrayMap(array $arrayMap): \Commerce\ReturnValue
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        // Query
-        $customerService->maintainLifeCyclePostXhrData($postData);
-        // Command
-        $customerService->setLifeCyclePostXhrData();
-        return $customerService->mutate();
+        $customerService->maintainArrayMap($arrayMap);
+        $customerService->setArrayMapOperations();
+        return $customerService->execute();
     }
 
     /**
-     * InterActor Customer form data, queries uuid, array collection
+     * Form unit, maintains uuid, queries array map
      * @param $uuid
      * @return array
      */
-    public function formData($uuid = '')
+    public function formUnit($uuid = ''): array
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        // Query
-        $customerService->maintainLifeCycleFormData($uuid);
+        $customerService->maintainUnit($uuid, 'form');
         return $customerService->queries();
     }
 
     /**
-     * InterActor Customer list data, queries, array collection
+     * List unit, maintains uuid, queries array map
      * @param string $uuid
      * @return array
      */
-    public function listData($uuid = '')
+    public function listUnit($uuid = ''): array
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        // Query
-        $customerService->maintainLifeCycleListData($uuid);
+        $customerService->maintainUnit($uuid, 'list');
         return $customerService->queries();
     }
 }

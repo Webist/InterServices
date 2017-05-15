@@ -22,23 +22,40 @@ class RouteHandler implements RoutingInterface, RouteInterface
 
     public function handle()
     {
-        $routes = include dirname(getcwd()) . self::ROUTES_DATASTORAGE_PATH . DIRECTORY_SEPARATOR . self::ROUTES_DATASTORAGE_FILE;
+        try {
+            // Forward route
+            $this->matchContext->generateIndexKey();
 
-        // Forward route
-        $this->matchContext->generateIndexKey();
-        if (isset($routes[$this->matchContext->indexKey()])) {
-            return $routes[$this->matchContext->indexKey()];
+            $fileName = dirname(dirname(dirname(__DIR__)))
+                . self::ROUTES_DATASTORAGE_PATH . '/Routes'
+                . '/' . $this->matchContext->indexKey() . '.php';
+
+            if (!file_exists($fileName)) {
+                throw new NotFoundException('Forward route not found');
+            } else {
+                return include $fileName;
+            }
+
+        } catch (NotFoundException $exception) {
+
+            // Regular route
+            $this->matchContext->setRouteType(self::ROUTE_TYPE_ROUTE);
+            $this->matchContext->generateIndexKey();
+
+            $fileName = dirname(dirname(dirname(__DIR__)))
+                . self::ROUTES_DATASTORAGE_PATH . '/Routes'
+                . '/' . $this->matchContext->indexKey() . '.php';
+
+            if (!file_exists($fileName)) {
+                throw new NotFoundException('Regular route not found');
+            } else {
+                return include $fileName;
+            }
+
+        } catch (NotFoundException $exception) {
+
+            throw new NotFoundException(sprintf('The requested resource %s was not found on this server.',
+                $this->inputHandler->requestUrlPath()));
         }
-
-        // Regular route
-        $this->matchContext->setRouteType(self::ROUTE_TYPE_ROUTE);
-        $this->matchContext->generateIndexKey();
-
-        if (isset($routes[$this->matchContext->indexKey()])) {
-            return $routes[$this->matchContext->indexKey()];
-        }
-
-        throw new NotFoundException(sprintf('The requested resource %s was not found on this server.',
-            $this->inputHandler->requestUrlPath()));
     }
 }

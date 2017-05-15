@@ -10,7 +10,7 @@ class Database implements \App\Contract\Spec\Main
      */
     private $adapter;
     private $queries = [];
-    private $operators = [];
+    private $operations = [];
 
     public function queries()
     {
@@ -19,10 +19,14 @@ class Database implements \App\Contract\Spec\Main
 
     public function operators()
     {
-        return $this->operators;
+        return $this->operations;
     }
 
-    public function maintainVisitorLog(array $params)
+    /**
+     * @param array $params
+     * @return bool
+     */
+    public function maintainArrayMap(array $params)
     {
         \Assert\Assertion::keyExists($params, 'routeId');
         \Assert\Assertion::keyExists($params, 'ip');
@@ -31,16 +35,24 @@ class Database implements \App\Contract\Spec\Main
         $key = md5($query);
         $this->queries[$key]['statement'] = $query;
         $this->queries[$key]['params'] = $params;
+        return true;
     }
 
-    public function setLifeCycleVisitorLog()
+    /**
+     * @return bool
+     */
+    public function setArrayMapOperations()
     {
         foreach ($this->queries as $key => $query) {
-            $this->operators[$key]['statement'] = $this->adapter()->prepare($query['statement']);
-            $this->operators[$key]['params'] = $query['params'];
+            $this->operations[$key]['statement'] = $this->adapter()->prepare($query['statement']);
+            $this->operations[$key]['params'] = $query['params'];
         }
+        return true;
     }
 
+    /**
+     * @return \mysqli|\PDO
+     */
     private function adapter()
     {
         if ($this->adapter === null) {
@@ -51,10 +63,32 @@ class Database implements \App\Contract\Spec\Main
         return $this->adapter;
     }
 
+    /**
+     * @return __anonymous@1604
+     */
     public function execute()
     {
-        foreach ($this->operators as $key => $operator) {
-            $operator['statement']->execute($operator['params']);
+        $returnValue = new class
+        {
+            private $state = true;
+
+            public function setState(bool $state)
+            {
+                $this->state = $state;
+            }
+
+            public function state(): bool
+            {
+                return $this->state;
+            }
+        };
+
+        foreach ($this->operations as $key => $operation) {
+            if (!$operation['statement']->execute($operation['params'])) {
+                $returnValue->setState(false);
+            }
         }
+
+        return $returnValue;
     }
 }

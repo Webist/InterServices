@@ -6,10 +6,10 @@ namespace View;
 
 class RootPath
 {
-    public static function modelPage($data)
+    public static function page(array $contentArrayMap)
     {
         ob_start();
-        include '../web/homePage.php';
+        include dirname(dirname(__DIR__)) . '/web/homePage.php';
         return new \Dom\Html\Element(ob_get_clean());
     }
 }

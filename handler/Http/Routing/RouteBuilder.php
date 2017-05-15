@@ -22,8 +22,30 @@ class RouteBuilder
         $this->matchContext->setXRequestedWith($bool);
     }
 
-    public function buildRoute()
-    {   $this->matchContext->generateIndexKey();
+    /**
+     * @param bool $writeRouteFile Generates route file
+     * @return MatchContext|mixed
+     */
+    public function buildRoute($writeRouteFile = false)
+    {
+        $this->matchContext->generateIndexKey();
+
+        if ($writeRouteFile) {
+            $fileName = dirname(dirname(dirname(__DIR__)))
+                . '/app/Storage/Routes'
+                . '/' . mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $this->matchContext->indexKey()) . '.php';
+
+            $content = str_replace(
+                ['Http\Routing\MatchContext::__set_state(', '));'],
+                ['', ');'],
+                '<?php return ' . var_export($this->matchContext, true) . ";\n"
+            );
+
+            file_put_contents($fileName, $content);
+
+            return $fileName;
+        }
+
         return $this->matchContext;
     }
 

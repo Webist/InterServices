@@ -1,11 +1,12 @@
 <?php
+
 return [
     'match' =>
         array(
-            'routeType' => 0,
+            'routeType' => 1,
             'request_' =>
                 array(
-                    'REQUEST_URI' => '/customers',
+                    'REQUEST_URI' => '/test',
                     'REQUEST_METHOD' => 'GET',
                     'REQUEST_SCHEME' => NULL,
                 ),
@@ -36,16 +37,16 @@ return [
                         array(),
                 ),
         ),
-    'indexKey' => '7aa37bca37d1814768019721800fd9fb',
-    'delivery' => 'MOM',
-    'class' => 'Customer',
-    'method' => 'renderList',
-    'config' => 'Customer',
-    'handler' => 'Customer',
+    'indexKey' => 'a15152d0c4dcae747568e32121e97a90',
+    'delivery' => 'MVC',
+    'class' => 'Test',
+    'method' => 'renderTestString',
+    'config' => 'Test',
+    'handler' => 'Test',
     'head' => array(
-        'title' => 'Customers List'
+        'title' => 'Test'
     ),
     'body' => array(
-        'title' => '<h1>Customers List</h1>'
+        'title' => '<h1>Test</h1>'
     ),
 ];

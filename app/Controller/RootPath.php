@@ -2,49 +2,47 @@
 
 namespace App\Controller;
 
-use Exceptions\NotImplementedException;
-use Http\Stream\InputHandler;
 
 class RootPath implements \App\Contract\Spec\RootPath
 {
     private $inputHandler;
     private $actor;
 
-    public function __construct(InputHandler $inputHandler, \App\InterActor\RootPath $actor)
+    public function __construct(\Http\Stream\InputHandler $inputHandler, \App\InterActor\RootPath $actor)
     {
         $this->inputHandler = $inputHandler;
         $this->actor = $actor;
     }
 
     /**
-     * Entry point RootPath model page, renders model page, html data
+     * Entry point RootPath page, renders page, html content
      * @return string
      */
-    public function renderModelPage()
+    public function renderPage()
     {
         $view = new \View\Model(
-            \View\RootPath::modelPage($this->actor->modelPage()),
-            $this->actor->meta()->data()
+            \View\RootPath::page($this->actor->contentArrayMap()),
+            $this->actor->meta()->arrayMap()
         );
         return $view->render(false);
     }
 
     /**
-     * Entry point home page post request, adds Home Page Post, exception
+     * Entry point post request, adds RootPath Post, exception
      * @throws \Exceptions\NotImplementedException
      */
-    public function addHomePagePost()
+    public function addPost()
     {
-        throw new NotImplementedException(sprintf('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__));
+        throw new \Exceptions\NotImplementedException(sprintf('%s::%s needs to be implemented!', __CLASS__, __FUNCTION__));
     }
 
     /**
-     * Entry point RootPath email post xhr request, adds Email Post Xhr, confirmation message
+     * Entry point email post xhr request, adds Email Post Xhr, confirmation message
      * @return string
      */
-    public function addEmailPostXhr()
+    public function addPostXhrEmail()
     {
-        $returnValue = $this->actor->emailPostXhrData(filter_input_array(INPUT_POST));
+        $returnValue = $this->actor->emailArrayMap(filter_input_array(INPUT_POST));
 
         return json_encode(
             [

@@ -40,6 +40,7 @@ class MatchContext implements ResolverInterface, RouteInterface
         if(false === stristr($destination, '@', true)){
             $this->{self::FORWARD_DESTINATION_NAME} = $destination;
             $this->match['routeType'] = self::ROUTE_TYPE_FORWARD;
+            $className = str_replace(['_'], [' '], ucfirst(basename($destination, ".php")));
         } else {
             // Regular route
             $className = stristr($destination, '@', true);
@@ -60,6 +61,9 @@ class MatchContext implements ResolverInterface, RouteInterface
                 $this->{self::HANDLER_FIELD_NAME} = $className;
             }
         }
+
+        $this->{'head'} = ['title' => $className];
+        $this->{'body'} = ['title' => "<h1>{$className}</h1>"];
     }
 
     public function setXRequestedWith(bool $bool)

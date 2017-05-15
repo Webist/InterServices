@@ -1,12 +1,13 @@
 <?php
+
 return [
     'match' =>
         array(
-            'routeType' => 0,
+            'routeType' => 1,
             'request_' =>
                 array(
-                    'REQUEST_URI' => '/customers',
-                    'REQUEST_METHOD' => 'GET',
+                    'REQUEST_URI' => '/',
+                    'REQUEST_METHOD' => 'POST',
                     'REQUEST_SCHEME' => NULL,
                 ),
             'http_' =>
@@ -36,16 +37,16 @@ return [
                         array(),
                 ),
         ),
-    'indexKey' => '7aa37bca37d1814768019721800fd9fb',
+    'indexKey' => 'a585ac59b104425e42f06fd8adcd7ac0',
     'delivery' => 'MOM',
-    'class' => 'Customer',
-    'method' => 'renderList',
-    'config' => 'Customer',
-    'handler' => 'Customer',
+    'class' => 'RootPath',
+    'method' => 'addPost',
+    'config' => 'RootPath',
+    'handler' => 'RootPath',
     'head' => array(
-        'title' => 'Customers List'
+        'title' => 'Home'
     ),
     'body' => array(
-        'title' => '<h1>Customers List</h1>'
+        'title' => '<h1>Home</h1>'
     ),
 ];

@@ -32,7 +32,7 @@ Services are accessible as;
 Service Actions (operations/methods) (generally) are;
 + maintainLifeCycle
 + setLifeCycle
-+ mutate / dispatch
++ execute / dispatch
 Via ReturnValue object
 + state
 + getSucceedMessages
