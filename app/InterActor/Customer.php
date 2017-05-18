@@ -42,9 +42,8 @@ class Customer implements \App\Contract\Spec\Customer
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        $customerService->maintainArrayMap($arrayMap);
-        $customerService->setArrayMapOperations();
-        return $customerService->execute();
+        $operations = $customerService->maintainMutationMap($arrayMap);
+        return $customerService->mutate($operations);
     }
 
     /**
@@ -56,8 +55,8 @@ class Customer implements \App\Contract\Spec\Customer
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        $customerService->maintainUnit($uuid, 'form');
-        return $customerService->queries();
+        $operation = $customerService->maintainFormUnit($uuid);
+        return $customerService->get($operation);
     }
 
     /**
@@ -69,7 +68,7 @@ class Customer implements \App\Contract\Spec\Customer
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        $customerService->maintainUnit($uuid, 'list');
-        return $customerService->queries();
+        $operation = $customerService->maintainListUnit($uuid);
+        return $customerService->get($operation);
     }
 }

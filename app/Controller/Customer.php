@@ -50,7 +50,7 @@ class Customer implements \App\Contract\Spec\Customer
                 ),
         );
 
-        $this->actor->postXhrArrayMap($postData);
+        $result = $this->actor->postXhrArrayMap($postData);
     }
 
     /**

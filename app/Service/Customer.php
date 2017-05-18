@@ -4,8 +4,6 @@ namespace App\Service;
 
 class Customer
 {
-    private const SECTIONS = ['form' => [], 'list' => []];
-    private const SECTIONS_MESSAGE = ['error' => 'Given sectionName `%s` is not allowed'];
     private $orm;
     private $queries = [];
     private $operations = [];
@@ -21,66 +19,6 @@ class Customer
     }
 
     /**
-     * Maintain unit, build queries array, lifeCycle
-     *
-     * A request, as an intent, goes trough strategical process.
-     * It will be validated, sanitized, planned (prioritized),
-     * policies applied (such as bad word policy),
-     * converted to internal language
-     * and (partly or whole) accepted or rejected.
-     *
-     * @param string $uuid
-     * @param string $sectionName
-     * @return bool
-     * @throws \Exception
-     */
-    public function maintainUnit($uuid = '', $sectionName = 'form'): bool
-    {
-        if (!isset(self::SECTIONS[$sectionName])) {
-            throw new \Exception(sprintf(self::SECTIONS_MESSAGE['error'], $sectionName));
-        }
-
-        $userProfile = new \Account\UserProfile(new \Account\UserProfileData($uuid), $this->orm());
-
-        // list build
-        if ($sectionName == 'list') {
-            $this->queries[\Account\UserProfileData::class] = $userProfile->findAll();
-            return true;
-        }
-
-        // form build
-        $customer = new \Commerce\Customer(new \Commerce\CustomerData($uuid), $this->orm());
-
-        $this->queries[\Commerce\CustomerData::class] = $customer->foundData();
-
-        $user = new \Account\User(new \Account\UserData($uuid), $this->orm());
-        $userData = $user->foundData();
-        $userData->setProfileData($userProfile->foundData());
-
-        $this->queries[\Account\UserData::class] = $userData;
-
-        $creditCard = new \Payment\CreditCard(new \Payment\CreditCardData($uuid), $this->orm());
-        $creditCardData = $creditCard->foundData();
-
-        $payment = new \Payment\PaymentPreference(new \Payment\PaymentPreferenceData($uuid), $this->orm());
-        $creditCardData->setPaymentPreference($payment->foundData());
-
-        $billing = new \Payment\BillingSchedule(new \Payment\BillingScheduleData($uuid), $this->orm());
-        $creditCardData->setBillingSchedule($billing->foundData());
-
-        $this->queries[\Payment\CreditCardData::class] = $creditCardData;
-        return true;
-    }
-
-    private function orm()
-    {
-        if ($this->orm === null) {
-            $this->orm = new \App\Service\ORM();
-        }
-        return $this->orm;
-    }
-
-    /**
      * Maintain array map, build queries array, lifeCycle
      *
      * Maintaining the lifeCycle of a request, as an intent, goes trough strategical process.
@@ -90,9 +28,9 @@ class Customer
      * and (partly or whole) accepted or rejected.
      *
      * @param array $arrayMap
-     * @return bool
+     * @return array
      */
-    public function maintainArrayMap(array $arrayMap): bool
+    public function maintainMutationMap(array $arrayMap): array
     {
         \Assert\Assertion::keyExists($arrayMap, 'uuid');
         \Assert\Assertion::email($arrayMap['email']);
@@ -156,7 +94,7 @@ class Customer
         $creditCardData->setNumber($arrayMap['card_number']);
         $creditCardData->setStatus(0);
 
-        $this->queries[\Payment\CreditCardData::class] = $customerData;
+        $this->queries[\Payment\CreditCardData::class] = $creditCardData;
 
         // ----------
         $autoPayCC = false;
@@ -182,73 +120,128 @@ class Customer
 
         $this->queries[\Payment\BillingScheduleData::class] = $billingNotifyData;
 
-        return true;
+        return $this->queries;
+    }
+
+    private function orm()
+    {
+        if ($this->orm === null) {
+            $this->orm = new \App\Service\ORM();
+        }
+        return $this->orm;
     }
 
     /**
-     * Set operations, build operations array, lifeCycle
-     * @return bool
-     * @throws \Exception
+     * Maintain unit, build queries array, lifeCycle
+     *
+     * A request, as an intent, goes trough strategical process.
+     * It will be validated, sanitized, planned (prioritized),
+     * policies applied (such as bad word policy),
+     * converted to internal language
+     * and (partly or whole) accepted or rejected.
+     *
+     * @param $uuid
+     * @return mixed
      */
-    public function setArrayMapOperations(): bool
+    public function maintainFormUnit($uuid)
     {
-        if (empty($this->queries)) {
-            throw new \Exception('Array Map Operations not allowed before maintain Array Map');
-        }
+        $query = new class extends \App\Service\Customer
+        {
+            private $id;
 
-        $customer = new \Commerce\Customer(
-            $this->queries[\Commerce\CustomerData::class],
-            $this->orm());
-        $this->operations[\Commerce\Customer::class] = $customer;
+            public function getId()
+            {
+                return $this->id;
+            }
 
-        $user = new \Account\User(
-            $this->queries[\Account\UserData::class],
-            $this->orm());
-        $this->operations[\Account\User::class] = $user;
+            public function setId($uuid)
+            {
+                $this->id = $uuid;
+                return $this;
+            }
 
-        $userProfile = new \Account\UserProfile(
-            $this->queries[\Account\UserProfileData::class],
-            $this->orm());
-        $this->operations[\Account\UserProfile::class] = $userProfile;
+            public function query()
+            {
+                return function (\Doctrine\ORM\EntityManager $em) {
+                    $unit = [];
+                    $unit[\Commerce\CustomerData::class] = $em->getRepository(\Commerce\CustomerData::class)->find($this->getId());
+                    $unit[\Account\UserData::class] = $em->getRepository(\Account\UserData::class)->find($this->getId());
+                    $unit[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class)->find($this->getId());
+                    $unit[\Payment\CreditCardData::class] = $em->getRepository(\Payment\CreditCardData::class)->find($this->getId());
+                    $unit[\Payment\PaymentPreferenceData::class] = $em->getRepository(\Payment\PaymentPreferenceData::class)->find($this->getId());
+                    $unit[\Payment\BillingScheduleData::class] = $em->getRepository(\Payment\BillingScheduleData::class)->find($this->getId());
+                    return $unit;
+                };
+            }
+        };
 
-        $creditCard = new \Payment\CreditCard(
-            $this->queries[\Payment\CreditCardData::class],
-            $this->orm());
-        $this->operations[\Payment\CreditCard::class] = $creditCard;
-
-        $paymentPreference = new \Payment\PaymentPreference(
-            $this->queries[\Payment\PaymentPreferenceData::class],
-            $this->orm());
-        $this->operations[\Payment\PaymentPreference::class] = $paymentPreference;
-
-        $billingSchedule = new \Payment\BillingSchedule(
-            $this->queries[\Payment\BillingScheduleData::class],
-            $this->orm());
-        $this->operations[\Payment\BillingSchedule::class] = $billingSchedule;
-
-        return true;
+        return $query->setId($uuid);
     }
 
     /**
-     * @param bool $persistOnly
-     * @return \Commerce\ReturnValue
+     * Maintain unit, build queries array, lifeCycle
+     *
+     * A request, as an intent, goes trough strategical process.
+     * It will be validated, sanitized, planned (prioritized),
+     * policies applied (such as bad word policy),
+     * converted to internal language
+     * and (partly or whole) accepted or rejected.
+     *
+     * @param $uuid
+     * @return mixed
      */
-    public function execute($persistOnly = false)
+    public function maintainListUnit($uuid)
     {
-        $returnValue = new \Commerce\ReturnValue();
+        $query = new class extends \App\Service\Customer
+        {
+            private $id;
 
-        foreach ($this->operations as $operation => $statement) {
-            if ($persistOnly) {
-                $statement->persist();
+            public function getId()
+            {
+                return $this->id;
             }
 
-            if (!$statement->execute()) {
-                $returnValue->addFailureError($operation);
-            } else {
-                $returnValue->addSucceedMessage($operation);
+            public function setId($uuid)
+            {
+                $this->id = $uuid;
+                return $this;
             }
+
+            public function query()
+            {
+                return function (\Doctrine\ORM\EntityManager $em) {
+                    $unit = [];
+                    $unit[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class)->findAll();
+                    return $unit;
+                };
+            }
+        };
+
+        return $query->setId($uuid);
+    }
+
+    /**
+     * @param Customer $operation
+     * @return array
+     */
+    public function get(\App\Service\Customer $operation)
+    {
+        $this->queries = [];
+        return call_user_func($operation->query(), $this->orm()->entityManager());
+    }
+
+    /**
+     * @param array $operations
+     * @return \Statement\Statement
+     */
+    public function mutate(array $operations)
+    {
+        $this->queries = [];
+        foreach ($operations as $name => $operation) {
+            $this->operations[$name] = new \Statement\Operator($operation, $this->orm());
         }
 
-        return $returnValue;
+        $statement = new \Statement\Statement($this->operations, new \Statement\ReturnValue());
+        return $statement->execute();
     }
 }

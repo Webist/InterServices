@@ -9,8 +9,14 @@ class Database implements \App\Contract\Spec\Main
      * @var \mysqli|\PDO
      */
     private $adapter;
+
     private $queries = [];
+
     private $operations = [];
+
+    private $statements = [
+        'visitorLog' => "INSERT INTO visits SET route_id = :routeId, ip = :ip"
+    ];
 
     public function queries()
     {
@@ -24,30 +30,33 @@ class Database implements \App\Contract\Spec\Main
 
     /**
      * @param array $params
-     * @return bool
+     * @return array
      */
-    public function maintainArrayMap(array $params)
+    public function maintainMutationMap(array $params)
     {
         \Assert\Assertion::keyExists($params, 'routeId');
         \Assert\Assertion::keyExists($params, 'ip');
 
-        $query = "INSERT INTO visits SET route_id = :routeId, ip = :ip";
-        $key = md5($query);
-        $this->queries[$key]['statement'] = $query;
-        $this->queries[$key]['params'] = $params;
-        return true;
+        $this->queries['visitorLog']['query'] = $this->statements['visitorLog'];
+        $this->queries['visitorLog']['params'] = $params;
+
+        return $this->queries;
     }
 
     /**
-     * @return bool
+     * @param array $operations
+     * @return $this
      */
-    public function setArrayMapOperations()
+    public function prepareOperations(array $operations)
     {
-        foreach ($this->queries as $key => $query) {
-            $this->operations[$key]['statement'] = $this->adapter()->prepare($query['statement']);
-            $this->operations[$key]['params'] = $query['params'];
+        foreach ($operations as $operation) {
+            $this->operations[] = [
+                'statement' => $this->adapter()->prepare($operation['query']),
+                'parameters' => $operation['params']
+            ];
         }
-        return true;
+
+        return $this;
     }
 
     /**
@@ -66,7 +75,7 @@ class Database implements \App\Contract\Spec\Main
     /**
      * @return __anonymous@1604
      */
-    public function execute()
+    public function mutate()
     {
         $returnValue = new class
         {
@@ -83,8 +92,8 @@ class Database implements \App\Contract\Spec\Main
             }
         };
 
-        foreach ($this->operations as $key => $operation) {
-            if (!$operation['statement']->execute($operation['params'])) {
+        foreach ($this->operations as $operation) {
+            if (!$operation['statement']->execute($operation['parameters'])) {
                 $returnValue->setState(false);
             }
         }

@@ -20,10 +20,12 @@ class Meta
     private function visitorLog()
     {
         $databaseService = new \App\Service\Database();
-        $databaseService->maintainArrayMap(
+
+        $operations = $databaseService->maintainMutationMap(
             ['routeId' => $this->route['indexKey'], 'ip' => filter_input(INPUT_SERVER, 'REMOTE_ADDR')]);
-        $databaseService->setArrayMapOperations();
-        $databaseService->execute();
+
+        $statement = $databaseService->prepareOperations($operations);
+        return $statement->mutate();
     }
 
     public function route()

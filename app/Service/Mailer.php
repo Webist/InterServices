@@ -32,7 +32,7 @@ class Mailer
      * @param array $arrayMap
      * @return bool
      */
-    public function maintainArrayMap(array $arrayMap): bool
+    public function maintainMutationMap(array $arrayMap): bool
     {
         \Assert\Assertion::notEmpty($arrayMap);
         \Assert\Assertion::email($arrayMap['email']);
@@ -45,8 +45,6 @@ class Mailer
         }
         $uuid = $arrayMap['uuid'];
 
-        $this->queries[\Mail\Authorize::class] = new \Mail\Authorize($arrayMap['email']);
-
         $emailData = new \Mail\EmailData($uuid);
         $emailData->setSender($arrayMap['email']);
         $emailData->setReceiver($arrayMap['email_to']);
@@ -56,63 +54,14 @@ class Mailer
             'Replay-to: ' . $arrayMap['email'] . "\r\n" .
             'X-Mailer: PHP/' . phpversion());
 
-        $this->queries[\Mail\EmailData::class] = $emailData;
-
-        // Extra feature, create customer form an incoming email
-        $customerService = new \App\Service\Customer();
-
-        $arrayMap['uuid'] = \Ramsey\Uuid\Uuid::uuid4()->toString();
-        $arrayMap['username'] = '';
-        $arrayMap['password'] = '';
-        $arrayMap['gender'] = 0;
-        $arrayMap['fullname'] = $arrayMap['name'];
-        // $arrayMap['email'] = $arrayMap['email'];
-        $arrayMap['address'] = '';
-        $arrayMap['zipcode'] = '';
-        $arrayMap['city'] = '';
-        $arrayMap['country'] = '';
-        $arrayMap['remarks'] = "Created by eMail\r\n post uuid\r\n" . $uuid . "\r\n subject\r\n" . $arrayMap['subject'] . "\r\n message\r\n" . $arrayMap['message'];
-        $arrayMap['card_name'] = '';
-        $arrayMap['card_cvc'] = '';
-        $arrayMap['card_expiry_date'] = '';
-        $arrayMap['card_number'] = '';
-
-        $customerService->maintainArrayMap($arrayMap);
-
-        $this->queries[\App\Service\Customer::class] = $customerService;
-        return true;
-    }
-
-    /**
-     * Set operations, build operations array, lifeCycle
-     * @return bool
-     * @throws \Exception
-     */
-    public function setArrayMapOperations()
-    {
-        if (empty($this->queries)) {
-            throw new \Exception('Array Map Operations not allowed before maintain Array Map');
-        }
-
         // Validate data
-        $this->operations[\Mail\Authorize::class] = $this->queries[\Mail\Authorize::class];
-
+        $this->operations[\Mail\Authorize::class] = new \Mail\Authorize($arrayMap['email']);
         // Save into database
-        $this->operations[\Mail\Email::class] = new \Mail\Email($this->queries[\Mail\Authorize::class], $this->orm());
-
+        $this->operations[\Mail\Email::class] = new \Statement\Operator($emailData, $this->orm());
         // Send mail
-        $this->operations[\Mail\EmailSend::class] = new \Mail\EmailSend($this->queries[\Mail\Authorize::class]);
+        $this->operations[\Mail\EmailSend::class] = new \Mail\EmailSend($emailData);
 
-        // Extra feature, create customer form an incoming email
-        /** @var \App\Service\Customer $customerService */
-        $customerService = $this->queries[\App\Service\Customer::class];
-        $customerService->setArrayMapOperations();
-
-        foreach ($this->queries[\App\Service\Customer::class]->operations() as $operation) {
-            $this->operations[get_class($operation)] = $operation;
-        }
-
-        return true;
+        return $this->operations;
     }
 
     private function orm()
@@ -124,19 +73,23 @@ class Mailer
     }
 
     /**
-     * @return \Mail\ReturnValue
+     * Set operations, build operations array, lifeCycle
+     * @param array $operations
+     * @return \Statement\ReturnValue
      */
-    public function execute()
+    public function mutate(array $operations)
     {
-        $returnValue = new \Mail\ReturnValue();
+        $returnValue = new \Statement\ReturnValue();
 
-        foreach ($this->operations as $operation => $statement) {
+        /** @var \Statement\Operator $statement */
+        foreach ($operations as $operation => $statement) {
 
             if (!$statement->execute()) {
                 $returnValue->addFailureError($operation);
             } else {
                 $returnValue->addSucceedMessage($operation);
             }
+            $returnValue->setUuid($statement->data()->getId());
         }
 
         return $returnValue;

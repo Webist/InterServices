@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Mail;
+namespace Statement;
 
 
 class ReturnValue
@@ -48,4 +48,5 @@ class ReturnValue
     {
         return $this->uuid;
     }
+
 }
