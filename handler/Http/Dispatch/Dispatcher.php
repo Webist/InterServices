@@ -20,15 +20,18 @@ class Dispatcher implements ResolverInterface, DispatcherInterface
         $route = $this->resolver->handle();
 
         switch($route[self::DELIVERY_NAME]) {
+
             case self::DELIVERY_MODEL_SIMPLE :
                 $delivery = new \Delivery\Simple;
                 return $delivery($route, $route[self::CLASS_FIELD_NAME]);
+
             case self::DELIVERY_MODEL_MVC :
                 $delivery = new \Delivery\MVC;
                 return $delivery(
                     $route[self::CLASS_FIELD_NAME],
                     $route[self::CLASS_ACTION_FIELD_NAME],
                     $this->inputHandler->parameters());
+
             case self::DELIVERY_MODEL_MOM :
                 $delivery = new \Delivery\MOM;
                 return $delivery(

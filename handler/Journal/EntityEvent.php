@@ -46,8 +46,6 @@ class EntityEvent
             $em = $args->getEntityManager();
             $object = $args->getObject();
 
-            // var_dump($em->getUnitOfWork()->getEntityChangeSet($object));
-
             $data = new EntityEventData();
             $data->setUuid($object->getId());
             $data->setName(get_class($object));

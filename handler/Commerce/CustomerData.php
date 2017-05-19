@@ -60,7 +60,7 @@ class CustomerData implements \App\Contract\Behave\DataObject
     /**
      * Get id
      *
-     * @return guid
+     *
      */
     public function getId()
     {
@@ -70,7 +70,7 @@ class CustomerData implements \App\Contract\Behave\DataObject
     /**
      * Set id
      *
-     * @param guid $id
+     * @param  $id
      *
      * @return CustomerData
      */

@@ -6,7 +6,7 @@ namespace Delivery;
 
 class MVC
 {
-    public function __invoke($className, $actionName, $parameters)
+    public function __invoke(string $className, string $actionName, array $parameters)
     {
         $controller = new \ReflectionClass($className);
 

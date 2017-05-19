@@ -10,18 +10,11 @@ class Database implements \App\Contract\Spec\Main
      */
     private $adapter;
 
-    private $queries = [];
-
     private $operations = [];
 
     private $statements = [
         'visitorLog' => "INSERT INTO visits SET route_id = :routeId, ip = :ip"
     ];
-
-    public function queries()
-    {
-        return $this->queries;
-    }
 
     public function operators()
     {
@@ -37,10 +30,10 @@ class Database implements \App\Contract\Spec\Main
         \Assert\Assertion::keyExists($params, 'routeId');
         \Assert\Assertion::keyExists($params, 'ip');
 
-        $this->queries['visitorLog']['query'] = $this->statements['visitorLog'];
-        $this->queries['visitorLog']['params'] = $params;
+        $queries['visitorLog']['query'] = $this->statements['visitorLog'];
+        $queries['visitorLog']['params'] = $params;
 
-        return $this->queries;
+        return $queries;
     }
 
     /**
@@ -49,14 +42,15 @@ class Database implements \App\Contract\Spec\Main
      */
     public function prepareOperations(array $operations)
     {
+        $operations = [];
         foreach ($operations as $operation) {
-            $this->operations[] = [
+            $operations[] = [
                 'statement' => $this->adapter()->prepare($operation['query']),
                 'parameters' => $operation['params']
             ];
         }
 
-        return $this;
+        return $operations;
     }
 
     /**
@@ -72,10 +66,12 @@ class Database implements \App\Contract\Spec\Main
         return $this->adapter;
     }
 
+
     /**
-     * @return __anonymous@1604
+     * @param array $operations
+     * @return __anonymous@1656
      */
-    public function mutate()
+    public function mutate(array $operations)
     {
         $returnValue = new class
         {
@@ -92,7 +88,7 @@ class Database implements \App\Contract\Spec\Main
             }
         };
 
-        foreach ($this->operations as $operation) {
+        foreach ($operations as $operation) {
             if (!$operation['statement']->execute($operation['parameters'])) {
                 $returnValue->setState(false);
             }

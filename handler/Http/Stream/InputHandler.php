@@ -67,6 +67,7 @@ class InputHandler implements InputInterface, InputHandlerInterface
                 return $parameters[$name];
             }
         }
+        return null;
     }
 
     /**

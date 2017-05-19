@@ -22,7 +22,7 @@ class RootPath implements \App\Contract\Spec\RootPath
     {
         $view = new \View\Model(
             \View\RootPath::page($this->actor->contentArrayMap()),
-            $this->actor->meta()->arrayMap()
+            $this->actor->meta()->routeArrayMap()
         );
         return $view->render(false);
     }

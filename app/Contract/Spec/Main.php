@@ -9,7 +9,6 @@ interface Main
     /**
      * Service managers
      */
-    const ROOT_PATH = \App\Service\RootPath::class;
     const CUSTOMER = \App\Service\Customer::class;
     const MAILER = \App\Service\Mailer::class;
     const EMAIL_TO = 'info@example.com';

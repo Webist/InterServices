@@ -16,7 +16,7 @@ var_dump($title);
 <!--[if !IE]><!-->
 <html lang="en"> <!--<![endif]-->
 <head>
-    <title>Software Development Consultancy - anSoft</title>
+    <title>Software Development Consultancy - anSoft.nl</title>
 
     <!-- Meta -->
     <meta charset="utf-8">
@@ -65,9 +65,9 @@ var_dump($title);
     <div class="container">
         <div class="page-scroll">
             <a class="logo-link navbar-brand logo-left" href="#intro"
-               title="anSoft: Software Development Consultancy">
-                <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="anSoft Logo light">
-                <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="anSoft Logo dark">
+               title="anSoft.nl: Software Development Consultancy">
+                <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="anSoft.nl Logo light">
+                <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="anSoft.nl Logo dark">
             </a>
         </div>
 
@@ -109,10 +109,10 @@ var_dump($title);
                 <div class="col-md-2 no-side-padding">
                     <div class="center-block logo page-scroll">
                         <a class="logo-link navbar-brand logo-centered" href="#intro">
-                            <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="anSoft Logo light"
-                                 title="AnSoft: Software Development Consultancy">
-                            <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="anSoft Logo dark"
-                                 title="AnSoft: Software Development Consultancy">
+                            <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="anSoft.nl Logo light"
+                                 title="anSoft.nl: Software Development Consultancy">
+                            <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="anSoft.nl Logo dark"
+                                 title="anSoft.nl: Software Development Consultancy">
                         </a>
                     </div>
                 </div>
@@ -125,7 +125,7 @@ var_dump($title);
                                     <a href="#mission">Missie</a>
                                 </li>
                                 <li class="page-scroll">
-                                    <a href="#courses">anSoft Academy</a>
+                                    <a href="#courses">anSoft.nl Academy</a>
                                 </li>
 
                                 <li class="page-scroll">
@@ -288,23 +288,25 @@ var_dump($title);
                 <div class="owl-slider-v4">
 
                     <div class="item">
-                        <img src="assets/img/group-vs-team.jpg" alt="Groep versus Team">
-
-                        <p class="owl-p g-color-white-darker">
-                            Met self-organizing <strike>team</strike> partners onze team is dynamisch.
-                            Afhankelijk van het project of project-fase zijn er een of meer mensen bij aanwezig en
-                            betrokken.
-
-                        </p>
-
-                    </div>
-
-                    <div class="item">
                         <img src="assets/img-temp/regulative-cyclus.jpg" alt="">
 
                         <p class="owl-p g-color-white-darker">
                             Regulatieve cyclus (Probleemstelling, Diagnose, Plan(ontwerp), Implementatie, Evaluatie)
                             issues in applicatie infrastructuur,
+                        </p>
+
+                    </div>
+
+                    <div class="item">
+                        <img src="assets/img/group-vs-team.jpg" alt="Groep versus Team">
+
+                        <p class="owl-p g-color-white-darker">
+                            Met self-organizing
+                            <del>team</del>
+                            partners onze team is dynamisch.
+                            Afhankelijk van het project of project-fase zijn er een of meer mensen bij aanwezig en
+                            betrokken.
+
                         </p>
 
                     </div>
@@ -719,7 +721,7 @@ var_dump($title);
         <div class="container content-md">
             <div class="row">
                 <div class="col-md-3 g-heading-v7 text-center">
-                    <h2 class="h2 g-mb-30"><em class="block-name">anSoft Academy </em>
+                    <h2 class="h2 g-mb-30"><em class="block-name">anSoft.nl Academy </em>
                         Educatie
                     </h2>
                     <p class="g-mb-30"></p>
@@ -1035,8 +1037,8 @@ var_dump($title);
     <!-- copyrights -->
     <div class="copyrights container-fluid bg-color-com page-scroll">
         <div clas="container">
-            <a class="footer-logo" href="#intro" title="anSoft: Software Development Consultancy">
-                <img class="img-responsive" src="assets/img/ansoft-logo-light.png" alt="anSoft Logo">
+            <a class="footer-logo" href="#intro" title="anSoft.nl: Software Development Consultancy">
+                <img class="img-responsive" src="assets/img/ansoft-logo-light.png" alt="anSoft.nl Logo">
             </a>
             <?php /**
              * <ul class="list-inline footer-list">

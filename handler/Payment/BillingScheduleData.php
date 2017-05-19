@@ -33,7 +33,7 @@ class BillingScheduleData implements \App\Contract\Behave\DataObject
     /**
      * Get id
      *
-     * @return guid
+     *
      */
     public function getId()
     {
@@ -43,7 +43,7 @@ class BillingScheduleData implements \App\Contract\Behave\DataObject
     /**
      * Set id
      *
-     * @param guid $id
+     * @param integer $id
      *
      * @return $this
      */

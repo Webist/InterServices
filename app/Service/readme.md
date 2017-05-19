@@ -1,8 +1,8 @@
 ### Service Managers
 
-Business lifeCycle operation (e.g. query, command statements) interface.  
+Business lifeCycle operation interface.  
 
-A service manager is a framework that handles a lifeCycle in own space.  
+A service manager is a framework that handles operations lifeCycle in own space.  
  
 A lifeCycle basically includes business rules, workflow or a finite state machine and execution handlers.
 

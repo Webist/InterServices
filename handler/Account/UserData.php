@@ -67,7 +67,7 @@ class UserData implements \App\Contract\Behave\DataObject
     /**
      * Get id
      *
-     * @return integer
+     *
      */
     public function getId()
     {
@@ -77,7 +77,7 @@ class UserData implements \App\Contract\Behave\DataObject
     /**
      * Set id
      *
-     * @param guid $id
+     * @param  $id
      *
      * @return UserData
      */

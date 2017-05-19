@@ -2,7 +2,11 @@
 
 namespace Http\Routing;
 
-
+/**
+ * A tool to build quickly a route, internally not used.
+ *
+ * @package Http\Routing
+ */
 class RouteBuilder
 {
     private $matchContext;

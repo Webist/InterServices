@@ -9,7 +9,7 @@ class ErrorHandler
     /**
      * @var Exception
      */
-    private $exception;
+    private $throwable;
 
     /**
      * @var InputHandler
@@ -18,26 +18,28 @@ class ErrorHandler
 
     /**
      * ErrorHandler constructor.
-     *
-     * @param Exception $exception
+     * @param \Throwable $throwable http://php.net/manual/en/language.errors.php7.php
      * @param InputHandler $inputHandler
      */
-    public function __construct(Exception $exception, InputHandler $inputHandler)
+    public function __construct(\Throwable $throwable, InputHandler $inputHandler)
     {
-        $this->exception = $exception;
+        $this->throwable = $throwable;
         $this->inputHandler;
     }
 
     /**
-     * Handle error
+     * Handle throwable
+     * @param null $traceString
      */
-    public function handle()
+    public function handle($traceString = null)
     {
         if (!empty($_SERVER['APPLICATION_ENV']) && $_SERVER['APPLICATION_ENV'] == 'development') {
-            echo $this->exception->getMessage();
+            printf('<pre>%s</pre>', $this->throwable->getMessage());
+            if ($traceString) {
+                printf('<pre>%s</pre>', $this->throwable->getTraceAsString());
+            }
         }
 
-        // for instance write to file
-        // ...
+        // for example write to a file ...
     }
 }

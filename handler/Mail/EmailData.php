@@ -68,11 +68,17 @@ class EmailData implements \App\Contract\Behave\DataObject
     /**
      * Get id
      *
-     * @return integer
+     *
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
     }
 
     /**

@@ -71,7 +71,7 @@ class EntityEventData
     /**
      * Get id
      *
-     * @return integer
+     *
      */
     public function getId()
     {
@@ -81,7 +81,7 @@ class EntityEventData
     /**
      * Get uuid
      *
-     * @return guid
+     *
      */
     public function getUuid()
     {
@@ -105,7 +105,7 @@ class EntityEventData
     /**
      * Get sequence
      *
-     * @return integer
+     *
      */
     public function getSequence()
     {
@@ -247,7 +247,7 @@ class EntityEventData
     /**
      * Get userId
      *
-     * @return integer
+     *
      */
     public function getUserId()
     {

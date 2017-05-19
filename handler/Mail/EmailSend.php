@@ -12,6 +12,11 @@ class EmailSend
         $this->data = $emailData;
     }
 
+    public function data()
+    {
+        return $this->data;
+    }
+
     public function execute()
     {
         return mail(

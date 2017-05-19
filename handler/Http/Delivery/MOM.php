@@ -6,9 +6,8 @@ namespace Delivery;
 
 class MOM
 {
-    public function __invoke($className, $classHandlerName, $classActionName, $route, \Http\Stream\InputHandler $inputHandler)
+    public function __invoke(string $className, string $classHandlerName, string $classActionName, array $route, \Http\Stream\InputHandler $inputHandler)
     {
-        // A Regular route
         $controller = new \ReflectionClass($className);
 
         // Machine Object Model, requires __construct, Interface and InterActor.

@@ -31,12 +31,12 @@ class RouteHandler implements RoutingInterface, RouteInterface
                 . '/' . $this->matchContext->indexKey() . '.php';
 
             if (!file_exists($fileName)) {
-                throw new NotFoundException('Forward route not found');
+                throw new ForwardRouteNotFoundException('Forward route not found');
             } else {
                 return include $fileName;
             }
 
-        } catch (NotFoundException $exception) {
+        } catch (ForwardRouteNotFoundException $exception) {
 
             // Regular route
             $this->matchContext->setRouteType(self::ROUTE_TYPE_ROUTE);

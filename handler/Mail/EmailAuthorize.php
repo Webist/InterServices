@@ -10,6 +10,10 @@ namespace Mail;
  */
 class EmailAuthorize
 {
+    private $messages = [
+        'isBlackListed' => ['error' => 'Given eMail %s is blacklisted'],
+        'isDnsRecord' => ['error' => 'Given eMail %s has no valid DNS']
+    ];
     private $email;
 
     public function __construct($email)
@@ -27,5 +31,18 @@ class EmailAuthorize
     {
         $domain = substr(strstr($this->email, '@'), 1);
         return checkdnsrr($domain);
+    }
+
+    public function execute()
+    {
+        if ($this->isBlackListed()) {
+            throw new \Exception(sprintf($this->messages['blacklisted']['error'], $this->email));
+        }
+
+        if (!$this->isDnsRecord()) {
+            throw new \Exception(sprintf($this->messages['isDnsRecord']['error'], $this->email));
+        }
+
+        return true;
     }
 }

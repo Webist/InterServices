@@ -50,11 +50,18 @@ class RootPath implements \App\Contract\Spec\RootPath
      */
     public function emailArrayMap(array $arrayMap): \Statement\ReturnValue
     {
+        \Assert\Assertion::notEmpty($arrayMap);
+        \Assert\Assertion::email($arrayMap['email']);
+        \Assert\Assertion::keyExists($arrayMap, 'subject');
+        \Assert\Assertion::keyExists($arrayMap, 'message');
+        \Assert\Assertion::keyExists($arrayMap, 'uuid');
+
         $arrayMap['email_to'] = self::EMAIL_TO;
 
         /** @var \App\Service\Mailer $mailerService */
         $mailerService = $this->container->get(self::MAILER);
-        $operations = $mailerService->maintainMutationMap($arrayMap);
+        $queries = $mailerService->maintainMutationMap($arrayMap);
+        $operations = $mailerService->prepareOperations($queries);
         $result = $mailerService->mutate($operations);
 
         // Extra feature, create customer form an incoming email without breaking the mail process
@@ -75,9 +82,13 @@ class RootPath implements \App\Contract\Spec\RootPath
             $arrayMap['card_expiry_date'] = '';
             $arrayMap['card_number'] = '';
 
+            /** @var \App\Service\Customer $customerService */
             $customerService = $this->container->get(self::CUSTOMER);
-            $operations = $customerService->maintainMutationMap($arrayMap);
+            $queries = $customerService->maintainMutationMap($arrayMap);
+            $operations = $customerService->prepareOperations($queries);
             return $customerService->mutate($operations);
+
+
         } catch (\Exception $exception) {
             //
         }

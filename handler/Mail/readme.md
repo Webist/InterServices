@@ -1,11 +1,9 @@
 #### Mail handler, test only
 
 Sandbox processing an email.
-+ Authorize : Validate against filters such as blacklist, dns-record.            
++ EmailAuthorize : Validate against filters such as blacklist, dns-record.            
 + EmailData : Data object (Entity) for data mapping
-+ Email : Data object command
 + EmailSend : Real email send handler
-+ ReturnValue : Aggregation of result values in object
 
 Non-implemented 
 + Workflow : Transition stages for an email.   

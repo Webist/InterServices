@@ -7,17 +7,16 @@ namespace App\Service;
 class Mailer
 {
     private $orm;
-    private $queries = [];
-    private $operations = [];
 
-    public function queries()
+    /**
+     * @return ORM
+     */
+    private function orm()
     {
-        return $this->queries;
-    }
-
-    public function operations()
-    {
-        return $this->operations;
+        if ($this->orm === null) {
+            $this->orm = new \App\Service\ORM();
+        }
+        return $this->orm;
     }
 
     /**
@@ -30,22 +29,15 @@ class Mailer
      * and (partly or whole) accepted or rejected.
      *
      * @param array $arrayMap
-     * @return bool
+     * @return array
      */
-    public function maintainMutationMap(array $arrayMap): bool
+    public function maintainMutationMap(array $arrayMap): array
     {
-        \Assert\Assertion::notEmpty($arrayMap);
-        \Assert\Assertion::email($arrayMap['email']);
+        $queries = [];
+        // Validate data
+        $queries[\Mail\EmailAuthorize::class] = new \Mail\EmailAuthorize($arrayMap['email']);
 
-        \Assert\Assertion::keyExists($arrayMap, 'subject');
-        \Assert\Assertion::keyExists($arrayMap, 'message');
-
-        if (empty($arrayMap['uuid'])) {
-            $arrayMap['uuid'] = uniqid();
-        }
-        $uuid = $arrayMap['uuid'];
-
-        $emailData = new \Mail\EmailData($uuid);
+        $emailData = new \Mail\EmailData($arrayMap['uuid']);
         $emailData->setSender($arrayMap['email']);
         $emailData->setReceiver($arrayMap['email_to']);
         $emailData->setSubject($arrayMap['subject']);
@@ -54,22 +46,34 @@ class Mailer
             'Replay-to: ' . $arrayMap['email'] . "\r\n" .
             'X-Mailer: PHP/' . phpversion());
 
-        // Validate data
-        $this->operations[\Mail\Authorize::class] = new \Mail\Authorize($arrayMap['email']);
-        // Save into database
-        $this->operations[\Mail\Email::class] = new \Statement\Operator($emailData, $this->orm());
-        // Send mail
-        $this->operations[\Mail\EmailSend::class] = new \Mail\EmailSend($emailData);
+        $queries[\Mail\EmailData::class] = $emailData;
 
-        return $this->operations;
+        return $queries;
     }
 
-    private function orm()
+    /**
+     * @param array $queries
+     * @return array
+     */
+    public function prepareOperations(array $queries): array
     {
-        if ($this->orm === null) {
-            $this->orm = new \App\Service\ORM();
+        $operations = [];
+        $uuid = uniqid();
+        /** @var \Mail\EmailData $query */
+        foreach ($queries as $classString => $query) {
+
+            if ($classString == \Mail\EmailData::class) {
+
+                if (empty($query->getId())) {
+                    $query->setId($uuid);
+                }
+                // Save into database
+                $operations[\Mail\EmailData::class] = new \Statement\Operator($query, $this->orm());
+                // Send mail
+                $operations[\Mail\EmailSend::class] = new \Mail\EmailSend($query);
+            }
         }
-        return $this->orm;
+        return $operations;
     }
 
     /**

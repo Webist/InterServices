@@ -19,7 +19,7 @@ class Customer implements \App\Contract\Spec\Customer
         print 'Test the CustomerStatement data save into storage <br/>';
 
         $postData = array(
-            'uuid' => 'ce27bcce-f0c0-4f60-8479-52ef2e41b4f4',
+            'uuid' => '', //'ce27bcce-f0c0-4f60-8479-52ef2e41b4f4',
 
             'username' => 'John707',
             'password' => '12345',
@@ -50,7 +50,7 @@ class Customer implements \App\Contract\Spec\Customer
                 ),
         );
 
-        $result = $this->actor->postXhrArrayMap($postData);
+        return $this->actor->postXhrArrayMap($postData);
     }
 
     /**
@@ -84,7 +84,7 @@ class Customer implements \App\Contract\Spec\Customer
 
         $view = new \View\Model(
             \View\Customer::form($formData),
-            $this->actor->meta()->arrayMap()
+            $this->actor->meta()->routeArrayMap()
         );
         return $view->render();
     }
@@ -97,7 +97,7 @@ class Customer implements \App\Contract\Spec\Customer
     {
         $view = new \View\Model(
             \View\Customer::list($this->actor->listUnit()),
-            $this->actor->meta()->arrayMap()
+            $this->actor->meta()->routeArrayMap()
         );
         return $view->render();
     }

@@ -4,6 +4,7 @@ namespace App\InterActor;
 
 
 
+
 class Customer implements \App\Contract\Spec\Customer
 {
     /**
@@ -36,13 +37,18 @@ class Customer implements \App\Contract\Spec\Customer
     /**
      * Post xhr data, maintains array map, executes operations
      * @param $arrayMap
-     * @return \Commerce\ReturnValue
+     * @return \Statement\ReturnValue
      */
-    public function postXhrArrayMap(array $arrayMap): \Commerce\ReturnValue
+    public function postXhrArrayMap(array $arrayMap): \Statement\ReturnValue
     {
+        \Assert\Assertion::keyExists($arrayMap, 'uuid');
+        \Assert\Assertion::email($arrayMap['email']);
+
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        $operations = $customerService->maintainMutationMap($arrayMap);
+
+        $queries = $customerService->maintainMutationMap($arrayMap);
+        $operations = $customerService->prepareOperations($queries);
         return $customerService->mutate($operations);
     }
 
@@ -55,8 +61,10 @@ class Customer implements \App\Contract\Spec\Customer
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        $operation = $customerService->maintainFormUnit($uuid);
-        return $customerService->get($operation);
+
+        $queries = $customerService->maintainFormUnit($uuid);
+        $operations = $customerService->prepareOperations($queries);
+        return $customerService->get($operations);
     }
 
     /**
@@ -68,7 +76,9 @@ class Customer implements \App\Contract\Spec\Customer
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
-        $operation = $customerService->maintainListUnit($uuid);
-        return $customerService->get($operation);
+
+        $queries = $customerService->maintainListUnit($uuid);
+        return $customerService->get($queries);
     }
+
 }

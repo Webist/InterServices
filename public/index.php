@@ -29,11 +29,11 @@ try {
     $outputHandler->handle();
 } catch (Http\Routing\NotFoundException $exception) {
 
-    include '../web/404.php';
-} catch (Exception $exception) {
+    include dirname(__DIR__) . '/web/404.php';
+} catch (Throwable $throwable) {
 
-    $errorHandler = new \Http\Stream\ErrorHandler(
-        $exception,
+    $errorHandler = new Http\Stream\ErrorHandler(
+        $throwable,
         $inputHandler
     );
     $errorHandler->handle();
