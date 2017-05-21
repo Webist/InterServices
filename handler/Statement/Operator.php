@@ -70,7 +70,9 @@ class Operator
      */
     public function persist()
     {
-        if ($this->operator == self::SET || !empty($data = $this->foundData())) {
+        $data = $this->foundData();
+        // $this->operator == self::SET ||
+        if (!empty($data)) {
             $this->dataObject->setCreatedAt($data->getCreatedAt());
             $this->orm->entityManager()->merge($this->dataObject);
         } else {

@@ -60,8 +60,8 @@ class RootPath implements \App\Contract\Spec\RootPath
 
         /** @var \App\Service\Mailer $mailerService */
         $mailerService = $this->container->get(self::MAILER);
-        $queries = $mailerService->maintainMutationMap($arrayMap);
-        $operations = $mailerService->prepareOperations($queries);
+        $queries = $mailerService->maintainMutationUnit($arrayMap);
+        $operations = $mailerService->mutationUnitOperations($queries);
         $result = $mailerService->mutate($operations);
 
         // Extra feature, create customer form an incoming email without breaking the mail process
@@ -84,10 +84,9 @@ class RootPath implements \App\Contract\Spec\RootPath
 
             /** @var \App\Service\Customer $customerService */
             $customerService = $this->container->get(self::CUSTOMER);
-            $queries = $customerService->maintainMutationMap($arrayMap);
-            $operations = $customerService->prepareOperations($queries);
-            return $customerService->mutate($operations);
-
+            $queries = $customerService->maintainMutationUnit(\Statement\Operator::CREATE);
+            $operations = $customerService->mutationUnitOperations($queries, $arrayMap);
+            $customerService->mutate($operations);
 
         } catch (\Exception $exception) {
             //

@@ -31,7 +31,7 @@ class Mailer
      * @param array $arrayMap
      * @return array
      */
-    public function maintainMutationMap(array $arrayMap): array
+    public function maintainMutationUnit(array $arrayMap): array
     {
         $queries = [];
         // Validate data
@@ -55,7 +55,7 @@ class Mailer
      * @param array $queries
      * @return array
      */
-    public function prepareOperations(array $queries): array
+    public function mutationUnitOperations(array $queries): array
     {
         $operations = [];
         $uuid = uniqid();

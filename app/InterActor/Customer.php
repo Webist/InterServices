@@ -50,11 +50,11 @@ class Customer implements \App\Contract\Spec\Customer
         if (empty($arrayMap['uuid'])) {
             $operator = \Statement\Operator::CREATE;
         } else {
-            $operator = \Statement\Operator::SET;;
+            $operator = \Statement\Operator::SET;
         }
 
-        $queries = $customerService->maintainMutationMap($arrayMap, $operator);
-        $operations = $customerService->mutationMapOperations($queries);
+        $queries = $customerService->maintainMutationUnit($operator);
+        $operations = $customerService->mutationUnitOperations($queries, $arrayMap);
         return $customerService->mutate($operations);
     }
 
@@ -68,9 +68,14 @@ class Customer implements \App\Contract\Spec\Customer
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
 
-        $queries = $customerService->maintainFormUnit($uuid, $customerService::OPERATOR_FIND);
-        $customerService->unitOperations($queries);
-        return $customerService->get();
+        if (empty($uuid)) {
+            $operator = $customerService::OPERATOR_NEW;
+        } else {
+            $operator = $customerService::OPERATOR_FIND;
+        }
+
+        $customerService->maintainFormUnit($operator);
+        return $customerService->get($uuid);
     }
 
     /**
@@ -83,9 +88,14 @@ class Customer implements \App\Contract\Spec\Customer
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
 
-        $queries = $customerService->maintainListUnit($uuid, $customerService::OPERATOR_FIND_ALL);
-        $customerService->unitOperations($queries);
-        return $customerService->get();
+        if (empty($uuid)) {
+            $operator = $customerService::OPERATOR_FIND_ALL;
+        } else {
+            $operator = $customerService::OPERATOR_NEW;
+        }
+
+        $customerService->maintainListUnit($operator);
+        return $customerService->get($uuid);
     }
 
 }

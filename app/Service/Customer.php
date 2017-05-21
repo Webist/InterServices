@@ -39,61 +39,30 @@ class Customer
         return $this->orm;
     }
 
-    /**
-     * Sets operations
-     *
-     * @param array $queries
-     * @return array
-     */
-    public function unitOperations(array $queries)
+    private function newUnit()
     {
-        // In context view, when queries with empty id then fill with a new id, so that every form has an uuid
-        $uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
-
-        foreach ($queries as $class => $action) {
-
-            foreach ($action as $object) {
-                if ($object && empty($object->getId())) {
-                    $object->setId($uuid);
-                }
-            }
-
-            // In context fetch, when the operator is find then the ORM returns an one depth object otherwise multidimension array
-            if ($this->operator == self::OPERATOR_FIND) {
-                $this->operations[$class] = $action[$this->operator];
-            } else {
-                $this->operations[$class] = $action;
-            }
-
-        }
-
-        return $this->operations;
+        $unit = [];
+        $uuid = null;
+        $unit[\Commerce\CustomerData::class] = new \Commerce\CustomerData($uuid);
+        $unit[\Account\UserData::class] = new \Account\UserData($uuid);
+        $unit[\Account\UserProfileData::class] = new \Account\UserProfileData($uuid);
+        $unit[\Payment\CreditCardData::class] = new \Payment\CreditCardData($uuid);
+        $unit[\Payment\PaymentPreferenceData::class] = new \Payment\PaymentPreferenceData($uuid);
+        $unit[\Payment\BillingScheduleData::class] = new \Payment\BillingScheduleData($uuid);
+        return $unit;
     }
 
-    /**
-     * @param array $queries
-     * @return array
-     */
-    public function mutationMapOperations(array $queries)
+    private function existingUnit()
     {
-        // In context edit, when user-email already exists then use that by email matched uuid
-        $uuidByEmail = null;
-        foreach ($queries as $class => $object) {
-
-            if ($class == \Account\UserProfileData::class) {
-                $uuidByEmail = $this->findUuidByEmail($object[$this->operator]->getEmail());
-                break;
-            }
-        }
-
-        foreach ($queries as $class => $object) {
-            if (empty($uuidByEmail)) {
-                $object[$this->operator]->setId($uuidByEmail);
-            }
-            $this->operations[$class] = new \Statement\Operator($object[$this->operator], $this->operator, $this->orm());
-        }
-
-        return $this->operations;
+        $unit = [];
+        $em = $this->orm()->entityManager();
+        $unit[\Commerce\CustomerData::class] = $em->getRepository(\Commerce\CustomerData::class);
+        $unit[\Account\UserData::class] = $em->getRepository(\Account\UserData::class);
+        $unit[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class);
+        $unit[\Payment\CreditCardData::class] = $em->getRepository(\Payment\CreditCardData::class);
+        $unit[\Payment\PaymentPreferenceData::class] = $em->getRepository(\Payment\PaymentPreferenceData::class);
+        $unit[\Payment\BillingScheduleData::class] = $em->getRepository(\Payment\BillingScheduleData::class);
+        return $unit;
     }
 
     /**
@@ -111,7 +80,7 @@ class Customer
     }
 
     /**
-     * Maintain array map, build queries array, lifeCycle
+     * Maintain mutation unit lifeCycle
      *
      * Maintaining the lifeCycle of a request, as an intent, goes trough strategical process.
      * It will be validated, sanitized, planned (prioritized),
@@ -119,83 +88,13 @@ class Customer
      * eventually converted to internal language
      * and (partly or whole) accepted or rejected.
      *
-     * @param array $arrayMap
-     * @param $operator
+     * @param string $operator
      * @return array
      */
-    public function maintainMutationMap(array $arrayMap, string $operator): array
+    public function maintainMutationUnit(string $operator): array
     {
         $this->operator = $operator;
-        $uuid = $arrayMap['uuid'];
-
-        $queries = [];
-        // -------
-        $customerData = new \Commerce\CustomerData($uuid);
-        $customerData->setStatus(1);
-        $customerData->setLocale('en');
-        $customerData->setState(1);
-        $customerData->setTimezone('Europa/Amsterdam');
-        // $customerData->setCreatedAt()
-
-        $queries[\Commerce\CustomerData::class][$operator] = $customerData;
-
-        // --------
-        $userData = new \Account\UserData($uuid);
-        $userData->setUsername($arrayMap['username']);
-        $userData->setPasswd($arrayMap['password']);
-        // $userData->setRpasswd($arrayMap['rpassword']);
-
-        $queries[\Account\UserData::class][$operator] = $userData;
-
-        // --------
-        $userProfileData = new \Account\UserProfileData($uuid);
-        $userProfileData->setGender($arrayMap['gender']);
-        $userProfileData->setFullName($arrayMap['fullname']);
-        $userProfileData->setEmail($arrayMap['email']);
-        $userProfileData->setPhone($arrayMap['phone']);
-        $userProfileData->setAddress($arrayMap['address']);
-        $userProfileData->setZipcode($arrayMap['zipcode']);
-        $userProfileData->setCity($arrayMap['city']);
-        $userProfileData->setCountry($arrayMap['country']);
-        $userProfileData->setRemarks($arrayMap['remarks']);
-
-        $queries[\Account\UserProfileData::class][$operator] = $userProfileData;
-
-        // ---------
-        $creditCardData = new \Payment\CreditCardData($uuid);
-        $creditCardData->setName($arrayMap['card_name']);
-        $creditCardData->setCvc($arrayMap['card_cvc']);
-        $creditCardData->setExpiryDate($arrayMap['card_expiry_date']);
-        $creditCardData->setNumber($arrayMap['card_number']);
-        $creditCardData->setStatus(0);
-
-        $queries[\Payment\CreditCardData::class][$operator] = $creditCardData;
-
-        // ----------
-        $autoPayCC = false;
-        if (isset($arrayMap['payment']) && in_array("1", $arrayMap['payment'])) {
-            $autoPayCC = true;
-        }
-
-        $payPreference = new \Payment\PaymentPreferenceData($uuid);
-        $payPreference->setAutopay($autoPayCC);
-        $payPreference->setMethod(1);
-        $payPreference->setStatus(0);
-
-        $queries[\Payment\PaymentPreferenceData::class][$operator] = $payPreference;
-
-        // ---------
-        $notifyMonthly = 0;
-        if (isset($arrayMap['payment']) && in_array("2", $arrayMap['payment'])) {
-            $notifyMonthly = 30;
-        }
-
-        $billingNotifyData = new \Payment\BillingScheduleData($uuid);
-        $billingNotifyData->setPeriod($notifyMonthly);
-
-        $queries[\Payment\BillingScheduleData::class][$operator] = $billingNotifyData;
-
-        return $queries;
+        return $this->newUnit();
     }
 
     /**
@@ -207,74 +106,166 @@ class Customer
      * converted to internal language
      * and (partly or whole) accepted or rejected.
      *
-     * @param $uuid
-     * @param $operator
+     * @param string $operator
      * @return array
      */
-    public function maintainFormUnit($uuid, string $operator): array
+    public function maintainFormUnit(string $operator): array
     {
         $this->operator = $operator;
-        $unit = [];
+
         if ($this->operator == self::OPERATOR_FIND) {
-            $em = $this->orm()->entityManager();
-            $unit[\Commerce\CustomerData::class][$this->operator] = $em->getRepository(\Commerce\CustomerData::class)->find($uuid);
-            $unit[\Account\UserData::class][$this->operator] = $em->getRepository(\Account\UserData::class)->find($uuid);
-            $unit[\Account\UserProfileData::class][$this->operator] = $em->getRepository(\Account\UserProfileData::class)->find($uuid);
-            $unit[\Payment\CreditCardData::class][$this->operator] = $em->getRepository(\Payment\CreditCardData::class)->find($uuid);
-            $unit[\Payment\PaymentPreferenceData::class][$this->operator] = $em->getRepository(\Payment\PaymentPreferenceData::class)->find($uuid);
-            $unit[\Payment\BillingScheduleData::class][$this->operator] = $em->getRepository(\Payment\BillingScheduleData::class)->find($uuid);
+            $this->operations = $this->existingUnit();
         }
 
-        if (empty($unit)) {
-            $this->operator = self::OPERATOR_NEW;
-
-            $unit[\Commerce\CustomerData::class][$this->operator] = new \Commerce\CustomerData($uuid);
-            $unit[\Account\UserData::class][$this->operator] = new \Account\UserData($uuid);
-            $unit[\Account\UserProfileData::class][$this->operator] = new \Account\UserProfileData($uuid);
-            $unit[\Payment\CreditCardData::class][$this->operator] = new \Payment\CreditCardData($uuid);
-            $unit[\Payment\PaymentPreferenceData::class][$this->operator] = new \Payment\PaymentPreferenceData($uuid);
-            $unit[\Payment\BillingScheduleData::class][$this->operator] = new \Payment\BillingScheduleData($uuid);
+        if ($this->operator == self::OPERATOR_NEW) {
+            $this->operations = $this->newUnit();
         }
-
-        return $unit;
+        return $this->operations;
     }
 
     /**
-     *
-     * Maintain list unit lifeCycle
-     *
-     * A request, as an intent, goes trough strategical process.
-     * It will be validated, sanitized, planned (prioritized),
-     * policies applied (such as bad word policy),
-     * converted to internal language
-     * and (partly or whole) accepted or rejected.
-     *
-     * @param $uuid
-     * @param $operator
+     * @see function maintainF
+     * @param string $operator
      * @return array
      */
-    public function maintainListUnit($uuid, string $operator): array
+    public function maintainListUnit(string $operator): array
     {
         $this->operator = $operator;
-        $unit = [];
-        if ($operator == self::OPERATOR_FIND_ALL) {
+
+        if ($this->operator == self::OPERATOR_FIND_ALL) {
             $em = $this->orm()->entityManager();
-            $unit[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class)->findAll();
+            $this->operations[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class);
         }
 
-        if (empty($unit)) {
-            $this->operator = self::OPERATOR_NEW;
-            $unit[\Account\UserProfileData::class][$this->operator] = new \Account\UserProfileData($uuid);
+        if ($this->operator == self::OPERATOR_NEW) {
+            $this->operations[\Account\UserProfileData::class] = new \Account\UserProfileData(null);
         }
-        return $unit;
+        return $this->operations;
     }
 
     /**
+     * @param array $queries
+     * @param array $arrayMap
      * @return array
      */
-    public function get(): array
+    public function mutationUnitOperations(array $queries, array $arrayMap)
     {
+        $uuid = $arrayMap['uuid'];
+
+        /** @var \Commerce\CustomerData $customerData */
+        $customerData = $queries[\Commerce\CustomerData::class];
+        $customerData->setId($uuid);
+        $customerData->setStatus(1);
+        $customerData->setLocale('en');
+        $customerData->setState(1);
+        $customerData->setTimezone('Europa/Amsterdam');
+        // $customerData->setCreatedAt()
+
+        /** @var \Account\UserData $userData */
+        $userData = $queries[\Account\UserData::class];
+        $userData->setId($uuid);
+        $userData->setUsername($arrayMap['username']);
+        $userData->setPasswd($arrayMap['password']);
+        // $userData->setRpasswd($arrayMap['rpassword']);
+
+        /** @var \Account\UserProfileData $userProfileData */
+        $userProfileData = $queries[\Account\UserProfileData::class];
+        $userProfileData->setId($uuid);
+        $userProfileData->setGender($arrayMap['gender']);
+        $userProfileData->setFullName($arrayMap['fullname']);
+        $userProfileData->setEmail($arrayMap['email']);
+        $userProfileData->setPhone($arrayMap['phone']);
+        $userProfileData->setAddress($arrayMap['address']);
+        $userProfileData->setZipcode($arrayMap['zipcode']);
+        $userProfileData->setCity($arrayMap['city']);
+        $userProfileData->setCountry($arrayMap['country']);
+        $userProfileData->setRemarks($arrayMap['remarks']);
+
+
+        /** @var \Payment\CreditCardData $creditCardData */
+        $creditCardData = $queries[\Payment\CreditCardData::class];
+        $creditCardData->setId($uuid);
+        $creditCardData->setName($arrayMap['card_name']);
+        $creditCardData->setCvc($arrayMap['card_cvc']);
+        $creditCardData->setExpiryDate($arrayMap['card_expiry_date']);
+        $creditCardData->setNumber($arrayMap['card_number']);
+        $creditCardData->setStatus(0);
+
+        $autoPayCC = false;
+        if (isset($arrayMap['payment']) && in_array("1", $arrayMap['payment'])) {
+            $autoPayCC = true;
+        }
+
+        /** @var \Payment\PaymentPreferenceData $payPreference */
+        $payPreference = $queries[\Payment\PaymentPreferenceData::class];
+        $payPreference->setId($uuid);
+        $payPreference->setAutopay($autoPayCC);
+        $payPreference->setMethod(1);
+        $payPreference->setStatus(0);
+
+        $notifyMonthly = 0;
+        if (isset($arrayMap['payment']) && in_array("2", $arrayMap['payment'])) {
+            $notifyMonthly = 30;
+        }
+
+        /** @var \Payment\BillingScheduleData $billingNotifyData */
+        $billingNotifyData = $queries[\Payment\BillingScheduleData::class];
+        $billingNotifyData->setId($uuid);
+        $billingNotifyData->setPeriod($notifyMonthly);
+
+        // In context edit, when user-email already exists then use that by email matched uuid
+        $uuidByEmail = $this->findUuidByEmail($userProfileData->getEmail());
+
+        foreach ($queries as $class => $object) {
+            if (!empty($uuidByEmail)) {
+                $object->setId($uuidByEmail);
+            }
+            $this->operations[$class] = new \Statement\Operator($object, $this->operator, $this->orm());
+        }
         return $this->operations;
+    }
+
+    public function unitOperations(array $queries)
+    {
+        return $queries;
+    }
+
+    /**
+     * @param string $uuid
+     * @return array
+     */
+    public function get($uuid = ''): array
+    {
+        $results = [];
+
+        /** @var \Doctrine\ORM\EntityRepository $operation */
+        foreach ($this->operations as $class => $operation) {
+
+            if ($this->operator == self::OPERATOR_NEW) {
+                $results[$class] = $operation;
+                continue;
+            }
+
+            if ($this->operator == self::OPERATOR_FIND) {
+                $object = $operation->find($uuid);
+
+                if ($object && empty($object->getId())) {
+                    if (empty($uuid)) {
+                        $uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
+                    }
+                    $object->setId($uuid);
+                }
+                $results[$class] = $object;
+                continue;
+            }
+
+            if ($this->operator == self::OPERATOR_FIND_ALL) {
+                $results[$class] = $operation->findAll();
+                continue;
+            }
+        }
+
+        return $results;
     }
 
     /**
