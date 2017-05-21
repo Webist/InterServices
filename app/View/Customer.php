@@ -5,6 +5,8 @@ namespace View;
 
 
 use Dom\Html\Element;
+use Payment\BillingScheduleData;
+use Payment\PaymentPreferenceData;
 
 class Customer
 {
@@ -14,18 +16,34 @@ class Customer
      */
     public static function form(array $arrayMap)
     {
-        $arrayMap[\Account\UserData::class]->setProfileData($arrayMap[\Account\UserProfileData::class]);
-        $arrayMap[\Payment\CreditCardData::class]->setPaymentPreference($arrayMap[\Payment\PaymentPreferenceData::class]);
-        $arrayMap[\Payment\CreditCardData::class]->setBillingSchedule($arrayMap[\Payment\BillingScheduleData::class]);
+        $userData = $arrayMap[\Account\UserData::class];
 
-        $formContent = new Element($arrayMap[\Account\UserData::class]);
+        $userProfileData = $arrayMap[\Account\UserProfileData::class];
+        if (empty($userProfileData)) {
+            $userProfileData = new \Account\UserProfileData($userData->getId());
+        }
+        $userData->setProfileData($userProfileData);
+
+        $paymentPreference = $arrayMap[\Payment\PaymentPreferenceData::class];
+        if (empty($paymentPreference)) {
+            $paymentPreference = new PaymentPreferenceData($userData->getId());
+        }
+        $arrayMap[\Payment\CreditCardData::class]->setPaymentPreference($paymentPreference);
+
+        $billingSchedule = $arrayMap[\Payment\BillingScheduleData::class];
+        if (empty($billingSchedule)) {
+            $billingSchedule = new BillingScheduleData($userData->getId());
+        }
+        $arrayMap[\Payment\CreditCardData::class]->setBillingSchedule($billingSchedule);
+
+        $formContent = new Element($userData);
         $formContent->require(dirname(dirname(__DIR__)) . '/web/metronic/form-customer/form.php');
 
-        $account = new Element($arrayMap[\Account\UserData::class]);
+        $account = new Element($userData);
         $account->require(dirname(dirname(__DIR__)) . '/web/metronic/form-customer/account.details.php');
         $formContent->addElement(':formAccountDetails', $account);
 
-        $profile = new Element($arrayMap[\Account\UserData::class]->profileData());
+        $profile = new Element($userData->profileData());
         $profile->require(dirname(dirname(__DIR__)) . '/web/metronic/form-customer/profile.details.php');
         $formContent->addElement(':formProfileDetails', $profile);
 
@@ -33,7 +51,7 @@ class Customer
         $billing->require(dirname(dirname(__DIR__)) . '/web/metronic/form-customer/billing.details.php');
         $formContent->addElement(':formBillingDetails', $billing);
 
-        $confirm = new Element($arrayMap[\Account\UserData::class]);
+        $confirm = new Element($userData);
         $confirm->require(dirname(dirname(__DIR__)) . '/web/metronic/form-customer/confirm.details.php');
         $formContent->addElement(':confirmDetails', $confirm);
 

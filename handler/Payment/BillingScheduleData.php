@@ -22,7 +22,10 @@ class BillingScheduleData implements \App\Contract\Behave\DataObject
     /** @Column(type="datetime", name="created_at") */
     protected $createdAt;
 
-    /** @Column(type="smallint", length=65, nullable=true) */
+    /**
+     * @var integer
+     * @Column(type="smallint", length=65, nullable=true)
+     */
     protected $period;
 
     public function __construct($uuid)
@@ -76,7 +79,7 @@ class BillingScheduleData implements \App\Contract\Behave\DataObject
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getPeriod()
     {
@@ -87,7 +90,11 @@ class BillingScheduleData implements \App\Contract\Behave\DataObject
      * @param $period
      * @return $this
      */
-    public function setPeriod($period)
+    /**
+     * @param int $period
+     * @return $this
+     */
+    public function setPeriod(int $period)
     {
         $this->period = $period;
         return $this;

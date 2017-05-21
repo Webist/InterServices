@@ -29,7 +29,7 @@ class Meta
 
         $queries = $databaseService->maintainMutationMap(
             ['routeId' => $this->route['indexKey'], 'ip' => filter_input(INPUT_SERVER, 'REMOTE_ADDR')]);
-        $operations = $databaseService->prepareOperations($queries);
+        $operations = $databaseService->mutationMapOperations($queries);
         return $databaseService->mutate($operations);
     }
 

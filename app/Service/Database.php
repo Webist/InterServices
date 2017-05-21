@@ -37,13 +37,13 @@ class Database implements \App\Contract\Spec\Main
     }
 
     /**
-     * @param array $operations
+     * @param array $queries
      * @return $this
      */
-    public function prepareOperations(array $operations)
+    public function mutationMapOperations(array $queries)
     {
         $operations = [];
-        foreach ($operations as $operation) {
+        foreach ($queries as $operation) {
             $operations[] = [
                 'statement' => $this->adapter()->prepare($operation['query']),
                 'parameters' => $operation['params']

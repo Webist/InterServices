@@ -34,7 +34,7 @@ Note that vendor components are excluded.
     
     In another words, you add abstraction by applying for example by doing loose coupling  
     but not creating a class and adding the prefix abstract to it.
-+ 0 `instanceof`, `is_array`, `is_object` etc. usage
++ 0 `instanceof`, `is_array`, `is_object` etc. usage (unless `\App\Contract\Spec\Main::DEV_MODE`)
 + 0 output buffering
 
     

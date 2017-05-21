@@ -27,16 +27,13 @@ class ErrorHandler
         $this->inputHandler;
     }
 
-    /**
-     * Handle throwable
-     * @param null $traceString
-     */
-    public function handle($traceString = null)
+    public function handle()
     {
         if (!empty($_SERVER['APPLICATION_ENV']) && $_SERVER['APPLICATION_ENV'] == 'development') {
             printf('<pre>%s</pre>', $this->throwable->getMessage());
-            if ($traceString) {
-                printf('<pre>%s</pre>', $this->throwable->getTraceAsString());
+            if (\App\Contract\Spec\Main::DEV_MODE) {
+                printf('<pre>File</br> %s</pre>', $this->throwable->getFile() . ' Line:' . $this->throwable->getLine() . ' ');
+                printf('<pre>TraceString</br> %s</pre>', $this->throwable->getTraceAsString());
             }
         }
 

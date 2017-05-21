@@ -28,7 +28,7 @@ class RouteBuilder
 
     /**
      * @param bool $writeRouteFile Generates route file
-     * @return MatchContext|mixed
+     * @return MatchContext|string
      */
     public function buildRoute($writeRouteFile = false)
     {

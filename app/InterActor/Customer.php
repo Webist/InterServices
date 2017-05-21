@@ -47,8 +47,14 @@ class Customer implements \App\Contract\Spec\Customer
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
 
-        $queries = $customerService->maintainMutationMap($arrayMap);
-        $operations = $customerService->prepareOperations($queries);
+        if (empty($arrayMap['uuid'])) {
+            $operator = \Statement\Operator::CREATE;
+        } else {
+            $operator = \Statement\Operator::SET;;
+        }
+
+        $queries = $customerService->maintainMutationMap($arrayMap, $operator);
+        $operations = $customerService->mutationMapOperations($queries);
         return $customerService->mutate($operations);
     }
 
@@ -62,9 +68,9 @@ class Customer implements \App\Contract\Spec\Customer
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
 
-        $queries = $customerService->maintainFormUnit($uuid);
-        $operations = $customerService->prepareOperations($queries);
-        return $customerService->get($operations);
+        $queries = $customerService->maintainFormUnit($uuid, $customerService::OPERATOR_FIND);
+        $customerService->unitOperations($queries);
+        return $customerService->get();
     }
 
     /**
@@ -77,8 +83,9 @@ class Customer implements \App\Contract\Spec\Customer
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->container->get(self::CUSTOMER);
 
-        $queries = $customerService->maintainListUnit($uuid);
-        return $customerService->get($queries);
+        $queries = $customerService->maintainListUnit($uuid, $customerService::OPERATOR_FIND_ALL);
+        $customerService->unitOperations($queries);
+        return $customerService->get();
     }
 
 }

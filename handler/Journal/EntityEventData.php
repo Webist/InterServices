@@ -59,6 +59,7 @@ class EntityEventData
     protected $object;
 
     /**
+     * @var array
      * @Column(type="string")
      */
     protected $changeSet;
@@ -226,7 +227,7 @@ class EntityEventData
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getChangeSet()
     {
@@ -234,11 +235,10 @@ class EntityEventData
     }
 
     /**
-     * @param $changeSet
-     *
-     * @return EntityEventData
+     * @param array $changeSet
+     * @return $this
      */
-    public function setChangeSet($changeSet)
+    public function setChangeSet(array $changeSet)
     {
         $this->changeSet = serialize($changeSet);
         return $this;

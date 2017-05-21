@@ -111,7 +111,7 @@ class UserData implements \App\Contract\Behave\DataObject
     }
 
     /**
-     * @return mixed
+     * @return UserProfileData
      */
     public function profileData()
     {
@@ -119,9 +119,9 @@ class UserData implements \App\Contract\Behave\DataObject
     }
 
     /**
-     * @param mixed $profileData
+     * @param UserProfileData $profileData
      */
-    public function setProfileData($profileData)
+    public function setProfileData(UserProfileData $profileData)
     {
         $this->profileData = $profileData;
     }

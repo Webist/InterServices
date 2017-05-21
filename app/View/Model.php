@@ -26,7 +26,7 @@ class Model
 
     /**
      * @param bool $withBaseContent current template will be wrapped with baseContent
-     * @return mixed|string
+     * @return string
      */
     public function render($withBaseContent = true)
     {

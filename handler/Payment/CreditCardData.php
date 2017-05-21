@@ -28,8 +28,7 @@ class CreditCardData implements \App\Contract\Behave\DataObject
 
     /** @Column(type="string", length=8, nullable=true) */
     protected $status;
-    protected $paymentPreference;
-    protected $billingSchedule;
+
     /** @Column(type="string", length=65, nullable=true) */
     private $name;
     /** @Column(type="string", length=65, nullable=true) */
@@ -39,13 +38,18 @@ class CreditCardData implements \App\Contract\Behave\DataObject
     /** @Column(type="string", length=8, nullable=true) */
     private $expiryDate;
 
+    /** @var  $paymentPreference PaymentPreferenceData */
+    protected $paymentPreference;
+    /** @var  $billingSchedule BillingScheduleData */
+    protected $billingSchedule;
+
     public function __construct($uuid)
     {
         $this->id = $uuid;
     }
 
     /**
-     * @return mixed
+     * @return PaymentPreferenceData
      */
     public function getPaymentPreference()
     {
@@ -53,15 +57,15 @@ class CreditCardData implements \App\Contract\Behave\DataObject
     }
 
     /**
-     * @param mixed $paymentPreference
+     * @param PaymentPreferenceData $paymentPreference
      */
-    public function setPaymentPreference($paymentPreference)
+    public function setPaymentPreference(PaymentPreferenceData $paymentPreference)
     {
         $this->paymentPreference = $paymentPreference;
     }
 
     /**
-     * @return mixed
+     * @return BillingScheduleData
      */
     public function getBillingSchedule()
     {
@@ -69,9 +73,9 @@ class CreditCardData implements \App\Contract\Behave\DataObject
     }
 
     /**
-     * @param mixed $billingSchedule
+     * @param BillingScheduleData $billingSchedule
      */
-    public function setBillingSchedule($billingSchedule)
+    public function setBillingSchedule(BillingScheduleData $billingSchedule)
     {
         $this->billingSchedule = $billingSchedule;
     }

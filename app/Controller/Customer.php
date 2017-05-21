@@ -19,7 +19,8 @@ class Customer implements \App\Contract\Spec\Customer
         print 'Test the CustomerStatement data save into storage <br/>';
 
         $postData = array(
-            'uuid' => '', //'ce27bcce-f0c0-4f60-8479-52ef2e41b4f4',
+
+            'uuid' => 'ce27bcce-f0c0-4f60-8479-52ef2e41b4f4',
 
             'username' => 'John707',
             'password' => '12345',
@@ -49,8 +50,8 @@ class Customer implements \App\Contract\Spec\Customer
                     1 => '2', // Email me monthly billing
                 ),
         );
-
-        return $this->actor->postXhrArrayMap($postData);
+        // return $this->renderForm();
+        throw new \Error(var_dump($this->actor->postXhrArrayMap($postData)));
     }
 
     /**
@@ -76,7 +77,7 @@ class Customer implements \App\Contract\Spec\Customer
 
     /**
      * Entry point form request, renders Form, html data
-     * @return mixed|string
+     * @return string
      */
     public function renderForm()
     {
@@ -91,7 +92,7 @@ class Customer implements \App\Contract\Spec\Customer
 
     /**
      * Entry point list request, renders List, html data
-     * @return mixed|string
+     * @return string
      */
     public function renderList()
     {

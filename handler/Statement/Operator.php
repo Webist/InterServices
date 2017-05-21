@@ -6,7 +6,10 @@ namespace Statement;
 
 class Operator
 {
-
+    /** In context mutate, when a new record needed then create */
+    const CREATE = 'create';
+    /** In context mutate, when a record should be updated then set */
+    const SET = 'set';
     /**
      * @var \App\Contract\Behave\DataObject
      */
@@ -23,9 +26,10 @@ class Operator
      */
     private $orm;
 
-    public function __construct(\App\Contract\Behave\DataObject $dataObject, \App\Service\ORM $orm)
+    public function __construct(\App\Contract\Behave\DataObject $dataObject, $operator, \App\Service\ORM $orm)
     {
         $this->dataObject = $dataObject;
+        $this->operator = $operator;
         $this->orm = $orm;
     }
 
@@ -66,7 +70,7 @@ class Operator
      */
     public function persist()
     {
-        if (!empty($data = $this->foundData())) {
+        if ($this->operator == self::SET || !empty($data = $this->foundData())) {
             $this->dataObject->setCreatedAt($data->getCreatedAt());
             $this->orm->entityManager()->merge($this->dataObject);
         } else {

@@ -68,7 +68,7 @@ class Mailer
                     $query->setId($uuid);
                 }
                 // Save into database
-                $operations[\Mail\EmailData::class] = new \Statement\Operator($query, $this->orm());
+                $operations[\Mail\EmailData::class] = new \Statement\Operator($query, \Statement\Operator::CREATE, $this->orm());
                 // Send mail
                 $operations[\Mail\EmailSend::class] = new \Mail\EmailSend($query);
             }
