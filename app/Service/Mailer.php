@@ -31,7 +31,7 @@ class Mailer
     private $orm;
 
     /**
-     * @return ORM
+     * @return \Connector\ORM
      */
     private function orm()
     {
@@ -114,12 +114,12 @@ class Mailer
         $returnValue = new \Statement\ReturnValue();
 
         /** @var \Statement\Operation $operation */
-        foreach ($operations as $operation => $operation) {
+        foreach ($operations as $class => $operation) {
 
             if (!$operation->execute()) {
-                $returnValue->addFailureError($operation);
+                $returnValue->addFailureError($class);
             } else {
-                $returnValue->addSucceedMessage($operation);
+                $returnValue->addSucceedMessage($class);
             }
             $returnValue->setUuid($operation->data()->getId());
         }
