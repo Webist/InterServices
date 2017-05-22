@@ -60,11 +60,6 @@ class EmailData implements \App\Contract\Behave\DataObject
     private $headers;
 
 
-    public function __construct($uuid)
-    {
-        $this->id = $uuid;
-    }
-
     /**
      * Get id
      *

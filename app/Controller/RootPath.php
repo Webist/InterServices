@@ -21,7 +21,7 @@ class RootPath implements \App\Contract\Spec\RootPath
     public function renderPage()
     {
         $view = new \View\Model(
-            \View\RootPath::page($this->actor->contentArrayMap()),
+            \View\RootPath::page($this->actor->contentUnit()),
             $this->actor->meta()->routeArrayMap()
         );
         return $view->render(false);
@@ -42,7 +42,7 @@ class RootPath implements \App\Contract\Spec\RootPath
      */
     public function addPostXhrEmail()
     {
-        $returnValue = $this->actor->emailArrayMap(filter_input_array(INPUT_POST));
+        $returnValue = $this->actor->emailReturnValue(filter_input_array(INPUT_POST));
 
         return json_encode(
             [

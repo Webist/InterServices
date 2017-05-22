@@ -1,5 +1,7 @@
 #### Storage env 
 
+Infrastructure.
+
 Saved, and mostly generated, data to reuse.  
 
 + meta data - such as platform, route information -

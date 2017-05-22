@@ -19,9 +19,3 @@ These data structures are description of body's.
 #### Specific Source Schema's
 A source schema would be a 1 to 1 reflection of an entity.
 
-
-```
-Anecdote:  
-CQRS seggrates command and query.
-Taking this concept to further level is segragating Event and Source.
-```

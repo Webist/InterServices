@@ -38,7 +38,7 @@ class RootPath implements \App\Contract\Spec\RootPath
     /**
      * @return array
      */
-    public function contentArrayMap()
+    public function contentUnit()
     {
         return [];
     }
@@ -48,7 +48,7 @@ class RootPath implements \App\Contract\Spec\RootPath
      * @param array $arrayMap
      * @return \Statement\ReturnValue
      */
-    public function emailArrayMap(array $arrayMap): \Statement\ReturnValue
+    public function emailReturnValue(array $arrayMap): \Statement\ReturnValue
     {
         \Assert\Assertion::notEmpty($arrayMap);
         \Assert\Assertion::email($arrayMap['email']);
@@ -60,8 +60,9 @@ class RootPath implements \App\Contract\Spec\RootPath
 
         /** @var \App\Service\Mailer $mailerService */
         $mailerService = $this->container->get(self::MAILER);
-        $queries = $mailerService->maintainMutationUnit($arrayMap);
-        $operations = $mailerService->mutationUnitOperations($queries);
+
+        $queries = $mailerService->maintainReturnValueUnit($mailerService::OPERATOR_PERSIST);
+        $operations = $mailerService->returnValueOperations($queries, $arrayMap);
         $result = $mailerService->mutate($operations);
 
         // Extra feature, create customer form an incoming email without breaking the mail process
@@ -84,8 +85,8 @@ class RootPath implements \App\Contract\Spec\RootPath
 
             /** @var \App\Service\Customer $customerService */
             $customerService = $this->container->get(self::CUSTOMER);
-            $queries = $customerService->maintainMutationUnit(\Statement\Operator::CREATE);
-            $operations = $customerService->mutationUnitOperations($queries, $arrayMap);
+            $queries = $customerService->maintainReturnValueUnit($customerService::OPERATOR_PERSIST);
+            $operations = $customerService->returnValueOperations($queries, $arrayMap);
             $customerService->mutate($operations);
 
         } catch (\Exception $exception) {

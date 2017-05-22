@@ -39,7 +39,7 @@ class Customer implements \App\Contract\Spec\Customer
      * @param $arrayMap
      * @return \Statement\ReturnValue
      */
-    public function postXhrArrayMap(array $arrayMap): \Statement\ReturnValue
+    public function postXhrReturnValue(array $arrayMap): \Statement\ReturnValue
     {
         \Assert\Assertion::keyExists($arrayMap, 'uuid');
         \Assert\Assertion::email($arrayMap['email']);
@@ -48,13 +48,13 @@ class Customer implements \App\Contract\Spec\Customer
         $customerService = $this->container->get(self::CUSTOMER);
 
         if (empty($arrayMap['uuid'])) {
-            $operator = \Statement\Operator::CREATE;
+            $operator = $customerService::OPERATOR_PERSIST;
         } else {
-            $operator = \Statement\Operator::SET;
+            $operator = $customerService::OPERATOR_MERGE;
         }
 
-        $queries = $customerService->maintainMutationUnit($operator);
-        $operations = $customerService->mutationUnitOperations($queries, $arrayMap);
+        $returnValueUnit = $customerService->maintainReturnValueUnit($operator);
+        $operations = $customerService->returnValueOperations($returnValueUnit, $arrayMap);
         return $customerService->mutate($operations);
     }
 

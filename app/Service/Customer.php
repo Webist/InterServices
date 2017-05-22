@@ -3,10 +3,28 @@
 namespace App\Service;
 
 
+/**
+ *
+ * Domain-centric domain service.
+ * This means communications are with a persistence layer.
+ * Model and relations live in application via object orientation.
+ *
+ * LifeCycle of units
+ *
+ * Maintaining the lifeCycle of a request, as an intent, goes trough strategical process.
+ * It will be validated, sanitized, planned (prioritized),
+ * policies applied (such as bad word policy),
+ * eventually converted to internal language
+ * and (partly or whole) accepted or rejected.
+ *
+ *
+ * Class Customer
+ * @package App\Service
+ */
 class Customer
 {
     /**
-     * @var \App\Service\ORM
+     * @var \Connector\ORM
      */
     private $orm;
 
@@ -22,11 +40,17 @@ class Customer
      */
     private $operator;
 
-    /** In context fetch, when no data (from storage) then create a new unit */
-    const OPERATOR_NEW = 'new';
+    /** In context mutate, when array map then persist (insert) a new unit into the store */
+    const OPERATOR_PERSIST = \Statement\Operation::PERSIST;
+    /** In context mutate, when array map then merge (update) a new unit into the store, uuid required  */
+    const OPERATOR_MERGE = \Statement\Operation::MERGE;
 
-    const OPERATOR_FIND = 'find';
+    /** In context fetch, when no input (e.g. uuid) provided then compose a new unit, so that a new item can be created */
+    const OPERATOR_NEW = 'new';
+    /** In context fetch, when no filter (e.g. uuid) was provided then find all records */
     const OPERATOR_FIND_ALL = 'findAll';
+    /** In context fetch, when uuid is provided then find by that id, so that the item can be modified */
+    const OPERATOR_FIND = 'find';
 
     /**
      * @return ORM
@@ -34,34 +58,64 @@ class Customer
     private function orm()
     {
         if ($this->orm === null) {
-            $this->orm = new \App\Service\ORM();
+            $this->orm = new \Connector\ORM();
         }
         return $this->orm;
     }
 
-    private function newUnit()
+    /**
+     * @param $operator
+     * @return $this
+     */
+    private function operator($operator)
+    {
+        $this->operator = $operator;
+        return $this;
+    }
+
+    private function returnValueUnit()
     {
         $unit = [];
-        $uuid = null;
-        $unit[\Commerce\CustomerData::class] = new \Commerce\CustomerData($uuid);
-        $unit[\Account\UserData::class] = new \Account\UserData($uuid);
-        $unit[\Account\UserProfileData::class] = new \Account\UserProfileData($uuid);
-        $unit[\Payment\CreditCardData::class] = new \Payment\CreditCardData($uuid);
-        $unit[\Payment\PaymentPreferenceData::class] = new \Payment\PaymentPreferenceData($uuid);
-        $unit[\Payment\BillingScheduleData::class] = new \Payment\BillingScheduleData($uuid);
+        $unit[\Commerce\CustomerData::class] = new \Commerce\CustomerData();
+        $unit[\Account\UserData::class] = new \Account\UserData();
+        $unit[\Account\UserProfileData::class] = new \Account\UserProfileData();
+        $unit[\Payment\CreditCardData::class] = new \Payment\CreditCardData();
+        $unit[\Payment\PaymentPreferenceData::class] = new \Payment\PaymentPreferenceData();
+        $unit[\Payment\BillingScheduleData::class] = new \Payment\BillingScheduleData();
         return $unit;
     }
 
-    private function existingUnit()
+    private function formUnit()
+    {
+        if ($this->operator == self::OPERATOR_NEW) {
+            return $this->returnValueUnit();
+        }
+
+        if ($this->operator == self::OPERATOR_FIND) {
+            $unit = [];
+            $em = $this->orm()->entityManager();
+            $unit[\Commerce\CustomerData::class] = $em->getRepository(\Commerce\CustomerData::class);
+            $unit[\Account\UserData::class] = $em->getRepository(\Account\UserData::class);
+            $unit[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class);
+            $unit[\Payment\CreditCardData::class] = $em->getRepository(\Payment\CreditCardData::class);
+            $unit[\Payment\PaymentPreferenceData::class] = $em->getRepository(\Payment\PaymentPreferenceData::class);
+            $unit[\Payment\BillingScheduleData::class] = $em->getRepository(\Payment\BillingScheduleData::class);
+            return $unit;
+        }
+    }
+
+    private function listUnit()
     {
         $unit = [];
-        $em = $this->orm()->entityManager();
-        $unit[\Commerce\CustomerData::class] = $em->getRepository(\Commerce\CustomerData::class);
-        $unit[\Account\UserData::class] = $em->getRepository(\Account\UserData::class);
-        $unit[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class);
-        $unit[\Payment\CreditCardData::class] = $em->getRepository(\Payment\CreditCardData::class);
-        $unit[\Payment\PaymentPreferenceData::class] = $em->getRepository(\Payment\PaymentPreferenceData::class);
-        $unit[\Payment\BillingScheduleData::class] = $em->getRepository(\Payment\BillingScheduleData::class);
+        if ($this->operator == self::OPERATOR_FIND_ALL) {
+            $em = $this->orm()->entityManager();
+            $unit[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class);
+        }
+
+        if ($this->operator == self::OPERATOR_NEW) {
+            $unit[\Account\UserProfileData::class] = new \Account\UserProfileData();
+        }
+
         return $unit;
     }
 
@@ -82,65 +136,32 @@ class Customer
     /**
      * Maintain mutation unit lifeCycle
      *
-     * Maintaining the lifeCycle of a request, as an intent, goes trough strategical process.
-     * It will be validated, sanitized, planned (prioritized),
-     * policies applied (such as bad word policy),
-     * eventually converted to internal language
-     * and (partly or whole) accepted or rejected.
-     *
      * @param string $operator
      * @return array
      */
-    public function maintainMutationUnit(string $operator): array
+    public function maintainReturnValueUnit(string $operator): array
     {
-        $this->operator = $operator;
-        return $this->newUnit();
+        return $this->operator($operator)->returnValueUnit();
     }
 
     /**
      * Maintain form unit lifeCycle
-     *
-     * A request, as an intent, goes trough strategical process.
-     * It will be validated, sanitized, planned (prioritized),
-     * policies applied (such as bad word policy),
-     * converted to internal language
-     * and (partly or whole) accepted or rejected.
      *
      * @param string $operator
      * @return array
      */
     public function maintainFormUnit(string $operator): array
     {
-        $this->operator = $operator;
-
-        if ($this->operator == self::OPERATOR_FIND) {
-            $this->operations = $this->existingUnit();
-        }
-
-        if ($this->operator == self::OPERATOR_NEW) {
-            $this->operations = $this->newUnit();
-        }
-        return $this->operations;
+        return $this->operations = $this->operator($operator)->formUnit();
     }
 
     /**
-     * @see function maintainF
      * @param string $operator
      * @return array
      */
     public function maintainListUnit(string $operator): array
     {
-        $this->operator = $operator;
-
-        if ($this->operator == self::OPERATOR_FIND_ALL) {
-            $em = $this->orm()->entityManager();
-            $this->operations[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class);
-        }
-
-        if ($this->operator == self::OPERATOR_NEW) {
-            $this->operations[\Account\UserProfileData::class] = new \Account\UserProfileData(null);
-        }
-        return $this->operations;
+        return $this->operations = $this->operator($operator)->listUnit();
     }
 
     /**
@@ -148,7 +169,7 @@ class Customer
      * @param array $arrayMap
      * @return array
      */
-    public function mutationUnitOperations(array $queries, array $arrayMap)
+    public function returnValueOperations(array $queries, array $arrayMap)
     {
         $uuid = $arrayMap['uuid'];
 
@@ -220,14 +241,9 @@ class Customer
             if (!empty($uuidByEmail)) {
                 $object->setId($uuidByEmail);
             }
-            $this->operations[$class] = new \Statement\Operator($object, $this->operator, $this->orm());
+            $this->operations[$class] = new \Statement\Operation($object, $this->operator, $this->orm());
         }
         return $this->operations;
-    }
-
-    public function unitOperations(array $queries)
-    {
-        return $queries;
     }
 
     /**
@@ -236,15 +252,13 @@ class Customer
      */
     public function get($uuid = ''): array
     {
-        $results = [];
+        if ($this->operator == self::OPERATOR_NEW) {
+            return $this->operations;
+        }
 
+        $results = [];
         /** @var \Doctrine\ORM\EntityRepository $operation */
         foreach ($this->operations as $class => $operation) {
-
-            if ($this->operator == self::OPERATOR_NEW) {
-                $results[$class] = $operation;
-                continue;
-            }
 
             if ($this->operator == self::OPERATOR_FIND) {
                 $object = $operation->find($uuid);
@@ -270,11 +284,11 @@ class Customer
 
     /**
      * @param array $operations
-     * @return \Statement\Statement
+     * @return \Statement\Operator
      */
     public function mutate(array $operations)
     {
-        $statement = new \Statement\Statement($operations, new \Statement\ReturnValue());
+        $statement = new \Statement\Operator($operations, new \Statement\ReturnValue());
         return $statement->execute();
     }
 }

@@ -52,11 +52,6 @@ class CustomerData implements \App\Contract\Behave\DataObject
      */
     private $locale;
 
-    public function __construct($uuid)
-    {
-        $this->id = $uuid;
-    }
-
     /**
      * Get id
      *

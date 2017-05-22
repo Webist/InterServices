@@ -11,12 +11,15 @@ namespace Mail;
 class EmailAuthorize
 {
     private $messages = [
-        'isBlackListed' => ['error' => 'Given eMail %s is blacklisted'],
-        'isDnsRecord' => ['error' => 'Given eMail %s has no valid DNS']
+        'isInvalidInput' => ['error' => 'eMail `%s` is invalid'],
+        'isBlackListed' => ['error' => 'eMail `%s` is blacklisted'],
+        'isDnsRecord' => ['error' => 'eMail `%s` has no valid DNS']
     ];
-    private $email;
 
-    public function __construct($email)
+    /** @var string */
+    private $email = '';
+
+    public function setEmail($email)
     {
         $this->email = $email;
     }
@@ -35,8 +38,11 @@ class EmailAuthorize
 
     public function execute()
     {
+        if (emtpy(trim($this->email))) {
+            throw new \Exception(sprintf($this->messages['isInvalidInput']['error'], $this->email));
+        }
         if ($this->isBlackListed()) {
-            throw new \Exception(sprintf($this->messages['blacklisted']['error'], $this->email));
+            throw new \Exception(sprintf($this->messages['isBlackListed']['error'], $this->email));
         }
 
         if (!$this->isDnsRecord()) {

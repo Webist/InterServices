@@ -59,11 +59,6 @@ class UserData implements \App\Contract\Behave\DataObject
      */
     protected $profileData;
 
-    public function __construct($uuid)
-    {
-        $this->id = $uuid;
-    }
-
     /**
      * Get id
      *

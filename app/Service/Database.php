@@ -2,7 +2,14 @@
 
 namespace App\Service;
 
-
+/**
+ * Data-centric domain service.
+ * This means communications are done with a database.
+ * Model and Relations live in database via join, stored procedures.
+ *
+ * Class Database
+ * @package App\Service
+ */
 class Database implements \App\Contract\Spec\Main
 {
     /**

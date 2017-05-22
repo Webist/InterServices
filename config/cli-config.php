@@ -16,5 +16,5 @@ class enumString {
 \Doctrine\DBAL\Types\Type::addType('enum', 'enumString');
  */
 
-$orm = new App\Service\ORM();
+$orm = new Connector\ORM();
 return ConsoleRunner::createHelperSet($orm->entityManager());

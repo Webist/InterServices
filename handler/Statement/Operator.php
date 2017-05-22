@@ -6,79 +6,38 @@ namespace Statement;
 
 class Operator
 {
-    /** In context mutate, when a new record needed then create */
-    const CREATE = 'create';
-    /** In context mutate, when a record should be updated then set */
-    const SET = 'set';
-    /**
-     * @var \App\Contract\Behave\DataObject
-     */
-    private $dataObject;
+    private $operations;
 
-    /**
-     * Enables the feature multiple times persisting before flushing.
-     * @var bool
-     */
-    private $persisted = false;
-
-    /**
-     * @var \App\Service\ORM
-     */
-    private $orm;
-
-    public function __construct(\App\Contract\Behave\DataObject $dataObject, $operator, \App\Service\ORM $orm)
+    public function __construct(array $operations, \Statement\ReturnValue $returnValue)
     {
-        $this->dataObject = $dataObject;
-        $this->operator = $operator;
-        $this->orm = $orm;
+        $this->operations = $operations;
+        $this->returnValue = $returnValue;
     }
 
     /**
-     * Hydrates data from data store
-     * @usage UPDATE
+     * @param bool $persistOnly
+     * @return \Statement\ReturnValue
      */
-    public function hydrate()
-    {
-        return $this->dataObject = $this->foundData();
-    }
-
-    public function foundData()
-    {
-        if ($this->dataObject->getId()) {
-            $repo = $this->orm->entityManager()->getRepository(get_class($this->data()));
-            return $repo->find($this->dataObject->getId());
-        }
-        return $this->dataObject;
-    }
-
-    public function data()
-    {
-        return $this->dataObject;
-    }
-
     public function execute($persistOnly = false)
     {
-        if (!$persistOnly && !$this->persisted) {
-            $this->persist();
+        $operations = $this->operations();
+
+        /** @var \Statement\Operation $operation */
+        foreach ($operations as $operation) {
+
+            if (!$operation->execute($persistOnly)) {
+                $this->returnValue->addFailureError(get_class($operation->data()));
+            } else {
+                $this->returnValue->addSucceedMessage(get_class($operation->data()));
+            }
+            $this->returnValue->setUuid($operation->data()->getId());
         }
-        $this->orm->entityManager()->flush();
-        return $this->orm->entityManager()->contains($this->dataObject);
+
+        return $this->returnValue;
     }
 
-    /**
-     * @return $this
-     */
-    public function persist()
+    public function operations()
     {
-        $data = $this->foundData();
-        // $this->operator == self::SET ||
-        if (!empty($data)) {
-            $this->dataObject->setCreatedAt($data->getCreatedAt());
-            $this->orm->entityManager()->merge($this->dataObject);
-        } else {
-            $this->orm->entityManager()->persist($this->dataObject);
-        }
-        $this->persisted = true;
-        return $this;
+        return $this->operations;
     }
 }

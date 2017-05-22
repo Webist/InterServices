@@ -43,11 +43,6 @@ class CreditCardData implements \App\Contract\Behave\DataObject
     /** @var  $billingSchedule BillingScheduleData */
     protected $billingSchedule;
 
-    public function __construct($uuid)
-    {
-        $this->id = $uuid;
-    }
-
     /**
      * @return PaymentPreferenceData
      */

@@ -51,7 +51,7 @@ class Customer implements \App\Contract\Spec\Customer
                 ),
         );
         // return $this->renderForm();
-        throw new \Error(var_dump($this->actor->postXhrArrayMap($postData)));
+        throw new \Error(var_dump($this->actor->postXhrReturnValue($postData)));
     }
 
     /**
@@ -60,7 +60,7 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function addPostXhr()
     {
-        $returnValue = $this->actor->postXhrArrayMap(filter_input_array(INPUT_POST));
+        $returnValue = $this->actor->postXhrReturnValue(filter_input_array(INPUT_POST));
 
         return json_encode(
             [
@@ -81,10 +81,10 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function renderForm()
     {
-        $formData = $this->actor->formUnit($this->inputHandler->parameter('uuid'));
+        $formUnit = $this->actor->formUnit($this->inputHandler->parameter('uuid'));
 
         $view = new \View\Model(
-            \View\Customer::form($formData),
+            \View\Customer::form($formUnit),
             $this->actor->meta()->routeArrayMap()
         );
         return $view->render();
@@ -96,8 +96,10 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function renderList()
     {
+        $listUnit = $this->actor->listUnit();
+
         $view = new \View\Model(
-            \View\Customer::list($this->actor->listUnit()),
+            \View\Customer::list($listUnit),
             $this->actor->meta()->routeArrayMap()
         );
         return $view->render();

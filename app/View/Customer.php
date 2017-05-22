@@ -20,19 +20,22 @@ class Customer
 
         $userProfileData = $arrayMap[\Account\UserProfileData::class];
         if (empty($userProfileData)) {
-            $userProfileData = new \Account\UserProfileData($userData->getId());
+            $userProfileData = new \Account\UserProfileData();
+            $userProfileData->setId($userData->getId());
         }
         $userData->setProfileData($userProfileData);
 
         $paymentPreference = $arrayMap[\Payment\PaymentPreferenceData::class];
         if (empty($paymentPreference)) {
-            $paymentPreference = new PaymentPreferenceData($userData->getId());
+            $paymentPreference = new PaymentPreferenceData();
+            $paymentPreference->setId($userData->getId());
         }
         $arrayMap[\Payment\CreditCardData::class]->setPaymentPreference($paymentPreference);
 
         $billingSchedule = $arrayMap[\Payment\BillingScheduleData::class];
         if (empty($billingSchedule)) {
-            $billingSchedule = new BillingScheduleData($userData->getId());
+            $billingSchedule = new BillingScheduleData();
+            $billingSchedule->setId($userData->getId());
         }
         $arrayMap[\Payment\CreditCardData::class]->setBillingSchedule($billingSchedule);
 

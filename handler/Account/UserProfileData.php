@@ -74,11 +74,6 @@ class UserProfileData implements \App\Contract\Behave\DataObject
     private $remarks;
 
 
-    public function __construct($uuid)
-    {
-        $this->id = $uuid;
-    }
-
     /**
      * Get id
      *
@@ -96,7 +91,7 @@ class UserProfileData implements \App\Contract\Behave\DataObject
      *
      * @return UserProfileData
      */
-    public function setId(string $id)
+    public function setId($id)
     {
         $this->id = (string)$id;
 

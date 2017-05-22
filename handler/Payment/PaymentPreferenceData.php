@@ -36,10 +36,6 @@ class PaymentPreferenceData implements \App\Contract\Behave\DataObject
     /** @Column(name="auto_pay", type="boolean", nullable=true) */
     protected $autoPay;
 
-    public function __construct($uuid)
-    {
-        $this->id = $uuid;
-    }
 
     /**
      * Get id

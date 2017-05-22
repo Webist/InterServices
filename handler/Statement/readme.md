@@ -1,10 +1,8 @@
-#### Statement handlers
+#### Operation - Statement handlers 
 
-+ Adapter
-Connection to database
-
-+ EntityManager
-ORM 
++ Operation
+Description Operation or Statement
 
 + Operator
-Statement executor
+Executor Operation or Statement 
+
