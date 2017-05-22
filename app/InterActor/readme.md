@@ -1,4 +1,4 @@
-### InterActor
+### InterActor - Gateway
 
 An InterActor is a controller specific activity manager.  
 Every controller should have its handler representation in this directory.
