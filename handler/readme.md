@@ -8,7 +8,6 @@ These services are mostly used by [Application services](../app/Service/readme.m
 + Infrastructure 
   + Http\Routing\RouteHandler
   + App\Storage\Meta
-  + Exceptions\Customer
 
 + Persistence layer access 
   + Connector\Database

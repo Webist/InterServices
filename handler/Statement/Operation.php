@@ -13,7 +13,7 @@ class Operation
     const MERGE = 'merge';
 
     /**
-     * @var \App\Contract\Behave\DataObject
+     * @var \Statement\DataObject
      */
     private $dataObject;
 
@@ -29,7 +29,7 @@ class Operation
      */
     private $orm;
 
-    public function __construct(\App\Contract\Behave\DataObject $dataObject, $operator, \Connector\ORM $orm)
+    public function __construct(\Statement\DataObject $dataObject, $operator, \Connector\ORM $orm)
     {
         $this->dataObject = $dataObject;
         $this->operator = $operator;

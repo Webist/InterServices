@@ -36,14 +36,18 @@ Activities are handled by methods to interact with an InterActor Manager, option
 #### Model Layer
 The model layer is responsible for the InterAction and the LifeCycle of the business logic.  
 
-A model by default hosts a meta information provider and a Service-Container.  
+An InterActor by default hosts a infrastructure, as meta, information provider and a service provider (c.q. service-container).  
 
 
-By analogy, a model consists of one or multiple Managers.
-An InterAction Manager takes care of regulation and might aggregate multiple Service Managers.  
-
-A Service Manager, in collaboration with an InterAction Manager, takes care of the operations, 
-such as creating statements by commands and queries, followed by execute or let it execute by a persistence layer.
+By analogy, an InterActor is a maintaining manager that interacts with service delivery frameworks.
+InterActor has the role of regulator and therefore it aggregates multiple services 
+to provide information either towards controller, infrastructure or application service. 
+  
+An application service is a provider of a unit and operations for use case's within a certain domain.  
+Note that the word `a unit` in previous sentence matches the model within an application service.  
+ 
+A typical application service is a domain model layer responsible for the operations such as creating statements 
+by commands and queries for that specific domain, followed by execute or let it execute by a persistence layer.
  
 #### View Layer
 The view layer provides composition tools such as a DOM builder for HTML, XML output.  

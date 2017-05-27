@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Contract\Behave;
+namespace Statement;
 
 
 interface DataObject

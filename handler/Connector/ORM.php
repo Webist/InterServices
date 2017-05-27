@@ -53,6 +53,7 @@ class ORM implements \App\Contract\Spec\ORM
 
     /**
      * @return \Doctrine\ORM\EntityManager
+     * @throws \Exception
      */
     public function entityManager()
     {
@@ -61,9 +62,18 @@ class ORM implements \App\Contract\Spec\ORM
             $this->setConfig(self::ORM_PATH_TO_ENTITY_FILES, self::ORM_DEV_MODE);
             $this->setEventListener(new \Journal\EntityEvent());
 
-            $db = new \Connector\Database();
-            $credentials = $db->credentials(dirname(dirname(__DIR__)) . '/app/Contract/Spec/.private.inc',
-                self::DATABASE_RELATIONAL);
+            $connector = new \Connector\Database();
+
+            $credentialsFile = dirname(dirname(__DIR__)) . '/app/Contract/Spec/.private.inc';
+            if (!file_exists($credentialsFile)) {
+                throw new \Exception(sprintf('Not found, file `%s` for %s ', $credentialsFile, __METHOD__));
+            }
+
+            if (false === ($credentials = @file_get_contents($credentialsFile))) {
+                throw new \Exception(sprintf('Could not get content, file `%s` for %s ', $credentialsFile, __METHOD__));
+            }
+
+            $credentials = $connector->credentials($credentials, self::DATABASE_RELATIONAL);
 
             return $this->em = $this->getEntityManager(
                 [

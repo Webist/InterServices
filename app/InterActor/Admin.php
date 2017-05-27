@@ -3,7 +3,7 @@
 namespace App\InterActor;
 
 
-class Admin implements \App\Contract\Spec\Admin
+class Admin implements \App\Contract\Spec\Admin, \App\Contract\Behave\InterActor
 {
     /**
      * Holds route, input information and access to generic handler
@@ -12,14 +12,18 @@ class Admin implements \App\Contract\Spec\Admin
     private $meta;
 
     /**
-     * Provides instantiation of defined class
-     * @var \App\Service\Container
+     * @var App
      */
-    private $container;
+    private $app;
 
-    public function __construct(\App\Storage\Meta $meta, \App\Service\Container $container)
+    /**
+     * RootPath constructor.
+     * @param \App\Storage\Meta $meta
+     * @param App $app
+     */
+    public function __construct(\App\Storage\Meta $meta, \App\InterActor\App $app)
     {
         $this->meta = $meta;
-        $this->container = $container;
+        $this->app = $app;
     }
 }

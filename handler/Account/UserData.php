@@ -9,7 +9,7 @@ namespace Account;
  * @Table(name="users")
  * @HasLifecycleCallbacks()
  **/
-class UserData implements \App\Contract\Behave\DataObject
+class UserData implements \Statement\DataObject
 {
     /**
      * @Id

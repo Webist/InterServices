@@ -10,7 +10,7 @@ namespace Account;
  * @Table(name="user_profiles")
  * @HasLifecycleCallbacks()
  **/
-class UserProfileData implements \App\Contract\Behave\DataObject
+class UserProfileData implements \Statement\DataObject
 {
     /**
      * @Id

@@ -23,7 +23,8 @@ class Dispatcher implements ResolverInterface, DispatcherInterface
 
             case self::DELIVERY_MODEL_SIMPLE :
                 $delivery = new \Delivery\Simple;
-                return $delivery($route, $route[self::CLASS_FIELD_NAME]);
+                return $delivery(
+                    $route, $route[self::CLASS_FIELD_NAME]);
 
             case self::DELIVERY_MODEL_MVC :
                 $delivery = new \Delivery\MVC;
@@ -38,7 +39,6 @@ class Dispatcher implements ResolverInterface, DispatcherInterface
                     $route[self::CLASS_FIELD_NAME],
                     $route[self::CLASS_HANDLER_NAME],
                     $route[self::CLASS_ACTION_FIELD_NAME],
-                    $route,
                     $this->inputHandler
                 );
 

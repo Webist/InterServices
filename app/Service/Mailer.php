@@ -23,12 +23,19 @@ namespace App\Service;
  */
 class Mailer
 {
+    private $orm;
+
+    /**
+     * Collection operations
+     * @var array
+     */
+    private $operations = [];
 
     private $operator;
     /** In context mutate, when a new record needed to be created */
     const OPERATOR_PERSIST = \Statement\Operation::PERSIST;
 
-    private $orm;
+    const EMAIL_TO = 'info@example.com';
 
     /**
      * @return \Connector\ORM
@@ -42,6 +49,23 @@ class Mailer
     }
 
     /**
+     * @param $operator
+     * @return $this
+     */
+    private function operator($operator)
+    {
+        $this->operator = $operator;
+        return $this;
+    }
+
+    private function returnValueUnit()
+    {
+        $unit = [];
+        $unit[\Mail\EmailAuthorize::class] = new \Mail\EmailAuthorize();
+        $unit[\Mail\EmailData::class] = new \Mail\EmailData();
+        return $unit;
+    }
+    /**
      * Maintain array map, build queries array, lifeCycle
      *
      * @param array $arrayMap
@@ -54,11 +78,7 @@ class Mailer
      */
     public function maintainReturnValueUnit($operator): array
     {
-        $this->operator = $operator;
-        $queries = [];
-        $queries[\Mail\EmailAuthorize::class] = new \Mail\EmailAuthorize();
-        $queries[\Mail\EmailData::class] = new \Mail\EmailData();
-        return $queries;
+        return $this->operator($operator)->returnValueUnit();
     }
 
     /**
@@ -68,12 +88,11 @@ class Mailer
      */
     public function returnValueOperations(array $queries, array $arrayMap): array
     {
-        $operations = [];
-
         $authorize = $queries[\Mail\EmailAuthorize::class];
         $authorize->setEmail($arrayMap['email']);
 
-        $operations[\Mail\EmailAuthorize::class] = $authorize;
+        // Validate email
+        $this->operations[\Mail\EmailAuthorize::class] = $authorize;
 
         /** @var \Mail\EmailData $emailData */
         $emailData = $queries[\Mail\EmailData::class];
@@ -95,13 +114,13 @@ class Mailer
                     $query->setId(uniqid());
                 }
                 // Save into database
-                $operations[\Mail\EmailData::class] = new \Statement\Operation($query, \Statement\Operation::PERSIST, $this->orm());
+                $this->operations[\Mail\EmailData::class] = new \Statement\Operation($query, \Statement\Operation::PERSIST, $this->orm());
                 // Send mail
-                $operations[\Mail\EmailSend::class] = new \Mail\EmailSend($query);
+                $this->operations[\Mail\EmailSend::class] = new \Mail\EmailSend($query);
             }
 
         }
-        return $operations;
+        return $this->operations;
     }
 
     /**

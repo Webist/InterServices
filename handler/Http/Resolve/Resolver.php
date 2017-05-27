@@ -9,25 +9,26 @@ class Resolver implements ResolverInterface, RoutingInterface
 {
     private $routeHandler;
 
-    private $nameServer;
+    private $interActor;
 
-    public function __construct(\Http\Routing\RouteHandler $routeHandler, NameServer $nameServer)
+    public function __construct(\Http\Routing\RouteHandler $routeHandler, \App\InterActor\App $interActor)
     {
         $this->routeHandler = $routeHandler;
-        $this->nameServer = $nameServer;
+        $this->interActor = $interActor;
     }
 
     public function handle()
     {
         $route = $this->routeHandler->handle();
 
+        $route[self::HANDLER_FIELD_NAME] = $this->interActor->controllerInterActor($route[self::HANDLER_FIELD_NAME], $route);
+
         if($route[self::DELIVERY_NAME] == self::DELIVERY_MODEL_SIMPLE) {
             return $route;
         }
 
-        $route[self::CLASS_FIELD_NAME] = $this->nameServer->getClassName($route[self::CLASS_FIELD_NAME]);
-        $route[self::INTER_FIELD_NAME] = $this->nameServer->getInterfaceName($route[self::INTER_FIELD_NAME]);
-        $route[self::HANDLER_FIELD_NAME] = $this->nameServer->getHandlerName($route[self::HANDLER_FIELD_NAME]);
+        $route[self::CLASS_FIELD_NAME] = $this->interActor->controllerClassName($route[self::CLASS_FIELD_NAME]);
+        $route[self::INTER_FIELD_NAME] = $this->interActor->controllerInterFaceName($route[self::INTER_FIELD_NAME]);
 
         return $route;
     }

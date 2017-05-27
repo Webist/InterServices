@@ -3,7 +3,7 @@
 namespace App\InterActor;
 
 
-class RootPath implements \App\Contract\Spec\RootPath
+class RootPath implements \App\Contract\Spec\RootPath, \App\Contract\Behave\InterActor
 {
     /**
      * Holds route, input information and access to generic handler
@@ -12,19 +12,19 @@ class RootPath implements \App\Contract\Spec\RootPath
     private $meta;
 
     /**
-     * @var \App\Service\Container
+     * @var App
      */
-    private $container;
+    private $app;
 
     /**
      * RootPath constructor.
      * @param \App\Storage\Meta $meta
-     * @param \App\Service\Container $container
+     * @param App $app
      */
-    public function __construct(\App\Storage\Meta $meta, \App\Service\Container $container)
+    public function __construct(\App\Storage\Meta $meta, \App\InterActor\App $app)
     {
         $this->meta = $meta;
-        $this->container = $container;
+        $this->app = $app;
     }
 
     /**
@@ -56,10 +56,10 @@ class RootPath implements \App\Contract\Spec\RootPath
         \Assert\Assertion::keyExists($arrayMap, 'message');
         \Assert\Assertion::keyExists($arrayMap, 'uuid');
 
-        $arrayMap['email_to'] = self::EMAIL_TO;
-
         /** @var \App\Service\Mailer $mailerService */
-        $mailerService = $this->container->get(self::MAILER);
+        $mailerService = $this->app->get(self::MAILER);
+
+        $arrayMap['email_to'] = $mailerService::EMAIL_TO;
 
         $queries = $mailerService->maintainReturnValueUnit($mailerService::OPERATOR_PERSIST);
         $operations = $mailerService->returnValueOperations($queries, $arrayMap);
@@ -84,7 +84,7 @@ class RootPath implements \App\Contract\Spec\RootPath
             $arrayMap['card_number'] = '';
 
             /** @var \App\Service\Customer $customerService */
-            $customerService = $this->container->get(self::CUSTOMER);
+            $customerService = $this->app->get(self::CUSTOMER);
             $queries = $customerService->maintainReturnValueUnit($customerService::OPERATOR_PERSIST);
             $operations = $customerService->returnValueOperations($queries, $arrayMap);
             $customerService->mutate($operations);

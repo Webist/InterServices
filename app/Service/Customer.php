@@ -39,7 +39,6 @@ class Customer
      * @var string
      */
     private $operator;
-
     /** In context mutate, when array map then persist (insert) a new unit into the store */
     const OPERATOR_PERSIST = \Statement\Operation::PERSIST;
     /** In context mutate, when array map then merge (update) a new unit into the store, uuid required  */

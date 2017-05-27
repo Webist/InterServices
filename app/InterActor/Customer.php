@@ -3,9 +3,7 @@
 namespace App\InterActor;
 
 
-
-
-class Customer implements \App\Contract\Spec\Customer
+class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\InterActor
 {
     /**
      * Holds route, input information and access to generic handler
@@ -14,19 +12,19 @@ class Customer implements \App\Contract\Spec\Customer
     private $meta;
 
     /**
-     * @var \App\Service\Container
+     * @var App
      */
-    private $container;
+    private $app;
 
     /**
-     * Customer constructor.
+     * RootPath constructor.
      * @param \App\Storage\Meta $meta
-     * @param \App\Service\Container $container
+     * @param App $app
      */
-    public function __construct(\App\Storage\Meta $meta, \App\Service\Container $container)
+    public function __construct(\App\Storage\Meta $meta, \App\InterActor\App $app)
     {
         $this->meta = $meta;
-        $this->container = $container;
+        $this->app = $app;
     }
 
     public function meta()
@@ -45,7 +43,7 @@ class Customer implements \App\Contract\Spec\Customer
         \Assert\Assertion::email($arrayMap['email']);
 
         /** @var \App\Service\Customer $customerService */
-        $customerService = $this->container->get(self::CUSTOMER);
+        $customerService = $this->app->get(self::CUSTOMER);
 
         if (empty($arrayMap['uuid'])) {
             $operator = $customerService::OPERATOR_PERSIST;
@@ -66,7 +64,7 @@ class Customer implements \App\Contract\Spec\Customer
     public function formUnit($uuid = ''): array
     {
         /** @var \App\Service\Customer $customerService */
-        $customerService = $this->container->get(self::CUSTOMER);
+        $customerService = $this->app->get(self::CUSTOMER);
 
         if (empty($uuid)) {
             $operator = $customerService::OPERATOR_NEW;
@@ -86,7 +84,7 @@ class Customer implements \App\Contract\Spec\Customer
     public function listUnit($uuid = ''): array
     {
         /** @var \App\Service\Customer $customerService */
-        $customerService = $this->container->get(self::CUSTOMER);
+        $customerService = $this->app->get(self::CUSTOMER);
 
         if (empty($uuid)) {
             $operator = $customerService::OPERATOR_FIND_ALL;

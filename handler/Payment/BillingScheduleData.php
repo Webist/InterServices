@@ -10,7 +10,7 @@ namespace Payment;
  * @HasLifecycleCallbacks()
  *
  **/
-class BillingScheduleData implements \App\Contract\Behave\DataObject
+class BillingScheduleData implements \Statement\DataObject
 {
     /**
      * @Id

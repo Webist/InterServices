@@ -16,13 +16,13 @@ var_dump($title);
 <!--[if !IE]><!-->
 <html lang="en"> <!--<![endif]-->
 <head>
-    <title>Software Development Consultancy - anSoft.nl</title>
+    <title>Software Development - anSoft.nl</title>
 
     <!-- Meta -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <?php /**  <meta name="description" content=""> **/ ?>
+    <meta name="author" content="anSoft">
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico">
@@ -63,32 +63,32 @@ var_dump($title);
 <nav class="one-page-header one-page-header-style-2 navbar navbar-default navbar-fixed-top architecture-nav one-page-nav-scrolling one-page-nav__fixed"
      role="navigation">
     <div class="container">
-        <div class="page-scroll">
-            <a class="logo-link navbar-brand logo-left" href="#intro"
-               title="anSoft.nl: Software Development Consultancy">
-                <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="anSoft.nl Logo light">
-                <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="anSoft.nl Logo dark">
-            </a>
-        </div>
-
+        <?php /**
+         * <div class="page-scroll">
+         * <a class="logo-link navbar-brand logo-left" href="#intro"
+         * title="Software Development - ansSoft.nl">
+         * <img class="default-logo" src="assets/img/ansoft-logo-light.png">
+         * <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png">
+         * </a>
+         * </div> **/ ?>
         <div class="menu-container page-scroll">
             <button type="button" class="navbar-toggle pull-right" data-toggle="collapse"
                     data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="container no-padding-left ">
+        <div class="container no-padding-left">
             <div class="row collapse navbar-collapse navbar-ex1-collapse">
-                <div class="col-md-5 no-side-padding">
+                <div class="col-md-7 no-side-padding">
                     <div class="left">
                         <div class="menu-container">
                             <ul class="nav navbar-nav">
                                 <li class="page-scroll home">
-                                    <a href="#body">Home</a>
+                                    <a href="#body">anSoft</a>
                                 </li>
                                 <li class="page-scroll">
                                     <a href="#about">Expertise</a>
@@ -97,49 +97,55 @@ var_dump($title);
                                     <a href="#services">Werkwijze</a>
                                 </li>
 
+                                <?php /**
                                 <li class="page-scroll">
                                     <a href="#markets">Cases</a>
+                                </li> **/ ?>
+                                <li class="page-scroll">
+                                    <a href="#courses">anSoft Academy</a>
                                 </li>
 
+                                <li class="page-scroll">
+                                    <a href="#contact">Contact</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-2 no-side-padding">
-                    <div class="center-block logo page-scroll">
-                        <a class="logo-link navbar-brand logo-centered" href="#intro">
-                            <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="anSoft.nl Logo light"
-                                 title="anSoft.nl: Software Development Consultancy">
-                            <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="anSoft.nl Logo dark"
-                                 title="anSoft.nl: Software Development Consultancy">
-                        </a>
-                    </div>
-                </div>
+                <?php /**
+                * <div class="col-md-2 no-side-padding">
+                    * <div class="center-block logo page-scroll">
+                        * <a class="logo-link navbar-brand logo-centered" href="#intro">
+                            * <img class="default-logo" src="assets/img/ansoft-logo-light.png" alt="anSoft.nl Logo light"
+                 * title="anSoft.nl: Software Development">
+                            * <img class="shrink-logo" src="assets/img/ansoft-logo-dark.png" alt="anSoft.nl Logo dark"
+                 * title="anSoft.nl: Software Development">
+                        * </a>
+                 * </div>
+                * </div> **/ ?>
 
                 <div class="col-md-5 no-side-padding">
                     <div class="right">
                         <div class="menu-container">
                             <ul class="nav navbar-nav">
+                                <?php /**
                                 <li class="page-scroll">
-                                    <a href="#mission">Missie</a>
-                                </li>
-                                <li class="page-scroll">
-                                    <a href="#courses">anSoft.nl Academy</a>
-                                </li>
+                                <a href="#mission">Missie</a>
+                                </li> **/ ?>
 
-                                <li class="page-scroll">
-                                    <a href="#team">Partners</a>
-                                </li>
+
+                                <?php /**
+                                 * <li class="page-scroll">
+                                 * <a href="#team">Partners</a>
+                                 * </li> **/ ?>
 
                                 <?php /*
 									<li class="page-scroll home">
 										<a href="#gallery">Processes</a>
 									</li>
                                     */ ?>
-                                <li class="page-scroll">
-                                    <a href="#contact">Contact</a>
-                                </li>
+
                             </ul>
                         </div>
                     </div>
@@ -159,11 +165,14 @@ var_dump($title);
         <div class="container valign__middle">
             <div class="row">
                 <div class="col-sm-12 text-center-xs g-heading-v7 text-center">
-                    <h1 class="h2 g-mb-30"><em class="block-name">Software Development Consultancy</em> anSoft
+                    <h1 class="h2 g-mb-30"><em class="block-name">Software Development</em> anSoft
                         <div class="block-name-ext">.nl</div>
                     </h1>
+                    <div class="block-desc">Code schrijvers met passende discipline en focus. </div>
                 </div>
+
             </div>
+
         </div>
         <!-- Promo Content END -->
     </div>
@@ -175,19 +184,17 @@ var_dump($title);
 <section id="about">
     <div class="container content-lg">
         <div class="g-heading-v7 text-center">
-            <h2 class="h2 g-mb-30"><em class="block-name">Specialisme in Software Development </em>Expertise </h2>
+            <h2 class="h2 g-mb-30"><em class="block-name">Software Development </em>Expertise </h2>
         </div>
 
         <!-- all for your comfort blocks -->
         <div class="row equal-height-columns">
             <div class="col-md-3 arch-service arch-service-1">
                 <div class="arch-service-in img-hover-1 equal-height-column">
-                    <span aria-hidden="true" class="icon-graph icon"></span>
-                    <h3>Grip op de code-kwalitiet</h3>
-                    <p>Continue aandacht voor technische uitmuntendheid en een goed ontwerp.
-
-                        Senior Developers, Software Experts, Wij zijn specialisten en schrijven hoge-kwalitiet code.</p>
-                    <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
+                    <span aria-hidden="true" class="icon-compass icon"></span>
+                    <h3>Code voor Business Value</h3>
+                    <p>Passende discipline, voortdurend aandacht voor technische uitmuntendheid en een goed ontwerp.</p>
+                    <button class="arch-service-btn" data-toggle="modal" data-target="#code-met-business-value">Lees meer</button>
                 </div>
             </div>
 
@@ -195,11 +202,8 @@ var_dump($title);
                 <div class="arch-service-in img-hover-2 equal-height-column">
                     <span aria-hidden="true" class="icon-users icon"></span>
                     <h3>Team Building</h3>
-                    <p>Best architecturen, vereisten en ontwerpen komen uit zelforganiserende teams.
-                        Projecten worden gebouwd rond gemotiveerde mensen, die moeten worden vertrouwd
-                        We zijn leiders. Met team excellentie als doel coach de teamleden, bouwen gezond team cultuur en
-                        realize commitment.</p>
-                    <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
+                    <p>Gemotiveerde mensen, zelforganiseren teams ...</p>
+                    <button class="arch-service-btn" data-toggle="modal" data-target="#team-building">Lees meer</button>
                 </div>
             </div>
 
@@ -207,12 +211,8 @@ var_dump($title);
                 <div class="arch-service-in img-hover-3 equal-height-column">
                     <span aria-hidden="true" class="icon-target icon"></span>
                     <h3>UX</h3>
-                    <p>Eenvoud; maximaliseren van hoeveelheid "dat werk is niet nodig" is een kunst. Klanttevredenheid
-                        door vroege en continue aflevering van waardevolle software.
-                        Close, dagelijkse samenwerking tussen mensen uit het bedrijfsleven en ontwikkelaars.
-                        We bestuderen gebruikers ervaring (User Experience). Study Competitors and know the Market. We
-                        define the Return on Assets </p>
-                    <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
+                    <p>Eenvoud; maximaliseren van hoeveelheid "dat werk is niet nodig" is een kunst. ...</p>
+                    <button class="arch-service-btn" data-toggle="modal" data-target="#ux">Lees meer</button>
                 </div>
             </div>
 
@@ -220,18 +220,14 @@ var_dump($title);
                 <div class="arch-service-in img-hover-4 equal-height-column">
                     <span aria-hidden="true" class="icon-bar-chart icon"></span>
                     <h3>Evaluatie</h3>
-                    <p>
-                        Regelmatig reflecteren over hoe om effectiever te worden, en dienovereenkomstig aangepast.
-                        Werkende software is de belangrijkste maatregel van de vooruitgang.
-                        Analyse Componenten. re-Define and Plan re-architecture/re-design components to remove the
-                        Techinal Debt.</p>
-                    <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
+                    <p>Regelmatig reflecteren over hoe om effectiever te worden, en dienovereenkomstig aangepast.</p>
+                    <button class="arch-service-btn" data-toggle="modal" data-target="#evaluatie">Lees meer</button>
                 </div>
             </div>
         </div>
 
         <!-- modal popup window -->
-        <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog"
+        <div class="modal fade bs-example-modal-lg" id="code-met-business-value" tabindex="-1" role="dialog"
              aria-labelledby="myModalLabel" aria-hidden="true">
             <button aria-hidden="true" data-dismiss="modal" class="close" type="button"><i class="fa fa-times"></i>
             </button>
@@ -243,30 +239,145 @@ var_dump($title);
                         </div>
 
                         <div class="modal-bot g-heading-v7">
-                            <h3 class="g-color-white">Omom sociis natoque penatibus</h3>
-                            <p class="margin-bottom-30">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-                                commodo ligula eget dolor. Aenean massa. Omom sociis natoque penatibus.Lorem ipsum dolor
-                                sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-                                Omom sociis natoque penatibus.</p>
+                            <h3 class="g-color-white">Code voor Business Value</h3>
+                            <p class="margin-bottom-30">
+                                Optimaliseren werkmethodes in software ontwikkeling is de uitdaging, die we
+                                aangaan.<br/>
+                                Agility heeft de softwarewereld organisatorische verbetering tussen de betrokkenen
+                                gebracht.
+                                Echter de werkmethodes in het schrijven van code zelf, de technische kant, is nagenoeg
+                                uitgebleven.
+                                Er zijn weinig modellen ontwikkeld om dat als als conventie te hanteren.
+                            </p>
+                            <p>Er zijn anti-patterns, principes, best practices door verschillende ontwikkelaars bekend
+                                gemaakt.
+                                <br/>Die vaak onbekend zijn bij de software ontwikkelaars.
+                            </p>
 
-                            <p class="margin-bottom-30">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-                                commodo ligula eget dolor. Aenean massa. Omom sociis natoque penatibus.Lorem ipsum dolor
-                                sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+                            <p>Onze focus is gericht op,
+                                met een passende discipline modellen en werkmethodes voor code schrijven
+                                realiseren.<br/>
+                            </p>
 
-                            <p class="margin-bottom-30"><img src="assets/img-temp/wp5.jpg" alt=""></p>
+                            <p>We zijn senior developers, software experts. Goed code schrijven is ons leven.<br/>
+                                Helderheid creeren van code orchestratie methodieken is onze primaire taak.
+                            </p>
+                            <p>
+                            <ul style="text-align:left;">
+                                <li>Waar dient een framework feitelijk voor?</li>
+                                <li>Wat is DDD (Domain Driven Design) en waarvoor kan het best worden toegepast?</li>
+                                <li>Wat is event-sourcing, hoe te herkennen en voor welke business model best voor
+                                    dient?
+                                </li>
+                                <li>Wat is MVC, MOM (Machine Object Mode) en wat voor discipline brengt het ons?</li>
+                                <li>Wat is IoC (Inversion flow of Control), DIP (dependency inversion principle) en hoe
+                                    toe te passen?
+                                </li>
+                                <li>How to grow towards functional programming?</li>
+                                <li>Modelling, domain-centric data-centric or both?</li>
+                                <li>Agile of Agility?</li>
+                                <li>Machine learning, wat te verwachten?</li>
+                            </ul>
+                            </p>
+                            <p>Goed code is voor ons de code die best aansluit op de business value,
+                                business value zoals het verwacht wordt vanuit de stakeholders en gebruikers.
+                            </p>
 
-                            <p class="margin-bottom-30">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-                                commodo ligula eget dolor. Aenean massa. Omom sociis natoque penatibus.Lorem ipsum dolor
-                                sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-
-                            <p class="margin-bottom-30">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-                                commodo ligula eget dolor. Aenean massa. Omom sociis natoque penatibus.Lorem ipsum dolor
-                                sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="modal fade bs-example-modal-lg" id="team-building" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <button aria-hidden="true" data-dismiss="modal" class="close" type="button"><i class="fa fa-times"></i>
+            </button>
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="modal-top margin-bottom-40">
+                            <!--img src="assets/img-temp/wp1.jpg" alt=""-->
+                        </div>
+
+                        <div class="modal-bot g-heading-v7">
+                            <h3 class="g-color-white">Team Building</h3>
+                            <p class="margin-bottom-30">
+                                Beste architecturen, vereisten en ontwerpen komen uit zelforganiserende teams.<br/>
+                                Projecten worden gebouwd rond gemotiveerde mensen, die moeten worden vertrouwd.<br/>
+                            </p>
+                            <p>
+                                We zijn leiders. Met team excellentie als doel wij coach'en de teamleden, bouwen een
+                                gezond team cultuur en
+                                realiseren commitment vanuit iedere developer.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-lg" id="ux" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <button aria-hidden="true" data-dismiss="modal" class="close" type="button"><i class="fa fa-times"></i>
+            </button>
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="modal-top margin-bottom-40">
+                            <!--img src="assets/img-temp/wp1.jpg" alt=""-->
+                        </div>
+
+                        <div class="modal-bot g-heading-v7">
+                            <h3 class="g-color-white">UX - User Experience</h3>
+                            <p class="margin-bottom-30">
+                                Klanttevredenheid door vroege en continue aflevering van waardevolle software. <br/>
+                                Betrokken, dagelijkse samenwerking tussen mensen uit het bedrijfsleven en ontwikkelaars.
+                                <br/>
+                            </p>
+                            <p>
+                                We bestuderen gebruikerservaring (User Experience). "Study Competitors and know the
+                                Market." <br/>
+                                We zijn gericht op Return on Assets.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-lg" id="evaluatie" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <button aria-hidden="true" data-dismiss="modal" class="close" type="button"><i class="fa fa-times"></i>
+            </button>
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="modal-top margin-bottom-40">
+                            <!--img src="assets/img-temp/wp1.jpg" alt=""-->
+                        </div>
+
+                        <div class="modal-bot g-heading-v7">
+                            <h3 class="g-color-white">Evaluatie</h3>
+                            <p class="margin-bottom-30">
+                                Werkende software is de enige waarheid.
+
+                                Analyse Componenten. re-Define and Plan re-architecture/re-design components to remove
+                                the
+                                Techinal Debt. Retrospective.
+                            </p>
+                            <p>
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
     </div>
 </section>
 <!--End of About Section-->
@@ -278,7 +389,7 @@ var_dump($title);
 
             <div class="row  g-heading-v7 text-center">
                 <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Agile software development framework </em> Werkwijze </h2>
+                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Development framework </em> Werkwijze </h2>
 
                 </div>
             </div>
@@ -298,60 +409,61 @@ var_dump($title);
                     </div>
 
                     <div class="item">
-                        <img src="assets/img/group-vs-team.jpg" alt="Groep versus Team">
+                        <img src="assets/img/associatie.png" alt="Associatie">
 
                         <p class="owl-p g-color-white-darker">
-                            Met self-organizing
+                            De dynamic van een zelforganiserend
                             <del>team</del>
-                            partners onze team is dynamisch.
-                            Afhankelijk van het project of project-fase zijn er een of meer mensen bij aanwezig en
-                            betrokken.
-
+                            <del>group</del>
+                            <del>partners</del>
+                            associatie.
+                            Afhankelijk van het project of project-fase
+                            zijn er een of meer developers bij aanwezig en betrokken.
                         </p>
 
                     </div>
-
-                    <div class="item">
-                        <img src="assets/img-temp/owl-1.png" alt="">
-
-                        <p class="owl-p g-color-white-darker">
-                            Advies rondom applicatie binnen de projecten,
-                            Recommodatie nieuw code of hergebruik,
-                        </p>
-
-                    </div>
-
-                    <div class="item">
-                        <img src="assets/img-temp/owl-1.png" alt="">
-
-                        <p class="owl-p g-color-white-darker">
-                            Technische behoefte requirements opstellen,
-                            Coordinatie gewenste verbeteringen,
-                        </p>
-
-                    </div>
-
-                    <div class="item">
-                        <img src="assets/img-temp/owl-1.png" alt="">
-
-                        <p class="owl-p g-color-white-darker">
-                            Functioneel en Technisch Ontwerp,
-                            Participatie data architectuur design, performance monitoring,
-                            product evaluatie, Integratie methodologie
-                        </p>
-
-                    </div>
-
-                    <div class="item">
-                        <img src="assets/img-temp/owl-1.png" alt="">
-
-                        <p class="owl-p g-color-white-darker">
-                            Quality Assurance,
-                            RFC (Request for Change) opstellen,
-                        </p>
-
-                    </div>
-
+<?php /**
+                    * <div class="item">
+                        * <img src="assets/img-temp/owl-1.png" alt="">
+ *
+* <p class="owl-p g-color-white-darker">
+                            * Advies rondom applicatie binnen de projecten,
+                            * Recommodatie nieuw code of hergebruik,
+                        * </p>
+ *
+* </div>
+ *
+* <div class="item">
+                        * <img src="assets/img-temp/owl-1.png" alt="">
+ *
+* <p class="owl-p g-color-white-darker">
+                            * Technische behoefte requirements opstellen,
+                            * Coordinatie gewenste verbeteringen,
+                        * </p>
+ *
+* </div>
+ *
+* <div class="item">
+                        * <img src="assets/img-temp/owl-1.png" alt="">
+ *
+* <p class="owl-p g-color-white-darker">
+                            * Functioneel en Technisch Ontwerp,
+                            * Participatie data architectuur design, performance monitoring,
+                            * product evaluatie, Integratie methodologie
+                        * </p>
+ *
+* </div>
+ *
+* <div class="item">
+                        * <img src="assets/img-temp/owl-1.png" alt="">
+ *
+* <p class="owl-p g-color-white-darker">
+                            * Quality Assurance,
+                            * RFC (Request for Change) opstellen,
+                        * </p>
+ *
+* </div>
+**/ ?>
 
                 </div>
             </div>
@@ -360,202 +472,202 @@ var_dump($title);
     </div>
 </section>
 <!--End of Services Section-->
-<?php /**/ ?>
-<!--markets Section-->
-<section id="markets">
-    <div class="container-fluid no-side-padding content-md">
-        <div class="container g-heading-v7 text-center">
-            <h2 class="h2 g-mb-30"><em class="block-name">Reeds gerealiseerd </em>Cases </h2>
-        </div>
-
-        <!-- markets cube-portfolio/ what we did -->
-        <div id="grid-container">
-            <div class="cbp-item">
-                <!-- data-title attribute will be used to populate lightbox caption -->
-                <div class="cbp-caption">
-                    <a class="cbp-lightbox" title="Maatwerk Webapplicatie Development"
-                       data-title="<h3><em>Web Applicaties </em> Specifieke Weboplossingen</h3>"
-                       href="assets/img-temp/projects/img1.jpg">
-                        <img src="assets/img-temp/projects/img1.jpg" alt="">
-                        <div class="popup-title">
-                            <h3><em>Web Applicaties </em> Specifieke Weboplossingen</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="cbp-item">
-                <div class="cbp-caption">
-                    <a class="cbp-lightbox" title="PHP Software Development"
-                       data-title="<h3><em>PHP Software </em>Management Systeem </h3>"
-                       href="assets/img-temp/projects/img5.jpg">
-                        <img src="assets/img-temp/projects/img5.jpg" alt="">
-                        <div class="popup-title">
-                            <h3><em>PHP Software </em>Management Systeem </h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="cbp-item">
-                <div class="cbp-caption">
-                    <a class="cbp-lightbox" title="SOAP / REST API Development"
-                       data-title="<h3><em>Web Services </em>SOAP / REST API development </h3>"
-                       href="assets/img-temp/projects/img2.jpg">
-                        <img src="assets/img-temp/projects/img2.jpg" alt="">
-                        <div class="popup-title">
-                            <h3><em>Web Services </em> SOAP / REST API</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="cbp-item">
-                <div class="cbp-caption">
-                    <a class="cbp-lightbox" title="Web Portal Development"
-                       data-title="<h3><em>Intranet </em>Web Portal </h3>" href="assets/img-temp/projects/img3.jpg">
-                        <img src="assets/img-temp/projects/img3.jpg" alt="">
-                        <div class="popup-title">
-                            <h3><em>Intranet </em>Web Portal </h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="cbp-item">
-                <div class="cbp-caption">
-                    <a class="cbp-lightbox" title="Online Business Platform Development"
-                       data-title="<h3><em>E-commerce </em> Online Business Platform </h3>"
-                       href="assets/img-temp/projects/img4.jpg">
-                        <img src="assets/img-temp/projects/img4.jpg" alt="">
-                        <div class="popup-title">
-                            <h3><em>E-Commerce </em>Online Business Platform </h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="cbp-item">
-                <div class="cbp-caption">
-                    <a class="cbp-lightbox" title="Marketing Platform Integratie Development"
-                       data-title="<h3><em>API Integratie </em>Marketing Platform Integratie </h3>"
-                       href="assets/img-temp/projects/img1.jpg">
-                        <img src="assets/img-temp/projects/img1.jpg" alt="">
-                        <div class="popup-title">
-                            <h3><em>API Integratie </em>Marketing Platform Integratie </h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-
-            <div class="cbp-item">
-                <div class="cbp-caption">
-                    <a class="cbp-lightbox" title="Social Media Integratie Development"
-                       data-title="<h3><em>API Integratie </em>Social Media Integratie </h3>"
-                       href="assets/img-temp/projects/img1.jpg">
-                        <img src="assets/img-temp/projects/img1.jpg" alt="">
-                        <div class="popup-title">
-                            <h3><em>API Integratie </em>Social Media Integratie </h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="cbp-item">
-                <div class="cbp-caption">
-                    <a class="cbp-lightbox" title="Booking System Integratie Development"
-                       data-title="<h3><em>API Integratie </em>Booking System Integratie </h3>"
-                       href="assets/img-temp/projects/img1.jpg">
-                        <img src="assets/img-temp/projects/img1.jpg" alt="">
-                        <div class="popup-title">
-                            <h3><em>API Integratie </em>Booking System Integratie </h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="cbp-item">
-                <div class="cbp-caption">
-                    <a class="cbp-lightbox" title="Machine Learning Integratie Development"
-                       data-title="<h3><em>Machine Learning Integratie </em>Machine Learning Integratie </h3>"
-                       href="assets/img-temp/projects/img1.jpg">
-                        <img src="assets/img-temp/projects/img1.jpg" alt="">
-                        <div class="popup-title">
-                            <h3><em>API Integratie </em>Machine Learning Integratie </h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-<!--End of markets Section-->
-
-
-<!--mission Section-->
-<section id="mission">
-    <div class="container-fluid bg-color-com service-section">
-        <div class="container content-md">
-
-            <div class="row  g-heading-v7 text-center">
-                <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-                    <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Gids voor doeltreffend acties
-                        </em>Missie</h2>
-                </div>
-            </div>
-
-
-            <!-- blocks -->
-            <div class="row equal-height-columns">
-                <div class="col-md-3 arch-service arch-service-1">
-                    <div class="arch-service-in img-hover-1 equal-height-column">
-                        <span aria-hidden="true" class="icon-graph icon"></span>
-                        <h3>Vakmanschap</h3>
-                        <p>Materie goed begrijpen ... meesterschap </p>
-                        <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
-                    </div>
-                </div>
-
-                <div class="col-md-3 arch-service arch-service-2">
-                    <div class="arch-service-in img-hover-1 equal-height-column">
-                        <span aria-hidden="true" class="icon-graph icon"></span>
-                        <h3>Mentoring</h3>
-                        <p>We zijn creatieve mensen ... zelfvertrouwen </p>
-                        <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
-                    </div>
-                </div>
-
-                <div class="col-md-3 arch-service arch-service-3">
-                    <div class="arch-service-in img-hover-1 equal-height-column">
-                        <span aria-hidden="true" class="icon-graph icon"></span>
-                        <h3>Culture Building</h3>
-                        <p>Ieder mens is anders ... cultuur opbouwen ... happy team-work</p>
-
-                        <p> ...</p>
-                        <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
-                    </div>
-                </div>
-                <div class="col-md-3 arch-service arch-service-3">
-                    <div class="arch-service-in img-hover-1 equal-height-column">
-                        <span aria-hidden="true" class="icon-graph icon"></span>
-                        <h3>Samenwerking</h3>
-                        <p>Samenwerken met mensen met vergelijkbaar gemeenschappelijke doe.
-                            Niet alleen samenwerking met de klanten, maar ook productieve partners.</p>
-
-                        <p> ...</p>
-                        <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-    </div>
-</section>
-<!--End of mission Section-->
-
+<?php /** ?>
+* <!--markets Section-->
+* <section id="markets">
+    * <div class="container-fluid no-side-padding content-md">
+ * <div class="container g-heading-v7 text-center">
+ * <h2 class="h2 g-mb-30"><em class="block-name">Reeds gerealiseerd </em>Cases </h2>
+        * </div>
+ *
+* <!-- markets cube-portfolio/ what we did -->
+        * <div id="grid-container">
+            * <div class="cbp-item">
+                * <!-- data-title attribute will be used to populate lightbox caption -->
+                * <div class="cbp-caption">
+                    * <a class="cbp-lightbox" title="Maatwerk Webapplicatie Development"
+                       * data-title="<h3><em>Web Applicaties </em> Specifieke Weboplossingen</h3>"
+                       * href="assets/img-temp/projects/img1.jpg">
+                        * <img src="assets/img-temp/projects/img1.jpg" alt="">
+                        * <div class="popup-title">
+                            * <h3><em>Web Applicaties </em> Specifieke Weboplossingen</h3>
+                        * </div>
+                    * </a>
+                * </div>
+            * </div>
+ *
+* <div class="cbp-item">
+                * <div class="cbp-caption">
+                    * <a class="cbp-lightbox" title="PHP Software Development"
+                       * data-title="<h3><em>PHP Software </em>Management Systeem </h3>"
+                       * href="assets/img-temp/projects/img5.jpg">
+                        * <img src="assets/img-temp/projects/img5.jpg" alt="">
+                        * <div class="popup-title">
+                            * <h3><em>PHP Software </em>Management Systeem </h3>
+                        * </div>
+                    * </a>
+                * </div>
+            * </div>
+ *
+* <div class="cbp-item">
+                * <div class="cbp-caption">
+                    * <a class="cbp-lightbox" title="SOAP / REST API Development"
+                       * data-title="<h3><em>Web Services </em>SOAP / REST API development </h3>"
+                       * href="assets/img-temp/projects/img2.jpg">
+                        * <img src="assets/img-temp/projects/img2.jpg" alt="">
+                        * <div class="popup-title">
+                            * <h3><em>Web Services </em> SOAP / REST API</h3>
+                        * </div>
+                    * </a>
+                * </div>
+            * </div>
+ *
+* <div class="cbp-item">
+                * <div class="cbp-caption">
+                    * <a class="cbp-lightbox" title="Web Portal Development"
+                       * data-title="<h3><em>Intranet </em>Web Portal </h3>" href="assets/img-temp/projects/img3.jpg">
+                        * <img src="assets/img-temp/projects/img3.jpg" alt="">
+                        * <div class="popup-title">
+                            * <h3><em>Intranet </em>Web Portal </h3>
+                        * </div>
+                    * </a>
+                * </div>
+            * </div>
+ *
+* <div class="cbp-item">
+                * <div class="cbp-caption">
+                    * <a class="cbp-lightbox" title="Online Business Platform Development"
+                       * data-title="<h3><em>E-commerce </em> Online Business Platform </h3>"
+                       * href="assets/img-temp/projects/img4.jpg">
+                        * <img src="assets/img-temp/projects/img4.jpg" alt="">
+                        * <div class="popup-title">
+                            * <h3><em>E-Commerce </em>Online Business Platform </h3>
+                        * </div>
+                    * </a>
+                * </div>
+            * </div>
+ *
+* <div class="cbp-item">
+                * <div class="cbp-caption">
+                    * <a class="cbp-lightbox" title="Marketing Platform Integratie Development"
+                       * data-title="<h3><em>API Integratie </em>Marketing Platform Integratie </h3>"
+                       * href="assets/img-temp/projects/img1.jpg">
+                        * <img src="assets/img-temp/projects/img1.jpg" alt="">
+                        * <div class="popup-title">
+                            * <h3><em>API Integratie </em>Marketing Platform Integratie </h3>
+                        * </div>
+                    * </a>
+                * </div>
+            * </div>
+ *
+*
+* <div class="cbp-item">
+                * <div class="cbp-caption">
+                    * <a class="cbp-lightbox" title="Social Media Integratie Development"
+                       * data-title="<h3><em>API Integratie </em>Social Media Integratie </h3>"
+                       * href="assets/img-temp/projects/img1.jpg">
+                        * <img src="assets/img-temp/projects/img1.jpg" alt="">
+                        * <div class="popup-title">
+                            * <h3><em>API Integratie </em>Social Media Integratie </h3>
+                        * </div>
+                    * </a>
+                * </div>
+            * </div>
+ *
+* <div class="cbp-item">
+                * <div class="cbp-caption">
+                    * <a class="cbp-lightbox" title="Booking System Integratie Development"
+                       * data-title="<h3><em>API Integratie </em>Booking System Integratie </h3>"
+                       * href="assets/img-temp/projects/img1.jpg">
+                        * <img src="assets/img-temp/projects/img1.jpg" alt="">
+                        * <div class="popup-title">
+                            * <h3><em>API Integratie </em>Booking System Integratie </h3>
+                        * </div>
+                    * </a>
+                * </div>
+            * </div>
+ *
+* <div class="cbp-item">
+                * <div class="cbp-caption">
+                    * <a class="cbp-lightbox" title="Machine Learning Integratie Development"
+                       * data-title="<h3><em>Machine Learning Integratie </em>Machine Learning Integratie </h3>"
+                       * href="assets/img-temp/projects/img1.jpg">
+                        * <img src="assets/img-temp/projects/img1.jpg" alt="">
+                        * <div class="popup-title">
+                            * <h3><em>API Integratie </em>Machine Learning Integratie </h3>
+                        * </div>
+                    * </a>
+                * </div>
+            * </div>
+ *
+* </div>
+    * </div>
+* </section>
+ * <!--End of markets Section-->
+* <?php /**/ ?>
+<?php /**
+* <!--mission Section-->
+* <section id="mission">
+    * <div class="container-fluid bg-color-com service-section">
+        * <div class="container content-md">
+ *
+* <div class="row  g-heading-v7 text-center">
+                * <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
+                    * <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Gids voor doeltreffend acties
+                        * </em>Missie</h2>
+                * </div>
+            * </div>
+ *
+*
+* <!-- blocks -->
+            * <div class="row equal-height-columns">
+                * <div class="col-md-3 arch-service arch-service-1">
+                    * <div class="arch-service-in img-hover-1 equal-height-column">
+                        * <span aria-hidden="true" class="icon-graph icon"></span>
+                        * <h3>Vakmanschap</h3>
+                        * <p>Materie goed begrijpen ... meesterschap </p>
+                        * <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
+                    * </div>
+                * </div>
+ *
+* <div class="col-md-3 arch-service arch-service-2">
+                    * <div class="arch-service-in img-hover-1 equal-height-column">
+                        * <span aria-hidden="true" class="icon-graph icon"></span>
+                        * <h3>Mentoring</h3>
+                        * <p>We zijn creatieve mensen ... zelfvertrouwen </p>
+                        * <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
+                    * </div>
+                * </div>
+ *
+* <div class="col-md-3 arch-service arch-service-3">
+                    * <div class="arch-service-in img-hover-1 equal-height-column">
+                        * <span aria-hidden="true" class="icon-graph icon"></span>
+                        * <h3>Culture Building</h3>
+                        * <p>Ieder mens is anders ... cultuur opbouwen ... happy team-work</p>
+ *
+* <p> ...</p>
+                        * <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
+                    * </div>
+                * </div>
+                * <div class="col-md-3 arch-service arch-service-3">
+                    * <div class="arch-service-in img-hover-1 equal-height-column">
+                        * <span aria-hidden="true" class="icon-graph icon"></span>
+                        * <h3>Samenwerking</h3>
+                        * <p>Samenwerken met mensen met vergelijkbaar gemeenschappelijke doe.
+                            * Niet alleen samenwerking met de klanten, maar ook productieve partners.</p>
+ *
+* <p> ...</p>
+                        * <button class="arch-service-btn" data-toggle="modal" data-target="#myModal">Lees Meer</button>
+                    * </div>
+                * </div>
+            * </div>
+ *
+*
+* </div>
+    * </div>
+* </section>
+ * <!--End of mission Section-->
+* <?php /**/ ?>
 
 <?php /*
 	<!--Gallery Section-->
@@ -714,8 +826,9 @@ var_dump($title);
 		</div>
 	</section>
 	<!--End of Gallery Section-->
-*/ ?><?php /** */ ?>
-    <!--courses Section-->
+*/ ?>
+
+<!--courses Section-->
 <section id="courses">
     <div class="awards-section">
         <div class="container content-md">
@@ -823,112 +936,112 @@ var_dump($title);
 </section>
 <!--End of courses Section-->
 
-
-<!--Team Section-->
-    <section id="team">
-        <div class="container-fluid team-section bg-color-com">
-            <div class="container content-md g-heading-v7 text-center">
-                <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Werken met
-                        professionals</em>Partners</h2>
-
-                <!-- Owl Carousel v4 team -->
-                <div class="owl-carousel-v4 owl-theme">
-                    <div class="owl-slider-v4-team">
-                        <div class="item">
-                            <img class="img-responsive" src="assets/img-temp/t1.jpg" alt="">
-                            <small class="owl-small">Technical Supervisor</small>
-                            <span class="owl-span">James Novel</span>
-                            <ul class="list-inline owl-list">
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
-                        </div>
-
-                        <div class="item">
-                            <img class="img-responsive" src="assets/img-temp/t2.jpg" alt="">
-                            <small class="owl-small">Technical Director</small>
-                            <span class="owl-span">Catrina Wearner</span>
-                            <ul class="list-inline owl-list">
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
-                        </div>
-
-                        <div class="item">
-                            <img class="img-responsive" src="assets/img-temp/t5.jpg" alt="">
-                            <small class="owl-small">Technical Manager</small>
-                            <span class="owl-span">Fiona Biloti</span>
-                            <ul class="list-inline owl-list">
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
-                        </div>
-
-                        <div class="item">
-                            <img class="img-responsive" src="assets/img-temp/t9.jpg" alt="">
-                            <small class="owl-small">Head of Secretory</small>
-                            <span class="owl-span">Samuel Calven</span>
-                            <ul class="list-inline owl-list">
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
-                        </div>
-
-                        <div class="item">
-                            <img class="img-responsive" src="assets/img-temp/t4.jpg" alt="">
-                            <small class="owl-small">Human Resources Manager</small>
-                            <span class="owl-span">George Manuel</span>
-                            <ul class="list-inline owl-list">
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
-                        </div>
-
-                        <div class="item">
-                            <img class="img-responsive" src="assets/img-temp/t6.jpg" alt="">
-                            <small class="owl-small">Chief Interior Designer</small>
-                            <span class="owl-span">Salma Irek</span>
-                            <ul class="list-inline owl-list">
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
-                        </div>
-
-                        <div class="item">
-                            <img class="img-responsive" src="assets/img-temp/t8.jpg" alt="">
-                            <small class="owl-small">Chief Engineer</small>
-                            <span class="owl-span">Carl Sanchez</span>
-                            <ul class="list-inline owl-list">
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
-                        </div>
-
-                        <div class="item">
-                            <img class="img-responsive" src="assets/img-temp/t3.jpg" alt="">
-                            <small class="owl-small">Finance Manager</small>
-                            <span class="owl-span">Julia Dolly</span>
-                            <ul class="list-inline owl-list">
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Owl Carousel v4 -->
-            </div>
-        </div>
-    </section>
-    <!--End of Team Section-->
-
+<?php /**
+* <!--Team Section-->
+    * <section id="team">
+        * <div class="container-fluid team-section bg-color-com">
+            * <div class="container content-md g-heading-v7 text-center">
+                * <h2 class="h2 g-color-white g-mb-30"><em class="block-name">Werken met
+                        * professionals</em>Partners</h2>
+ *
+* <!-- Owl Carousel v4 team -->
+                * <div class="owl-carousel-v4 owl-theme">
+                    * <div class="owl-slider-v4-team">
+                        * <div class="item">
+                            * <img class="img-responsive" src="assets/img-temp/t1.jpg" alt="">
+                            * <small class="owl-small">Technical Supervisor</small>
+                            * <span class="owl-span">James Novel</span>
+                            * <ul class="list-inline owl-list">
+                                * <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                * <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
+                                * <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            * </ul>
+                        * </div>
+ *
+* <div class="item">
+                            * <img class="img-responsive" src="assets/img-temp/t2.jpg" alt="">
+                            * <small class="owl-small">Technical Director</small>
+                            * <span class="owl-span">Catrina Wearner</span>
+                            * <ul class="list-inline owl-list">
+                                * <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                * <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
+                                * <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            * </ul>
+                        * </div>
+ *
+* <div class="item">
+                            * <img class="img-responsive" src="assets/img-temp/t5.jpg" alt="">
+                            * <small class="owl-small">Technical Manager</small>
+                            * <span class="owl-span">Fiona Biloti</span>
+                            * <ul class="list-inline owl-list">
+                                * <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                * <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
+                                * <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            * </ul>
+                        * </div>
+ *
+* <div class="item">
+                            * <img class="img-responsive" src="assets/img-temp/t9.jpg" alt="">
+                            * <small class="owl-small">Head of Secretory</small>
+                            * <span class="owl-span">Samuel Calven</span>
+                            * <ul class="list-inline owl-list">
+                                * <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                * <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
+                                * <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            * </ul>
+                        * </div>
+ *
+* <div class="item">
+                            * <img class="img-responsive" src="assets/img-temp/t4.jpg" alt="">
+                            * <small class="owl-small">Human Resources Manager</small>
+                            * <span class="owl-span">George Manuel</span>
+                            * <ul class="list-inline owl-list">
+                                * <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                * <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
+                                * <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            * </ul>
+                        * </div>
+ *
+* <div class="item">
+                            * <img class="img-responsive" src="assets/img-temp/t6.jpg" alt="">
+                            * <small class="owl-small">Chief Interior Designer</small>
+                            * <span class="owl-span">Salma Irek</span>
+                            * <ul class="list-inline owl-list">
+                                * <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                * <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
+                                * <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            * </ul>
+                        * </div>
+ *
+* <div class="item">
+                            * <img class="img-responsive" src="assets/img-temp/t8.jpg" alt="">
+                            * <small class="owl-small">Chief Engineer</small>
+                            * <span class="owl-span">Carl Sanchez</span>
+                            * <ul class="list-inline owl-list">
+                                * <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                * <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
+                                * <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            * </ul>
+                        * </div>
+ *
+* <div class="item">
+                            * <img class="img-responsive" src="assets/img-temp/t3.jpg" alt="">
+                            * <small class="owl-small">Finance Manager</small>
+                            * <span class="owl-span">Julia Dolly</span>
+                            * <ul class="list-inline owl-list">
+                                * <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                * <li><a href="#" class="fb"><i class="fa fa-facebook"></i></a></li>
+                                * <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            * </ul>
+                        * </div>
+                    * </div>
+                * </div>
+                * <!-- End Owl Carousel v4 -->
+            * </div>
+ * </div>
+ * </section>
+    * <!--End of Team Section-->
+**/ ?>
 
 <?php /**/ ?>
 <!--Contact Section-->
@@ -1037,7 +1150,7 @@ var_dump($title);
     <!-- copyrights -->
     <div class="copyrights container-fluid bg-color-com page-scroll">
         <div clas="container">
-            <a class="footer-logo" href="#intro" title="anSoft.nl: Software Development Consultancy">
+            <a class="footer-logo" href="#intro" title="anSoft.nl: Software Development">
                 <img class="img-responsive" src="assets/img/ansoft-logo-light.png" alt="anSoft.nl Logo">
             </a>
             <?php /**

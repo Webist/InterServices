@@ -11,7 +11,7 @@ namespace Payment;
  *
  * improve this https://github.com/doctrine/doctrine2/issues/1757
  **/
-class CreditCardData implements \App\Contract\Behave\DataObject
+class CreditCardData implements \Statement\DataObject
 {
     /**
      * @Id

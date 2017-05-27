@@ -8,7 +8,7 @@ namespace Mail;
  * @Table("emails")
  * @HasLifecycleCallbacks
  */
-class EmailData implements \App\Contract\Behave\DataObject
+class EmailData implements \Statement\DataObject
 {
     /**
      * @Id

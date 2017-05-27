@@ -1,4 +1,4 @@
-#### View or ViewModel
+#### View - ViewModel
 
 View composition tools such as a DOM builder for HTML, XML. 
 

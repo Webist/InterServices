@@ -12,7 +12,7 @@ namespace Payment;
  * @HasLifecycleCallbacks()
  *
  **/
-class PaymentPreferenceData implements \App\Contract\Behave\DataObject
+class PaymentPreferenceData implements \Statement\DataObject
 {
     /**
      * @Id
