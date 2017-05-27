@@ -26,4 +26,14 @@ class Admin implements \App\Contract\Spec\Admin, \App\Contract\Behave\InterActor
         $this->meta = $meta;
         $this->app = $app;
     }
+
+    public function meta()
+    {
+        return $this->meta;
+    }
+
+    public function app()
+    {
+        return $this->app;
+    }
 }

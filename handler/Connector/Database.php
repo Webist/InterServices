@@ -42,15 +42,14 @@ class Database
     }
 
     /**
-     * @param $content
+     * @param array $credentials
      * @param $useDatabase
      * @param string $protocol
      * @return array
      */
-    public function credentials($content, $useDatabase, $protocol = 'mysql')
+    public function credentials(array $credentials, $useDatabase, $protocol = 'mysql')
     {
-        $dbCredentials = explode("\n", $content);
-        foreach ($dbCredentials as $line) {
+        foreach ($credentials as $line) {
             if (!empty(trim($line))
                 && substr($line, 0, strlen($protocol)) === $protocol
                 && substr($line, -(strlen($useDatabase))) === $useDatabase
@@ -62,17 +61,16 @@ class Database
     }
 
     /**
-     * @param $credentialsContent
+     * @param array $credentials
      * @param string $useDatabase
      * @param string $protocol
      * @param string $adapter
      * @return \mysqli|\PDO
      */
-    public function connection($credentialsContent, string $useDatabase, $protocol = 'mysql', $adapter = \PDO::class)
+    public function connection(array $credentials, string $useDatabase, $protocol = 'mysql', $adapter = \PDO::class)
     {
         self::$adapter = $adapter;
-
-        $credentials = $this->credentials($credentialsContent, $useDatabase);
+        $credentials = $this->credentials($credentials, $useDatabase);
         if (!empty($credentials)) {
             switch (self::$adapter) {
                 case 'PDO' :

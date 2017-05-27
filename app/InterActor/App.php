@@ -12,8 +12,6 @@ class App implements \App\Contract\Spec\Main
      */
     private $services = [];
 
-    private $adapter;
-
     /**
      * @param $handlerFieldName
      * @param $route
@@ -28,9 +26,22 @@ class App implements \App\Contract\Spec\Main
             $interActor = new $classHandlerName($meta, $this);
         }
 
+        // Extra feature, log visits
         try {
-            $ipLoggerService = new \App\Service\IpLogger($this->adapter());
-            $queries = $ipLoggerService->maintainMutationUnit($ipLoggerService::OPERATOR_VISITOR_LOG);
+            // Read config file with credentials
+            /** @var \App\Service\File $fileService */
+            $fileService = $this->get(self::FILE);
+            $credentials = $fileService->maintainUnit(dirname(__DIR__) . self::CREDENTIALS_FILE)->get();
+
+            // Get the database adapter with connection
+            /** @var \App\Service\Adapter $adapterService */
+            $adapterService = $this->get(self::DB_ADAPTER);
+            $adapter = $adapterService->maintainUnit($credentials)->get(\App\Contract\Spec\Main::DATABASE_LOGS);
+
+            // Insert into data store
+            /** @var \App\Service\IpLogger $ipLoggerService */
+            $ipLoggerService = $this->get(self::IP_LOGGER);
+            $queries = $ipLoggerService->maintainMutationUnit($ipLoggerService::OPERATOR_VISITOR_LOG, $adapter);
 
             $params = [
                 $ipLoggerService::OPERATOR_VISITOR_LOG => [
@@ -85,28 +96,5 @@ class App implements \App\Contract\Spec\Main
             $this->services[$serviceObject] = $reflection->newInstance();
         }
         return $this->services[$serviceObject];
-    }
-
-    public function adapter()
-    {
-        if ($this->adapter === null) {
-            $connector = new \Connector\Database();
-            $this->adapter = $connector->connection($this->credentials(), \App\Contract\Spec\Main::DATABASE_LOGS);
-        }
-        return $this->adapter;
-    }
-
-    private function credentials()
-    {
-        $credentialsFile = dirname(__DIR__) . self::CREDENTIALS_FILE;
-        if (!file_exists($credentialsFile)) {
-            throw new \Exception(sprintf('Not found, file `%s` for %s ', $credentialsFile, __METHOD__));
-        }
-
-        if (false === ($credentials = @file_get_contents($credentialsFile))) {
-            throw new \Exception(sprintf('Could not get content, file `%s` for %s ', $credentialsFile, __METHOD__));
-        }
-
-        return $credentials;
     }
 }

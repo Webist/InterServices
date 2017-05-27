@@ -73,7 +73,7 @@ class ORM implements \App\Contract\Spec\ORM
                 throw new \Exception(sprintf('Could not get content, file `%s` for %s ', $credentialsFile, __METHOD__));
             }
 
-            $credentials = $connector->credentials($credentials, self::DATABASE_RELATIONAL);
+            $credentials = $connector->credentials(explode("\n", $credentials), self::DATABASE_RELATIONAL);
 
             return $this->em = $this->getEntityManager(
                 [

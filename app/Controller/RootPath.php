@@ -6,12 +6,12 @@ namespace App\Controller;
 class RootPath implements \App\Contract\Spec\RootPath
 {
     private $inputHandler;
-    private $actor;
+    private $interActor;
 
-    public function __construct(\Http\Stream\InputHandler $inputHandler, \App\InterActor\RootPath $actor)
+    public function __construct(\Http\Stream\InputHandler $inputHandler, \App\InterActor\RootPath $interActor)
     {
         $this->inputHandler = $inputHandler;
-        $this->actor = $actor;
+        $this->interActor = $interActor;
     }
 
     /**
@@ -21,8 +21,8 @@ class RootPath implements \App\Contract\Spec\RootPath
     public function renderPage()
     {
         $view = new \View\Model(
-            \View\RootPath::page($this->actor->contentUnit()),
-            $this->actor->meta()->routeArrayMap()
+            \View\RootPath::page($this->interActor->contentUnit()),
+            $this->interActor->meta()->routeArrayMap()
         );
         return $view->render(false);
     }
@@ -42,7 +42,7 @@ class RootPath implements \App\Contract\Spec\RootPath
      */
     public function addPostXhrEmail()
     {
-        $returnValue = $this->actor->emailReturnValue(filter_input_array(INPUT_POST));
+        $returnValue = $this->interActor->emailReturnValue(filter_input_array(INPUT_POST));
 
         return json_encode(
             [

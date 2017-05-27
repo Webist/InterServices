@@ -6,12 +6,12 @@ namespace App\Controller;
 class Customer implements \App\Contract\Spec\Customer
 {
     private $inputHandler;
-    private $actor;
+    private $interActor;
 
-    public function __construct(\Http\Stream\InputHandler $inputHandler, \App\InterActor\Customer $actor)
+    public function __construct(\Http\Stream\InputHandler $inputHandler, \App\InterActor\Customer $interActor)
     {
         $this->inputHandler = $inputHandler;
-        $this->actor = $actor;
+        $this->interActor = $interActor;
     }
 
     public function test()
@@ -51,7 +51,7 @@ class Customer implements \App\Contract\Spec\Customer
                 ),
         );
         // return $this->renderForm();
-        throw new \Error(var_dump($this->actor->postXhrReturnValue($postData)));
+        throw new \Error(var_dump($this->interActor->postXhrReturnValue($postData)));
     }
 
     /**
@@ -60,7 +60,7 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function addPostXhr()
     {
-        $returnValue = $this->actor->postXhrReturnValue(filter_input_array(INPUT_POST));
+        $returnValue = $this->interActor->postXhrReturnValue(filter_input_array(INPUT_POST));
 
         return json_encode(
             [
@@ -81,11 +81,11 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function renderForm()
     {
-        $formUnit = $this->actor->formUnit($this->inputHandler->parameter('uuid'));
+        $formUnit = $this->interActor->formUnit($this->inputHandler->parameter('uuid'));
 
         $view = new \View\Model(
             \View\Customer::form($formUnit),
-            $this->actor->meta()->routeArrayMap()
+            $this->interActor->meta()->routeArrayMap()
         );
         return $view->render();
     }
@@ -96,11 +96,11 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function renderList()
     {
-        $listUnit = $this->actor->listUnit();
+        $listUnit = $this->interActor->listUnit();
 
         $view = new \View\Model(
             \View\Customer::list($listUnit),
-            $this->actor->meta()->routeArrayMap()
+            $this->interActor->meta()->routeArrayMap()
         );
         return $view->render();
     }

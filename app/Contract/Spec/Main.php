@@ -20,8 +20,12 @@ interface Main
 
     /**
      * Service applications
+     * Always in service directory and they mostly use components form \handler namespace
      */
-    const DB_CONNECTOR = \Connector\Database::class;
+    const FILE = \App\Service\File::class;
+    const DB_ADAPTER = \App\Service\Adapter::class;
+    const IP_LOGGER = \App\Service\IpLogger::class;
+
     const CUSTOMER = \App\Service\Customer::class;
     const MAILER = \App\Service\Mailer::class;
 

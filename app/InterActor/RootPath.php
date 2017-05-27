@@ -27,12 +27,14 @@ class RootPath implements \App\Contract\Spec\RootPath, \App\Contract\Behave\Inte
         $this->app = $app;
     }
 
-    /**
-     * @return \App\Storage\Meta
-     */
     public function meta()
     {
         return $this->meta;
+    }
+
+    public function app()
+    {
+        return $this->app;
     }
 
     /**

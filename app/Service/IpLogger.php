@@ -12,20 +12,22 @@ namespace App\Service;
  */
 class IpLogger
 {
+    /** @var actual operator holder */
+    private $operator;
+    /** Use a public constant for operator agreement */
+    const OPERATOR_VISITOR_LOG = 'log visits';
+
+    /** @var array queries map (model) to hide */
+    private $queries = [
+        self::OPERATOR_VISITOR_LOG => [
+            "INSERT INTO visits SET route_id = :routeId, ip = :ip"
+        ]
+    ];
+
     /**
      * @var \mysqli|\PDO
      */
     private $adapter;
-
-    private $operations = [];
-
-    private $operator;
-    const OPERATOR_VISITOR_LOG = 'log visits';
-
-    public function __construct($adapter)
-    {
-        $this->adapter = $adapter;
-    }
 
     private function operator($operator)
     {
@@ -35,12 +37,7 @@ class IpLogger
 
     private function queryUnit()
     {
-        if ($this->operator == self::OPERATOR_VISITOR_LOG) {
-            return [
-                self::OPERATOR_VISITOR_LOG => "INSERT INTO visits SET route_id = :routeId, ip = :ip"
-            ];
-        }
-        return [];
+        return $this->queries[$this->operator];
     }
 
     /**
@@ -53,10 +50,12 @@ class IpLogger
 
     /**
      * @param string $operator
+     * @param $adapter
      * @return array
      */
-    public function maintainMutationUnit(string $operator): array
+    public function maintainMutationUnit(string $operator, $adapter): array
     {
+        $this->adapter = $adapter;
         return $this->operator($operator)->queryUnit();
     }
 
@@ -67,13 +66,14 @@ class IpLogger
      */
     public function mutationUnitOperations(array $queries, array $params)
     {
-        foreach ($queries as $operator => $operation) {
-            $this->operations[] = [
+        $operations = [];
+        foreach ($queries as $operation) {
+            $operations[] = [
                 'statement' => $this->adapter()->prepare($operation),
-                'parameters' => $params[$operator]
+                'parameters' => $params[$this->operator]
             ];
         }
-        return $this->operations;
+        return $operations;
     }
 
     /**

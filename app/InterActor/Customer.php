@@ -32,6 +32,11 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
         return $this->meta;
     }
 
+    public function app()
+    {
+        return $this->app;
+    }
+
     /**
      * Post xhr data, maintains array map, executes operations
      * @param $arrayMap
