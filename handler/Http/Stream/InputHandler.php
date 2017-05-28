@@ -59,57 +59,106 @@ class InputHandler implements InputInterface, InputHandlerInterface
         return !is_null(filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH'));
     }
 
-    public function parameter($name)
+    /**
+     * REQUEST_METHOD: POST
+     * @return array|mixed
+     */
+    public function postArrayMap()
     {
-        $methods = $this->parameters();
-        foreach ($methods as $parameters) {
-            if (isset($parameters[$name])) {
-                return $parameters[$name];
-            }
-        }
-        return null;
+        return filter_input_array(INPUT_POST) ?? [];
     }
 
     /**
-     * Gets input parameters
+     * REQUEST_METHOD: GET
+     * @return array|mixed
+     */
+    public function getArrayMap()
+    {
+        return filter_input_array(INPUT_GET) ?? [];
+    }
+
+    /**
+     * REQUEST_METHOD: PUT
+     * @return array
+     */
+    public function putArrayMap()
+    {
+        $put = [];
+        parse_str(file_get_contents('php://input'), $put);
+        return $put;
+    }
+
+    /**
+     * REQUEST_METHOD: OPTIONS
+     *
+     */
+    public function optionsArrayMap()
+    {
+
+    }
+
+    /**
+     * request to receive headers only
+     * REQUEST_METHOD: HEAD
+     */
+    public function headArrayMap()
+    {
+
+    }
+
+    /**
+     * REQUEST_METHOD: TRACE
+     */
+    public function traceArrayMap()
+    {
+
+    }
+
+    /**
+     * REQUEST_METHOD: DELETE
+     */
+    public function deleteArrayMap()
+    {
+
+    }
+
+    /**
+     *
+     * REQUEST_METHOD: CONNECT
+     */
+    public function connectArrayMap()
+    {
+
+    }
+
+    /**
+     * a simple CLI arguments collector
+     * @return array
+     */
+    public function cliArgumentsArrayMap()
+    {
+        $params = [];
+        if(PHP_SAPI === "cli" && array_key_exists('argv', $_SERVER)) {
+            parse_str(implode('&', array_slice($_SERVER['argv'], 1)), $params);
+        }
+        return $params;
+    }
+
+    /**
+     * Input parameters of the current request method.
+     * @notice Use appropriate method in this @class for other values
      * @return array
      */
     public function parameters()
     {
-        $params = [];
-
-        if(PHP_SAPI === "cli" && array_key_exists('argv', $_SERVER)) {
-            // a simple CLI arguments collector
-            parse_str(implode('&', array_slice($_SERVER['argv'], 1)), $params);
-        } else {
-
-            switch($this->requestMethod()) {
-                // request to receive resource-uri
-                case "GET":
-                    $params['GET'] = filter_input_array(INPUT_GET);
-
-                // request to receive headers only
-                case "HEAD":
-                    $params['HEAD'] = filter_input_array(INPUT_GET);
-
-                // request to update with the sent body data, server-side defines resource
-                case "POST":
-                    $params['POST'] = filter_input_array(INPUT_POST);
-                    $params['GET'] = filter_input_array(INPUT_GET);
-
-                // request to replace the sent resource-uri. replace (by new insert)
-                case "PUT":
-                    $put = [];
-                    parse_str(file_get_contents('php://input'), $put);
-                    $params['PUT'] = $put;
-
-                // request to receive request options
-                case "OPTIONS":
-                    // request tho delete given resource-uri
-                case "DELETE":
-            }
+        switch ($this->requestMethod()) {
+            case "POST":
+                return $this->postArrayMap();
+                break;
+            case "GET" :
+                return $this->getArrayMap();
+                break;
         }
-        return $params;
     }
 
     /**

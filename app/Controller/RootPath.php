@@ -42,7 +42,7 @@ class RootPath implements \App\Contract\Spec\RootPath
      */
     public function addPostXhrEmail()
     {
-        $returnValue = $this->interActor->emailReturnValue(filter_input_array(INPUT_POST));
+        $returnValue = $this->interActor->emailReturnValue($this->inputHandler->postArrayMap());
 
         return json_encode(
             [

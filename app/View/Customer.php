@@ -5,8 +5,6 @@ namespace View;
 
 
 use Dom\Html\Element;
-use Payment\BillingScheduleData;
-use Payment\PaymentPreferenceData;
 
 class Customer
 {
@@ -19,25 +17,15 @@ class Customer
         $userData = $arrayMap[\Account\UserData::class];
 
         $userProfileData = $arrayMap[\Account\UserProfileData::class];
-        if (empty($userProfileData)) {
-            $userProfileData = new \Account\UserProfileData();
-            $userProfileData->setId($userData->getId());
-        }
         $userData->setProfileData($userProfileData);
 
+        $creditCardData = $arrayMap[\Payment\CreditCardData::class];
+
         $paymentPreference = $arrayMap[\Payment\PaymentPreferenceData::class];
-        if (empty($paymentPreference)) {
-            $paymentPreference = new PaymentPreferenceData();
-            $paymentPreference->setId($userData->getId());
-        }
-        $arrayMap[\Payment\CreditCardData::class]->setPaymentPreference($paymentPreference);
+        $creditCardData->setPaymentPreference($paymentPreference);
 
         $billingSchedule = $arrayMap[\Payment\BillingScheduleData::class];
-        if (empty($billingSchedule)) {
-            $billingSchedule = new BillingScheduleData();
-            $billingSchedule->setId($userData->getId());
-        }
-        $arrayMap[\Payment\CreditCardData::class]->setBillingSchedule($billingSchedule);
+        $creditCardData->setBillingSchedule($billingSchedule);
 
         $formContent = new Element($userData);
         $formContent->require(dirname(dirname(__DIR__)) . '/web/metronic/form-customer/form.php');
@@ -50,7 +38,7 @@ class Customer
         $profile->require(dirname(dirname(__DIR__)) . '/web/metronic/form-customer/profile.details.php');
         $formContent->addElement(':formProfileDetails', $profile);
 
-        $billing = new Element($arrayMap[\Payment\CreditCardData::class]);
+        $billing = new Element($creditCardData);
         $billing->require(dirname(dirname(__DIR__)) . '/web/metronic/form-customer/billing.details.php');
         $formContent->addElement(':formBillingDetails', $billing);
 
@@ -67,9 +55,11 @@ class Customer
      */
     public static function list(array $arrayMap)
     {
-        $userProfileData = new Element($arrayMap[\Account\UserProfileData::class]);
-        $userProfileData->require(dirname(dirname(__DIR__)) . '/web/metronic/table-customer/list.php');
+        $userProfileData = $arrayMap[\Account\UserProfileData::class];
 
-        return $userProfileData;
+        $userProfile = new Element($userProfileData);
+        $userProfile->require(dirname(dirname(__DIR__)) . '/web/metronic/table-customer/list.php');
+
+        return $userProfile;
     }
 }

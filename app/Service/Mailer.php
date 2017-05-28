@@ -140,7 +140,13 @@ class Mailer
             } else {
                 $returnValue->addSucceedMessage($class);
             }
-            $returnValue->setUuid($operation->data()->getId());
+
+            if ($class == \Mail\EmailAuthorize::class) {
+                //
+            } else {
+                $returnValue->setUuid($operation->data()->getId());
+            }
+
         }
 
         return $returnValue;

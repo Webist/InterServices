@@ -28,6 +28,11 @@ class BillingScheduleData implements \Statement\DataObject
      */
     protected $period;
 
+    public function __construct($uuid)
+    {
+        $this->id = $uuid;
+    }
+
     /**
      * Get id
      *

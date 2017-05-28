@@ -38,7 +38,7 @@ class EmailAuthorize
 
     public function execute()
     {
-        if (emtpy(trim($this->email))) {
+        if (empty(trim($this->email))) {
             throw new \Exception(sprintf($this->messages['isInvalidInput']['error'], $this->email));
         }
         if ($this->isBlackListed()) {

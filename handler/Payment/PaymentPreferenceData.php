@@ -37,6 +37,11 @@ class PaymentPreferenceData implements \Statement\DataObject
     protected $autoPay;
 
 
+    public function __construct($uuid)
+    {
+        $this->id = $uuid;
+    }
+
     /**
      * Get id
      *

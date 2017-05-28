@@ -51,6 +51,7 @@ class Customer
     /** In context fetch, when uuid is provided then find by that id, so that the item can be modified */
     const OPERATOR_FIND = 'find';
 
+    private $unitType = 'form';
     /**
      * @return ORM
      */
@@ -72,22 +73,33 @@ class Customer
         return $this;
     }
 
-    private function returnValueUnit()
+    private function returnValueUnit($uuid)
     {
         $unit = [];
-        $unit[\Commerce\CustomerData::class] = new \Commerce\CustomerData();
-        $unit[\Account\UserData::class] = new \Account\UserData();
-        $unit[\Account\UserProfileData::class] = new \Account\UserProfileData();
-        $unit[\Payment\CreditCardData::class] = new \Payment\CreditCardData();
-        $unit[\Payment\PaymentPreferenceData::class] = new \Payment\PaymentPreferenceData();
-        $unit[\Payment\BillingScheduleData::class] = new \Payment\BillingScheduleData();
+
+        if ($this->unitType == 'list') {
+            $unit[\Account\UserProfileData::class] = new \Account\UserProfileData($uuid);
+            return $unit;
+        }
+
+        if ($this->unitType == 'form') {
+            $unit[\Commerce\CustomerData::class] = new \Commerce\CustomerData($uuid);
+            $unit[\Account\UserData::class] = new \Account\UserData($uuid);
+            $unit[\Account\UserProfileData::class] = new \Account\UserProfileData($uuid);
+            $unit[\Payment\CreditCardData::class] = new \Payment\CreditCardData($uuid);
+            $unit[\Payment\PaymentPreferenceData::class] = new \Payment\PaymentPreferenceData($uuid);
+            $unit[\Payment\BillingScheduleData::class] = new \Payment\BillingScheduleData($uuid);
+        }
+
         return $unit;
     }
 
     private function formUnit()
     {
+        $this->unitType = 'form';
+
         if ($this->operator == self::OPERATOR_NEW) {
-            return $this->returnValueUnit();
+            return $this->returnValueUnit(\Ramsey\Uuid\Uuid::uuid4()->toString());
         }
 
         if ($this->operator == self::OPERATOR_FIND) {
@@ -105,17 +117,18 @@ class Customer
 
     private function listUnit()
     {
-        $unit = [];
-        if ($this->operator == self::OPERATOR_FIND_ALL) {
-            $em = $this->orm()->entityManager();
-            $unit[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class);
-        }
+        $this->unitType = 'list';
 
         if ($this->operator == self::OPERATOR_NEW) {
-            $unit[\Account\UserProfileData::class] = new \Account\UserProfileData();
+            return $this->returnValueUnit(\Ramsey\Uuid\Uuid::uuid4()->toString());
         }
 
-        return $unit;
+        if ($this->operator == self::OPERATOR_FIND_ALL) {
+            $unit = [];
+            $em = $this->orm()->entityManager();
+            $unit[\Account\UserProfileData::class] = $em->getRepository(\Account\UserProfileData::class);
+            return $unit;
+        }
     }
 
     /**
@@ -134,13 +147,13 @@ class Customer
 
     /**
      * Maintain mutation unit lifeCycle
-     *
      * @param string $operator
+     * @param $uuid
      * @return array
      */
-    public function maintainReturnValueUnit(string $operator): array
+    public function maintainReturnValueUnit(string $operator, $uuid): array
     {
-        return $this->operator($operator)->returnValueUnit();
+        return $this->operator($operator)->returnValueUnit($uuid);
     }
 
     /**
@@ -170,11 +183,8 @@ class Customer
      */
     public function returnValueOperations(array $queries, array $arrayMap)
     {
-        $uuid = $arrayMap['uuid'];
-
         /** @var \Commerce\CustomerData $customerData */
         $customerData = $queries[\Commerce\CustomerData::class];
-        $customerData->setId($uuid);
         $customerData->setStatus(1);
         $customerData->setLocale('en');
         $customerData->setState(1);
@@ -183,14 +193,12 @@ class Customer
 
         /** @var \Account\UserData $userData */
         $userData = $queries[\Account\UserData::class];
-        $userData->setId($uuid);
         $userData->setUsername($arrayMap['username']);
         $userData->setPasswd($arrayMap['password']);
         // $userData->setRpasswd($arrayMap['rpassword']);
 
         /** @var \Account\UserProfileData $userProfileData */
         $userProfileData = $queries[\Account\UserProfileData::class];
-        $userProfileData->setId($uuid);
         $userProfileData->setGender($arrayMap['gender']);
         $userProfileData->setFullName($arrayMap['fullname']);
         $userProfileData->setEmail($arrayMap['email']);
@@ -204,7 +212,6 @@ class Customer
 
         /** @var \Payment\CreditCardData $creditCardData */
         $creditCardData = $queries[\Payment\CreditCardData::class];
-        $creditCardData->setId($uuid);
         $creditCardData->setName($arrayMap['card_name']);
         $creditCardData->setCvc($arrayMap['card_cvc']);
         $creditCardData->setExpiryDate($arrayMap['card_expiry_date']);
@@ -218,7 +225,6 @@ class Customer
 
         /** @var \Payment\PaymentPreferenceData $payPreference */
         $payPreference = $queries[\Payment\PaymentPreferenceData::class];
-        $payPreference->setId($uuid);
         $payPreference->setAutopay($autoPayCC);
         $payPreference->setMethod(1);
         $payPreference->setStatus(0);
@@ -230,7 +236,6 @@ class Customer
 
         /** @var \Payment\BillingScheduleData $billingNotifyData */
         $billingNotifyData = $queries[\Payment\BillingScheduleData::class];
-        $billingNotifyData->setId($uuid);
         $billingNotifyData->setPeriod($notifyMonthly);
 
         // In context edit, when user-email already exists then use that by email matched uuid
@@ -246,10 +251,10 @@ class Customer
     }
 
     /**
-     * @param string $uuid
+     * @param array $arrayMap
      * @return array
      */
-    public function get($uuid = ''): array
+    public function get(array $arrayMap): array
     {
         if ($this->operator == self::OPERATOR_NEW) {
             return $this->operations;
@@ -260,13 +265,11 @@ class Customer
         foreach ($this->operations as $class => $operation) {
 
             if ($this->operator == self::OPERATOR_FIND) {
-                $object = $operation->find($uuid);
+                $object = $operation->find($arrayMap['uuid']);
 
-                if ($object && empty($object->getId())) {
-                    if (empty($uuid)) {
-                        $uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
-                    }
-                    $object->setId($uuid);
+                // When uuid was given and not found then create a new empty unit
+                if (!$object) {
+                    return $this->operator(self::OPERATOR_NEW)->returnValueUnit(\Ramsey\Uuid\Uuid::uuid4()->toString());
                 }
                 $results[$class] = $object;
                 continue;

@@ -52,53 +52,55 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
 
         if (empty($arrayMap['uuid'])) {
             $operator = $customerService::OPERATOR_PERSIST;
+            $uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
         } else {
             $operator = $customerService::OPERATOR_MERGE;
+            $uuid = $arrayMap['uuid'];
         }
 
-        $returnValueUnit = $customerService->maintainReturnValueUnit($operator);
+        $returnValueUnit = $customerService->maintainReturnValueUnit($operator, $uuid);
         $operations = $customerService->returnValueOperations($returnValueUnit, $arrayMap);
         return $customerService->mutate($operations);
     }
 
     /**
      * Form unit, maintains uuid, queries array map
-     * @param $uuid
+     * @param array $arrayMap
      * @return array
      */
-    public function formUnit($uuid = ''): array
+    public function formUnit(array $arrayMap = []): array
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->app->get(self::CUSTOMER);
 
-        if (empty($uuid)) {
+        if (empty($arrayMap)) {
             $operator = $customerService::OPERATOR_NEW;
         } else {
             $operator = $customerService::OPERATOR_FIND;
         }
 
         $customerService->maintainFormUnit($operator);
-        return $customerService->get($uuid);
+        return $customerService->get($arrayMap);
     }
 
     /**
      * List unit, maintains uuid, queries array map
-     * @param string $uuid
+     * @param array $arrayMap
      * @return array
      */
-    public function listUnit($uuid = ''): array
+    public function listUnit(array $arrayMap = []): array
     {
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->app->get(self::CUSTOMER);
 
-        if (empty($uuid)) {
+        if (empty($arrayMap)) {
             $operator = $customerService::OPERATOR_FIND_ALL;
         } else {
             $operator = $customerService::OPERATOR_NEW;
         }
 
         $customerService->maintainListUnit($operator);
-        return $customerService->get($uuid);
+        return $customerService->get($arrayMap);
     }
 
 }

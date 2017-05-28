@@ -59,6 +59,11 @@ class UserData implements \Statement\DataObject
      */
     protected $profileData;
 
+    public function __construct($uuid)
+    {
+        $this->id = $uuid;
+    }
+
     /**
      * Get id
      *

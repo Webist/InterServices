@@ -75,6 +75,11 @@ class CreditCardData implements \Statement\DataObject
         $this->billingSchedule = $billingSchedule;
     }
 
+    public function __construct($uuid)
+    {
+        $this->id = $uuid;
+    }
+
     /**
      * Get id
      *

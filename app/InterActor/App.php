@@ -13,17 +13,17 @@ class App implements \App\Contract\Spec\Main
     private $services = [];
 
     /**
-     * @param $handlerFieldName
+     * @param $interActorName
      * @param $route
      * @return null
      */
-    public function controllerInterActor($handlerFieldName, $route)
+    public function controllerInterActor(string $interActorName, array $route)
     {
         $interActor = null;
         $meta = new \App\Storage\Meta($route);
-        if (!empty($handlerFieldName)) {
-            $classHandlerName = self::INTERACTOR_NAMESPACE . $handlerFieldName;
-            $interActor = new $classHandlerName($meta, $this);
+        if (!empty($interActorName)) {
+            $interActorClass = self::INTERACTOR_NAMESPACE . $interActorName;
+            $interActor = new $interActorClass($meta, $this);
         }
 
         // Extra feature, log visits

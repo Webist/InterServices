@@ -74,6 +74,11 @@ class UserProfileData implements \Statement\DataObject
     private $remarks;
 
 
+    public function __construct($uuid)
+    {
+        $this->id = $uuid;
+    }
+
     /**
      * Get id
      *

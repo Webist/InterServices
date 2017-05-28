@@ -14,6 +14,22 @@ class Customer implements \App\Contract\Spec\Customer
         $this->interActor = $interActor;
     }
 
+    /**
+     * When post request-method uuid is empty then use the non empty uuid from get request-method
+     * @param $postArrayMap
+     * @return mixed
+     */
+    private function maintainUuid($postArrayMap)
+    {
+        if (array_key_exists('uuid', $postArrayMap) && empty($postArrayMap['uuid'])) {
+            $getArrayMap = $this->inputHandler->getArrayMap();
+            if (array_key_exists('uuid', $getArrayMap) && !empty($getArrayMap['uuid'])) {
+                $postArrayMap['uuid'] = $getArrayMap['uuid'];
+            }
+        }
+        return $postArrayMap;
+    }
+
     public function test()
     {
         print 'Test the CustomerStatement data save into storage <br/>';
@@ -60,7 +76,9 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function addPostXhr()
     {
-        $returnValue = $this->interActor->postXhrReturnValue(filter_input_array(INPUT_POST));
+        $postArrayMap = $this->maintainUuid($this->inputHandler->postArrayMap());
+
+        $returnValue = $this->interActor->postXhrReturnValue($postArrayMap);
 
         return json_encode(
             [
@@ -81,7 +99,7 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function renderForm()
     {
-        $formUnit = $this->interActor->formUnit($this->inputHandler->parameter('uuid'));
+        $formUnit = $this->interActor->formUnit($this->inputHandler->getArrayMap());
 
         $view = new \View\Model(
             \View\Customer::form($formUnit),
@@ -96,7 +114,7 @@ class Customer implements \App\Contract\Spec\Customer
      */
     public function renderList()
     {
-        $listUnit = $this->interActor->listUnit();
+        $listUnit = $this->interActor->listUnit($this->inputHandler->getArrayMap());
 
         $view = new \View\Model(
             \View\Customer::list($listUnit),
