@@ -53,8 +53,8 @@ class Operation
         if ($this->operator == self::MERGE) {
 
             if ($this->dataObject->getId()) {
-                $this->dataObject = $this->orm->entityManager()->getRepository(get_class($this->data()))->find($this->dataObject->getId());
-                $this->dataObject->setCreatedAt($this->dataObject->getCreatedAt());
+                $dataObject = $this->orm->entityManager()->getRepository(get_class($this->data()))->find($this->dataObject->getId());
+                $this->dataObject->setCreatedAt($dataObject->getCreatedAt());
             }
             $this->orm->entityManager()->merge($this->dataObject);
         }

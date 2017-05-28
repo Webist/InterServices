@@ -153,6 +153,7 @@ class Customer
      */
     public function maintainReturnValueUnit(string $operator, $uuid): array
     {
+        $this->unitType = 'form';
         return $this->operator($operator)->returnValueUnit($uuid);
     }
 
