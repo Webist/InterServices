@@ -25,51 +25,42 @@ class IpLogger
     ];
 
     /**
-     * @var \mysqli|\PDO
+     * @param $operator
+     * @return $this
      */
-    private $adapter;
-
     private function operator($operator)
     {
         $this->operator = $operator;
         return $this;
     }
 
-    private function queryUnit()
+    private function queryUnit(): bool
     {
-        return $this->queries[$this->operator];
-    }
-
-    /**
-     * @return \mysqli|\PDO
-     */
-    public function adapter()
-    {
-        return $this->adapter;
+        $this->queries[$this->operator];
+        return true;
     }
 
     /**
      * @param string $operator
-     * @param $adapter
-     * @return array
+     * @return bool
      */
-    public function maintainMutationUnit(string $operator, $adapter): array
+    public function maintainMutation(string $operator): bool
     {
-        $this->adapter = $adapter;
-        return $this->operator($operator)->queryUnit();
+        $this->operator($operator)->queryUnit();
+        return true;
     }
 
     /**
-     * @param array $queries
      * @param array $params
+     * @param $adapter \mysqli|\PDO
      * @return array
      */
-    public function mutationUnitOperations(array $queries, array $params)
+    public function mutationOperations(array $params, $adapter): array
     {
         $operations = [];
-        foreach ($queries as $operation) {
+        foreach ($this->queries[$this->operator] as $operation) {
             $operations[] = [
-                'statement' => $this->adapter()->prepare($operation),
+                'statement' => $adapter->prepare($operation),
                 'parameters' => $params[$this->operator]
             ];
         }

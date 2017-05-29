@@ -31,24 +31,24 @@ class App implements \App\Contract\Spec\Main
             // Read config file with credentials
             /** @var \App\Service\File $fileService */
             $fileService = $this->get(self::FILE);
-            $credentials = $fileService->maintainUnit(dirname(__DIR__) . self::CREDENTIALS_FILE)->get();
+            $credentials = $fileService->maintainFileName(dirname(__DIR__) . self::CREDENTIALS_FILE)->fileContents();
 
             // Get the database adapter with connection
             /** @var \App\Service\Adapter $adapterService */
             $adapterService = $this->get(self::DB_ADAPTER);
-            $adapter = $adapterService->maintainUnit($credentials)->get(\App\Contract\Spec\Main::DATABASE_LOGS);
+            $adapter = $adapterService->maintainCredentials($credentials)->connection(\App\Contract\Spec\Main::DATABASE_LOGS);
 
             // Insert into data store
             /** @var \App\Service\IpLogger $ipLoggerService */
             $ipLoggerService = $this->get(self::IP_LOGGER);
-            $queries = $ipLoggerService->maintainMutationUnit($ipLoggerService::OPERATOR_VISITOR_LOG, $adapter);
+            $ipLoggerService->maintainMutation($ipLoggerService::OPERATOR_VISITOR_LOG);
 
             $params = [
                 $ipLoggerService::OPERATOR_VISITOR_LOG => [
                     'routeId' => $route['indexKey'],
                     'ip' => filter_input(INPUT_SERVER, 'REMOTE_ADDR')]
             ];
-            $operations = $ipLoggerService->mutationUnitOperations($queries, $params);
+            $operations = $ipLoggerService->mutationOperations($params, $adapter);
             $ipLoggerService->mutate($operations);
 
         } catch (\Throwable $throwable) {

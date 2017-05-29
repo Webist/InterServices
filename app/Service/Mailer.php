@@ -23,8 +23,6 @@ namespace App\Service;
  */
 class Mailer
 {
-    private $orm;
-
     /**
      * Collection operations
      * @var array
@@ -36,17 +34,6 @@ class Mailer
     const OPERATOR_PERSIST = \Statement\Operation::PERSIST;
 
     const EMAIL_TO = 'info@example.com';
-
-    /**
-     * @return \Connector\ORM
-     */
-    private function orm()
-    {
-        if ($this->orm === null) {
-            $this->orm = new \Connector\ORM();
-        }
-        return $this->orm;
-    }
 
     /**
      * @param $operator
@@ -114,7 +101,7 @@ class Mailer
                     $query->setId(uniqid());
                 }
                 // Save into database
-                $this->operations[\Mail\EmailData::class] = new \Statement\Operation($query, \Statement\Operation::PERSIST, $this->orm());
+                $this->operations[\Mail\EmailData::class] = new \Statement\Operation($query, \Statement\Operation::PERSIST);
                 // Send mail
                 $this->operations[\Mail\EmailSend::class] = new \Mail\EmailSend($query);
             }

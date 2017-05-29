@@ -38,7 +38,7 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
     }
 
     /**
-     * Post xhr data, maintains array map, executes operations
+     * Post xhr, maintains array map and defines operation, dispatches operations
      * @param $arrayMap
      * @return \Statement\ReturnValue
      */
@@ -50,21 +50,20 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->app->get(self::CUSTOMER);
 
-        if (empty($arrayMap['uuid'])) {
+        if (strlen($arrayMap['uuid']) == $customerService::NEW_ITEM_UUID_LENGTH) {
             $operator = $customerService::OPERATOR_PERSIST;
-            $uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
-        } else {
+        }
+        if (strlen($arrayMap['uuid']) == $customerService::EXISTING_ITEM_UUID_LENGTH) {
             $operator = $customerService::OPERATOR_MERGE;
-            $uuid = $arrayMap['uuid'];
         }
 
-        $returnValueUnit = $customerService->maintainReturnValueUnit($operator, $uuid);
-        $operations = $customerService->returnValueOperations($returnValueUnit, $arrayMap);
+        $customerService->maintainReturnValue($operator);
+        $operations = $customerService->returnValueOperations($arrayMap);
         return $customerService->mutate($operations);
     }
 
     /**
-     * Form unit, maintains uuid, queries array map
+     * Form unit, maintains array map and defines operation, dispatches queries
      * @param array $arrayMap
      * @return array
      */
@@ -79,12 +78,12 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
             $operator = $customerService::OPERATOR_FIND;
         }
 
-        $customerService->maintainFormUnit($operator);
-        return $customerService->get($arrayMap);
+        $customerService->maintainForm($operator);
+        return $customerService->form($arrayMap);
     }
 
     /**
-     * List unit, maintains uuid, queries array map
+     * List unit, maintains array map and defines operation, dispatches queries
      * @param array $arrayMap
      * @return array
      */
@@ -99,8 +98,8 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
             $operator = $customerService::OPERATOR_NEW;
         }
 
-        $customerService->maintainListUnit($operator);
-        return $customerService->get($arrayMap);
+        $customerService->maintainList($operator);
+        return $customerService->list($arrayMap);
     }
 
 }

@@ -46,7 +46,7 @@ class RootPath implements \App\Contract\Spec\RootPath, \App\Contract\Behave\Inte
     }
 
     /**
-     * email array map, maintains array map, executes operations
+     * Email, maintains array map and defines operation, dispatches operations
      * @param array $arrayMap
      * @return \Statement\ReturnValue
      */
@@ -69,7 +69,7 @@ class RootPath implements \App\Contract\Spec\RootPath, \App\Contract\Behave\Inte
 
         // Extra feature, create customer form an incoming email without breaking the mail process
         try {
-            $arrayMap['uuid'] = \Ramsey\Uuid\Uuid::uuid4()->toString();
+            $arrayMap['uuid'] = uniqid();
             $arrayMap['username'] = '';
             $arrayMap['password'] = '';
             $arrayMap['gender'] = 0;
@@ -87,8 +87,8 @@ class RootPath implements \App\Contract\Spec\RootPath, \App\Contract\Behave\Inte
 
             /** @var \App\Service\Customer $customerService */
             $customerService = $this->app->get(self::CUSTOMER);
-            $queries = $customerService->maintainReturnValueUnit($customerService::OPERATOR_PERSIST);
-            $operations = $customerService->returnValueOperations($queries, $arrayMap);
+            $customerService->maintainReturnValue($customerService::OPERATOR_PERSIST);
+            $operations = $customerService->returnValueOperations($arrayMap);
             $customerService->mutate($operations);
 
         } catch (\Exception $exception) {
