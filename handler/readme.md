@@ -20,7 +20,7 @@ These services are mostly used by [Application services](../app/Service/readme.m
   + Payment\CreditCardData
 + Persistence layer execution and after
   + Statement\Operation
-  + Statement\Operator
+  + Statement\Operations
   + Journal\EntityEventData
   
 + View layer / User Interface / Presentation Layer

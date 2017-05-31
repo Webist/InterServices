@@ -50,15 +50,18 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->app->get(self::CUSTOMER);
 
-        if (strlen($arrayMap['uuid']) == $customerService::NEW_ITEM_UUID_LENGTH) {
-            $operator = $customerService::OPERATOR_PERSIST;
-        }
-        if (strlen($arrayMap['uuid']) == $customerService::EXISTING_ITEM_UUID_LENGTH) {
+        $operator = $customerService::OPERATOR_PERSIST;
+        $uuid = '';
+        if (strlen($arrayMap['uuid']) === $customerService::EXISTING_ITEM_UUID_LENGTH) {
             $operator = $customerService::OPERATOR_MERGE;
+            $uuid = $arrayMap['uuid'];
         }
 
-        $customerService->maintainReturnValue($operator);
-        $operations = $customerService->returnValueOperations($arrayMap);
+        $customerService->maintainReturnValue($operator, $uuid);
+        $operators = $customerService->returnValueOperators($arrayMap);
+
+        $operations = new \Statement\Operations($operators, new \Statement\ReturnValue());
+
         return $customerService->mutate($operations);
     }
 
@@ -72,14 +75,20 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->app->get(self::CUSTOMER);
 
-        if (empty($arrayMap)) {
-            $operator = $customerService::OPERATOR_NEW;
-        } else {
-            $operator = $customerService::OPERATOR_FIND;
+        $operator = $customerService::OPERATOR_NEW;
+        $uuid = '';
+        if (!empty($arrayMap)) {
+            if (isset($arrayMap['uuid']) && strlen($arrayMap['uuid']) === $customerService::EXISTING_ITEM_UUID_LENGTH) {
+                $operator = $customerService::OPERATOR_FIND;
+                $uuid = $arrayMap['uuid'];
+            }
         }
 
-        $customerService->maintainForm($operator);
-        return $customerService->form($arrayMap);
+        $selector = new \Statement\Selector();
+        $selector->setPredicates([new \Statement\Predicate('uuid', $operator, [$uuid])]);
+
+        $customerService->maintainForm($selector);
+        return $customerService->form();
     }
 
     /**
@@ -92,14 +101,17 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
         /** @var \App\Service\Customer $customerService */
         $customerService = $this->app->get(self::CUSTOMER);
 
-        if (empty($arrayMap)) {
-            $operator = $customerService::OPERATOR_FIND_ALL;
-        } else {
-            $operator = $customerService::OPERATOR_NEW;
+        $operator = $customerService::OPERATOR_FIND_ALL;
+        $uuid = '';
+        if (!empty($arrayMap)) {
+            $operator = $customerService::OPERATOR_FIND;
         }
 
-        $customerService->maintainList($operator);
-        return $customerService->list($arrayMap);
+        $selector = new \Statement\Selector();
+        $selector->setPredicates([new \Statement\Predicate('id', $operator, [$uuid])]);
+
+        $customerService->maintainList($selector);
+        return $customerService->list();
     }
 
 }

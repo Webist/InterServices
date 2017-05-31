@@ -29,9 +29,9 @@ class Customer
      */
     private $operator;
     /** In context mutate, when array map then persist (insert) a new unit into the store */
-    const OPERATOR_PERSIST = \Statement\Operation::PERSIST;
+    const OPERATOR_PERSIST = \Statement\Operator::PERSIST;
     /** In context mutate, when array map then merge (update) a new unit into the store, uuid required  */
-    const OPERATOR_MERGE = \Statement\Operation::MERGE;
+    const OPERATOR_MERGE = \Statement\Operator::MERGE;
 
     /** In context fetch, when no input (e.g. uuid) provided then compose a new unit, so that a new item can be created */
     const OPERATOR_NEW = 'new';
@@ -39,7 +39,7 @@ class Customer
     const OPERATOR_FIND_ALL = 'findAll';
     /** In context fetch, when uuid is provided then find by that id, so that the item can be modified */
     const OPERATOR_FIND = 'find';
-
+    private $parameters = [];
     /**
      * @var string
      */
@@ -48,7 +48,7 @@ class Customer
     /** Length, UniqueId for a new empty item  */
     const NEW_ITEM_UUID_LENGTH = 13;
     /** Length, UniqueId for to create or an existing item */
-    const EXISTING_ITEM_UUID_LENGTH = 32;
+    const EXISTING_ITEM_UUID_LENGTH = 36;
 
     /**
      * @var \Connector\ORM
@@ -130,10 +130,13 @@ class Customer
 
     /**
      * Aggregates the business case as a new model. Default domain model.
+     * @param string $uuid Operation like "merge" provides uuid
      */
-    private function newModel(): void
+    private function newModel($uuid): void
     {
-        $uuid = $this->uuid();
+        if (empty($uuid)) {
+            $uuid = $this->uuid();
+        }
         $this->customerData = new \Commerce\CustomerData($uuid);
         $this->userData = new \Account\UserData($uuid);
         $this->userProfileData = new \Account\UserProfileData($uuid);
@@ -144,9 +147,11 @@ class Customer
 
     /**
      * Aggregates the business case as an existing repository model. Default data model.
+     * @param $uuid
      */
-    private function repositoryModel(): void
+    private function repositoryModel($uuid): void
     {
+        $this->setId($uuid);
         $em = $this->orm()->entityManager();
         $this->customerData = $em->getRepository(\Commerce\CustomerData::class);
         $this->userData = $em->getRepository(\Account\UserData::class);
@@ -159,11 +164,12 @@ class Customer
     /**
      * Aggregates the business case "mutate" as a new model.
      * @param string $operator
+     * @param string $uuid
      * @return bool
      */
-    public function maintainReturnValue(string $operator): bool
+    public function maintainReturnValue(string $operator, $uuid = ''): bool
     {
-        $this->setOperator($operator)->newModel();
+        $this->setOperator($operator)->newModel($uuid);
         return true;
     }
     /**
@@ -172,12 +178,13 @@ class Customer
      * @param array $arrayMap
      * @return array
      */
-    public function returnValueOperations(array $arrayMap): array
+    public function returnValueOperators(array $arrayMap): array
     {
-        $operations = [];
+        $operators = [];
 
         // Extra feature, In context edit, when user-email already exists then use that by email matched uuid
-        $uuidByEmail = $this->findUuidByEmail($this->userProfileData->getEmail());
+        $uuidByEmail = $this->findUuidByEmail($arrayMap['email']);
+
         if (!empty($uuidByEmail)) {
             $this->customerData->setId($uuidByEmail);
             $this->userData->setId($uuidByEmail);
@@ -191,12 +198,12 @@ class Customer
         $this->customerData->setLocale('en');
         $this->customerData->setState(1);
         $this->customerData->setTimezone('Europa/Amsterdam');
-        $operations[\Commerce\CustomerData::class] = new \Statement\Operation($this->customerData, $this->operator);
+        $operators[\Commerce\CustomerData::class] = new \Statement\Operator($this->customerData, $this->operator);
 
         $this->userData->setUsername($arrayMap['username']);
         $this->userData->setPasswd($arrayMap['password']);
         // $this->userData->setRpasswd($arrayMap['rpassword']);
-        $operations[\Account\UserData::class] = new \Statement\Operation($this->userData, $this->operator);
+        $operators[\Account\UserData::class] = new \Statement\Operator($this->userData, $this->operator);
 
         $this->userProfileData->setGender($arrayMap['gender']);
         $this->userProfileData->setFullName($arrayMap['fullname']);
@@ -207,14 +214,14 @@ class Customer
         $this->userProfileData->setCity($arrayMap['city']);
         $this->userProfileData->setCountry($arrayMap['country']);
         $this->userProfileData->setRemarks($arrayMap['remarks']);
-        $operations[\Account\UserProfileData::class] = new \Statement\Operation($this->userProfileData, $this->operator);
+        $operators[\Account\UserProfileData::class] = new \Statement\Operator($this->userProfileData, $this->operator);
 
         $this->creditCardData->setName($arrayMap['card_name']);
         $this->creditCardData->setCvc($arrayMap['card_cvc']);
         $this->creditCardData->setExpiryDate($arrayMap['card_expiry_date']);
         $this->creditCardData->setNumber($arrayMap['card_number']);
         $this->creditCardData->setStatus(0);
-        $operations[\Payment\CreditCardData::class] = new \Statement\Operation($this->creditCardData, $this->operator);
+        $operators[\Payment\CreditCardData::class] = new \Statement\Operator($this->creditCardData, $this->operator);
 
         $autoPayCC = false;
         if (isset($arrayMap['payment']) && in_array("1", $arrayMap['payment'])) {
@@ -224,62 +231,62 @@ class Customer
         $this->paymentPreferenceData->setAutopay($autoPayCC);
         $this->paymentPreferenceData->setMethod(1);
         $this->paymentPreferenceData->setStatus(0);
-        $operations[\Payment\PaymentPreferenceData::class] = new \Statement\Operation($this->paymentPreferenceData, $this->operator);
+        $operators[\Payment\PaymentPreferenceData::class] = new \Statement\Operator($this->paymentPreferenceData, $this->operator);
 
         $notifyMonthly = 0;
         if (isset($arrayMap['payment']) && in_array("2", $arrayMap['payment'])) {
             $notifyMonthly = 30;
         }
         $this->billingScheduleData->setPeriod($notifyMonthly);
-        $operations[\Payment\BillingScheduleData::class] = new \Statement\Operation($this->billingScheduleData, $this->operator);
+        $operators[\Payment\BillingScheduleData::class] = new \Statement\Operator($this->billingScheduleData, $this->operator);
 
-        return $operations;
+        return $operators;
     }
 
     /**
      * Gets the business case "mutate" model results
      * @param array $operations
-     * @return \Statement\Operator
+     * @return mixed
      */
     public function mutate(array $operations)
     {
-        $statement = new \Statement\Operator($operations, new \Statement\ReturnValue());
-        return $statement->execute();
+        return $operations->execute();
     }
 
     /**
      * Aggregates the business case "form" as a new or an repository model.
-     * @param string $operator
+     * @param \Statement\Selector $selector
      * @return bool
      */
-    public function maintainForm(string $operator): bool
+    public function maintainForm(\Statement\Selector $selector): bool
     {
-        $this->setOperator($operator);
+        /** @var \Statement\Predicate $predicate */
+        foreach ($selector->getPredicates() as $predicate) {
+            $this->setOperator($predicate->operator());
+            if ($predicate->operator() == self::OPERATOR_FIND) {
+                $this->repositoryModel(current($predicate->values()));
+                return true;
+            }
 
-        if ($this->operator == self::OPERATOR_FIND) {
-            $this->repositoryModel();
+            $this->newModel(current($predicate->values()));
             return true;
         }
-
-        $this->newModel();
-        return true;
     }
 
     /**
      * Gets the business case "form" model results
-     * @param array $arrayMap
      * @return array
      */
-    public function form(array $arrayMap): array
+    public function form(): array
     {
         $unit = [];
         if ($this->operator == self::OPERATOR_FIND) {
-            $unit[\Commerce\CustomerData::class] = $this->customerData->find($arrayMap['uuid']);
-            $unit[\Account\UserData::class] = $this->userData->find($arrayMap['uuid']);
-            $unit[\Account\UserProfileData::class] = $this->userProfileData->find($arrayMap['uuid']);
-            $unit[\Payment\CreditCardData::class] = $this->creditCardData->find($arrayMap['uuid']);
-            $unit[\Payment\PaymentPreferenceData::class] = $this->paymentPreferenceData->find($arrayMap['uuid']);
-            $unit[\Payment\BillingScheduleData::class] = $this->billingScheduleData->find($arrayMap['uuid']);
+            $unit[\Commerce\CustomerData::class] = $this->customerData->find($this->uuid());
+            $unit[\Account\UserData::class] = $this->userData->find($this->uuid());
+            $unit[\Account\UserProfileData::class] = $this->userProfileData->find($this->uuid());
+            $unit[\Payment\CreditCardData::class] = $this->creditCardData->find($this->uuid());
+            $unit[\Payment\PaymentPreferenceData::class] = $this->paymentPreferenceData->find($this->uuid());
+            $unit[\Payment\BillingScheduleData::class] = $this->billingScheduleData->find($this->uuid());
             return $unit;
         }
 
@@ -297,37 +304,59 @@ class Customer
 
     /**
      * Aggregates the business case "list" as a new or an repository model.
-     * @param string $operator
+     * @param \Statement\Selector $selector
      * @return bool
      */
-    public function maintainList(string $operator): bool
+    public function maintainList(\Statement\Selector $selector): bool
     {
-        $this->setOperator($operator);
 
-        if ($this->operator == self::OPERATOR_FIND_ALL) {
-            $this->userProfileData = $this->orm()->entityManager()->getRepository(\Account\UserProfileData::class);
-            return true;
+        /** @var \Statement\Predicate $predicate */
+        foreach ($selector->getPredicates() as $predicate) {
+            $this->setOperator($predicate->operator());
+
+            if ($predicate->operator() == self::OPERATOR_FIND_ALL) {
+                $this->userProfileData = $this->orm()->entityManager()->getRepository(\Account\UserProfileData::class);
+                return true;
+            }
+
+            if ($predicate->operator() == self::OPERATOR_FIND) {
+                $this->userProfileData = $this->orm()->entityManager()->getRepository(\Account\UserProfileData::class);
+                $this->parameters = array_flip(array_fill_keys($predicate->values(), $predicate->fieldName()));
+                return true;
+            }
+
+            if ($predicate->operator() == self::OPERATOR_NEW) {
+                $this->userProfileData = new \Account\UserProfileData(current($predicate->values()));
+                return true;
+            }
+
         }
-
-        $this->userProfileData = new \Account\UserProfileData($this->uuid());
-        return true;
     }
 
     /**
      * Gets the business case "list" model results
-     * @param array $arrayMap
      * @return array
      */
-    public function list(array $arrayMap): array
+    public function list(): array
     {
         $unit = [];
         if ($this->operator == self::OPERATOR_FIND_ALL) {
             $unit[\Account\UserProfileData::class] = $this->userProfileData->findAll();
         }
 
+        if ($this->operator == self::OPERATOR_FIND) {
+
+            if (!($result = $this->userProfileData->find($this->parameters))) {
+                $unit[\Account\UserProfileData::class] = [new \Account\UserProfileData(uniqid())];
+            } else {
+                $unit[\Account\UserProfileData::class] = [$result];
+            }
+        }
+
         if ($this->operator == self::OPERATOR_NEW) {
             $unit[\Account\UserProfileData::class] = $this->userProfileData;
         }
+
         return $unit;
     }
 }

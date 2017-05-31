@@ -31,7 +31,7 @@ class Mailer
 
     private $operator;
     /** In context mutate, when a new record needed to be created */
-    const OPERATOR_PERSIST = \Statement\Operation::PERSIST;
+    const OPERATOR_PERSIST = \Statement\Operator::PERSIST;
 
     const EMAIL_TO = 'info@example.com';
 
@@ -101,7 +101,7 @@ class Mailer
                     $query->setId(uniqid());
                 }
                 // Save into database
-                $this->operations[\Mail\EmailData::class] = new \Statement\Operation($query, \Statement\Operation::PERSIST);
+                $this->operations[\Mail\EmailData::class] = new \Statement\Operator($query, \Statement\Operator::PERSIST);
                 // Send mail
                 $this->operations[\Mail\EmailSend::class] = new \Mail\EmailSend($query);
             }
@@ -119,7 +119,7 @@ class Mailer
     {
         $returnValue = new \Statement\ReturnValue();
 
-        /** @var \Statement\Operation $operation */
+        /** @var \Statement\Operator $operation */
         foreach ($operations as $class => $operation) {
 
             if (!$operation->execute()) {

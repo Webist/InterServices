@@ -88,7 +88,7 @@ class RootPath implements \App\Contract\Spec\RootPath, \App\Contract\Behave\Inte
             /** @var \App\Service\Customer $customerService */
             $customerService = $this->app->get(self::CUSTOMER);
             $customerService->maintainReturnValue($customerService::OPERATOR_PERSIST);
-            $operations = $customerService->returnValueOperations($arrayMap);
+            $operations = $customerService->returnValueOperators($arrayMap);
             $customerService->mutate($operations);
 
         } catch (\Exception $exception) {

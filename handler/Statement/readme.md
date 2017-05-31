@@ -3,6 +3,6 @@
 + Operation
 Description Operation or Statement
 
-+ Operator
++ Operations
 Executor Operation or Statement 
 

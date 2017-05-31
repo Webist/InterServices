@@ -6,38 +6,82 @@ namespace Statement;
 
 class Operator
 {
-    private $operations;
+    private $operator = '';
+    /** In context mutate, when a new record needed to be created */
+    const PERSIST = 'persist';
+    /** In context mutate, when a record should be updated  */
+    const MERGE = 'merge';
 
-    public function __construct(array $operations, \Statement\ReturnValue $returnValue)
+    /**
+     * @var \Statement\DataObject
+     */
+    private $dataObject;
+
+    /**
+     * Enables the feature multiple persists before flushing.
+     * @var bool
+     */
+    private $persisted = false;
+
+    /**
+     * @var \Connector\ORM
+     */
+    private $orm;
+
+    public function __construct(\Statement\DataObject $dataObject, $operator)
     {
-        $this->operations = $operations;
-        $this->returnValue = $returnValue;
+        $this->dataObject = $dataObject;
+        $this->operator = $operator;
+    }
+
+    private function orm()
+    {
+        if ($this->orm === null) {
+            $this->orm = new \Connector\ORM();
+        }
+        return $this->orm;
+    }
+
+    public function data()
+    {
+        return $this->dataObject;
     }
 
     /**
-     * @param bool $persistOnly
-     * @return \Statement\ReturnValue
+     * @return $this
      */
-    public function execute($persistOnly = false)
+    public function persist()
     {
-        $operations = $this->operations();
-
-        /** @var \Statement\Operation $operation */
-        foreach ($operations as $operation) {
-
-            if (!$operation->execute($persistOnly)) {
-                $this->returnValue->addFailureError(get_class($operation->data()));
-            } else {
-                $this->returnValue->addSucceedMessage(get_class($operation->data()));
-            }
-            $this->returnValue->setUuid($operation->data()->getId());
+        if ($this->operator == self::PERSIST) {
+            $this->orm()->entityManager()->persist($this->dataObject);
         }
 
-        return $this->returnValue;
+        if ($this->operator == self::MERGE) {
+
+            if ($this->dataObject->getId()) {
+                $dataObject = $this->orm()->entityManager()->getRepository(get_class($this->data()))->find($this->dataObject->getId());
+                if ($dataObject) {
+                    $this->dataObject->setCreatedAt($dataObject->getCreatedAt());
+                    $this->orm()->entityManager()->merge($this->dataObject);
+                } else {
+                    $this->operator = self::PERSIST;
+                    $this->orm()->entityManager()->persist($this->dataObject);
+                }
+            }
+        }
+
+        $this->persisted = true;
+        return $this;
     }
 
-    public function operations()
+    /**
+     * @return bool
+     */
+    public function execute()
     {
-        return $this->operations;
+        $this->persist();
+
+        $this->orm()->entityManager()->flush();
+        return $this->orm()->entityManager()->contains($this->dataObject);
     }
 }
