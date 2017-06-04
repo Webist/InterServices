@@ -33,7 +33,8 @@ class RouteHandler implements RoutingInterface, RouteInterface
             if (!file_exists($fileName)) {
                 throw new ForwardRouteNotFoundException('Forward route not found');
             } else {
-                return include $fileName;
+                $this->inputHandler->setRoute(include $fileName);
+                return $this->inputHandler->routeArrayMap();
             }
 
         } catch (ForwardRouteNotFoundException $exception) {
@@ -49,7 +50,8 @@ class RouteHandler implements RoutingInterface, RouteInterface
             if (!file_exists($fileName)) {
                 throw new NotFoundException('Regular route not found');
             } else {
-                return include $fileName;
+                $this->inputHandler->setRoute(include $fileName);
+                return $this->inputHandler->routeArrayMap();
             }
 
         } catch (NotFoundException $exception) {

@@ -3,14 +3,10 @@
 namespace App\InterActor;
 
 
+use App\Service\App;
+
 class RootPath implements \App\Contract\Spec\RootPath, \App\Contract\Behave\InterActor
 {
-    /**
-     * Holds route, input information and access to generic handler
-     * @var \App\Storage\Meta
-     */
-    private $meta;
-
     /**
      * @var App
      */
@@ -18,18 +14,11 @@ class RootPath implements \App\Contract\Spec\RootPath, \App\Contract\Behave\Inte
 
     /**
      * RootPath constructor.
-     * @param \App\Storage\Meta $meta
      * @param App $app
      */
-    public function __construct(\App\Storage\Meta $meta, \App\InterActor\App $app)
+    public function __construct(\App\Service\App $app)
     {
-        $this->meta = $meta;
         $this->app = $app;
-    }
-
-    public function meta()
-    {
-        return $this->meta;
     }
 
     public function app()
@@ -63,9 +52,11 @@ class RootPath implements \App\Contract\Spec\RootPath, \App\Contract\Behave\Inte
 
         $arrayMap['email_to'] = $mailerService::EMAIL_TO;
 
-        $queries = $mailerService->maintainReturnValueUnit($mailerService::OPERATOR_PERSIST);
-        $operations = $mailerService->returnValueOperations($queries, $arrayMap);
-        $result = $mailerService->mutate($operations);
+        $queries = $mailerService->maintainReturnValue($mailerService::OPERATOR_PERSIST);
+        $operators = $mailerService->returnValueOperators($queries, $arrayMap);
+
+        $operations = new \Statement\Operations($operators, new \Statement\ReturnValue());
+        $result = $operations->execute();
 
         // Extra feature, create customer form an incoming email without breaking the mail process
         try {
@@ -88,8 +79,10 @@ class RootPath implements \App\Contract\Spec\RootPath, \App\Contract\Behave\Inte
             /** @var \App\Service\Customer $customerService */
             $customerService = $this->app->get(self::CUSTOMER);
             $customerService->maintainReturnValue($customerService::OPERATOR_PERSIST);
-            $operations = $customerService->returnValueOperators($arrayMap);
-            $customerService->mutate($operations);
+            $operators = $customerService->returnValueOperators($arrayMap);
+
+            $operations = new \Statement\Operations($operators, new \Statement\ReturnValue());
+            $operations->execute();
 
         } catch (\Exception $exception) {
             //

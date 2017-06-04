@@ -23,12 +23,6 @@ namespace App\Service;
  */
 class Mailer
 {
-    /**
-     * Collection operations
-     * @var array
-     */
-    private $operations = [];
-
     private $operator;
     /** In context mutate, when a new record needed to be created */
     const OPERATOR_PERSIST = \Statement\Operator::PERSIST;
@@ -63,7 +57,7 @@ class Mailer
      * @param $operator
      * @return array
      */
-    public function maintainReturnValueUnit($operator): array
+    public function maintainReturnValue($operator): array
     {
         return $this->operator($operator)->returnValueUnit();
     }
@@ -73,13 +67,15 @@ class Mailer
      * @param array $arrayMap
      * @return array
      */
-    public function returnValueOperations(array $queries, array $arrayMap): array
+    public function returnValueOperators(array $queries, array $arrayMap): array
     {
+        $operators = [];
+
         $authorize = $queries[\Mail\EmailAuthorize::class];
         $authorize->setEmail($arrayMap['email']);
 
         // Validate email
-        $this->operations[\Mail\EmailAuthorize::class] = $authorize;
+        $operators[\Mail\EmailAuthorize::class] = $authorize;
 
         /** @var \Mail\EmailData $emailData */
         $emailData = $queries[\Mail\EmailData::class];
@@ -101,41 +97,12 @@ class Mailer
                     $query->setId(uniqid());
                 }
                 // Save into database
-                $this->operations[\Mail\EmailData::class] = new \Statement\Operator($query, \Statement\Operator::PERSIST);
+                $operators[\Mail\EmailData::class] = new \Statement\Operator($query, \Statement\Operator::PERSIST);
                 // Send mail
-                $this->operations[\Mail\EmailSend::class] = new \Mail\EmailSend($query);
+                $operators[\Mail\EmailSend::class] = new \Mail\EmailSend($query);
             }
 
         }
-        return $this->operations;
-    }
-
-    /**
-     * Set operations, build operations array, lifeCycle
-     * @param array $operations
-     * @return \Statement\ReturnValue
-     */
-    public function mutate(array $operations)
-    {
-        $returnValue = new \Statement\ReturnValue();
-
-        /** @var \Statement\Operator $operation */
-        foreach ($operations as $class => $operation) {
-
-            if (!$operation->execute()) {
-                $returnValue->addFailureError($class);
-            } else {
-                $returnValue->addSucceedMessage($class);
-            }
-
-            if ($class == \Mail\EmailAuthorize::class) {
-                //
-            } else {
-                $returnValue->setUuid($operation->data()->getId());
-            }
-
-        }
-
-        return $returnValue;
+        return $operators;
     }
 }

@@ -36,6 +36,16 @@ class EmailAuthorize
         return checkdnsrr($domain);
     }
 
+    public function data()
+    {
+        return $this;
+    }
+
+    public function getId()
+    {
+        return $this->email;
+    }
+
     public function execute()
     {
         if (empty(trim($this->email))) {

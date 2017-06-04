@@ -103,7 +103,7 @@ class Customer implements \App\Contract\Spec\Customer
 
         $view = new \View\Model(
             \View\Customer::form($formUnit),
-            $this->interActor->meta()->routeArrayMap()
+            $this->inputHandler->routeArrayMap()
         );
         return $view->render();
     }
@@ -118,7 +118,7 @@ class Customer implements \App\Contract\Spec\Customer
 
         $view = new \View\Model(
             \View\Customer::list($listUnit),
-            $this->interActor->meta()->routeArrayMap()
+            $this->inputHandler->routeArrayMap()
         );
         return $view->render();
     }

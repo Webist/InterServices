@@ -1,22 +1,22 @@
 ### Web Delivery
 
-Contract/Specification, Entry point, InterActor, Storage, Service Manager, View.
+Contract/Specification, Controller, InterActor, Service, Storage, View.
 
 
-+ Contract, Spec, Behave  
-Specifications, configurations and agreements by interfaces.  
++ Contract 
+Spec, Behave configurations and agreements by interfaces.  
 [Contract/readme.md](Contract/readme.md)
 
 + Controller   
-Entry points   
+Entry point of web delivery  
 [controller/readme.md](Controller/readme.md)
 
 + InterActor  
-InterActor-Managers, maintenance with service managers  
+Entry point of application services, use cases (model layer)  
 [InterActor/readme.md](InterActor/readme.md)
 
 + Service  
-Service-Managers, business lifeCycle operations   
+Utility, Business lifeCycle operations   
 [Service/readme.md](Service/readme.md)
 
 

@@ -4,7 +4,16 @@
 namespace App\Contract\Behave;
 
 
+/**
+ * Interface InterActor
+ *
+ * @package App\Contract\Behave
+ */
 interface InterActor
 {
-    function __construct(\App\Storage\Meta $meta, \App\InterActor\App $app);
+    /**
+     * InterActor constructor.
+     * @param \App\Service\App $app
+     */
+    function __construct(\App\Service\App $app);
 }

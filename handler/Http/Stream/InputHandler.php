@@ -2,9 +2,19 @@
 
 namespace Http\Stream;
 
-
+/**
+ * Class InputHandler
+ * Web delivery InterActor
+ * @package Http\Stream
+ */
 class InputHandler implements InputInterface, InputHandlerInterface
 {
+    /**
+     * Route arrayMap holder
+     * @var
+     */
+    private $route;
+
     /**
      * Gets request URL path
      * @return string
@@ -159,6 +169,7 @@ class InputHandler implements InputInterface, InputHandlerInterface
                 return $this->getArrayMap();
                 break;
         }
+        return [];
     }
 
     /**
@@ -168,5 +179,15 @@ class InputHandler implements InputInterface, InputHandlerInterface
     public function requestMethod()
     {
         return filter_input(INPUT_SERVER, self::inputStreamRequestMethod);
+    }
+
+    public function setRoute(array $route)
+    {
+        $this->route = $route;
+    }
+
+    public function routeArrayMap()
+    {
+        return $this->route;
     }
 }

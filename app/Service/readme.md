@@ -1,10 +1,14 @@
 ### Application services - Use cases
 
-Business lifeCycle operations.  
+An application that does one job, Business lifeCycle operations.  
 
 An application service is a framework that handles operations lifeCycle in own space.  
+
+Meaning this an application service might be a domain model with aggregations unit, but also 
+a simple function such as findDiff() is, as an utility, an application service.   
+
  
-A lifeCycle basically includes business rules, workflow or a finite state machine and execution handlers.
+A business lifeCycle basically includes business rules, workflow or a finite state machine and execution handler.
 
 **Layer**
 + Implements use cases
@@ -32,10 +36,10 @@ Start-point is specifying the domain logic.
 
 **Pros**
 + Focus on essential, use cases
-+ code reuse by creating APIs (REST, SOAP)
++ Code reuse by creating APIs (REST, SOAP)
 + Less coupling to details
 + Refactoring, scaling by modify according to new requirements works better
-+ less friction (e.g. db updates) between the developers, requires less SQL knowledge
++ Less friction (e.g. db updates) between the developers, requires less SQL knowledge
 + Necessary for DDD
 
 **Cons**

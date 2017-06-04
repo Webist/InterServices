@@ -13,7 +13,7 @@ try {
 
     $resolver = new Http\Resolve\Resolver(
         $routeHandler,
-        new \App\InterActor\App()
+        new \App\Service\App()
     );
 
     $dispatcher = new Http\Dispatch\Dispatcher(

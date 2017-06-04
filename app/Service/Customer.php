@@ -244,16 +244,6 @@ class Customer
     }
 
     /**
-     * Gets the business case "mutate" model results
-     * @param array $operations
-     * @return mixed
-     */
-    public function mutate(array $operations)
-    {
-        return $operations->execute();
-    }
-
-    /**
      * Aggregates the business case "form" as a new or an repository model.
      * @param \Statement\Selector $selector
      * @return bool
@@ -271,6 +261,7 @@ class Customer
             $this->newModel(current($predicate->values()));
             return true;
         }
+        return false;
     }
 
     /**

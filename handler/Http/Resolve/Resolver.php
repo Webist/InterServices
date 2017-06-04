@@ -11,7 +11,7 @@ class Resolver implements ResolverInterface, RoutingInterface
 
     private $interActor;
 
-    public function __construct(\Http\Routing\RouteHandler $routeHandler, \App\InterActor\App $interActor)
+    public function __construct(\Http\Routing\RouteHandler $routeHandler, \App\Service\App $interActor)
     {
         $this->routeHandler = $routeHandler;
         $this->interActor = $interActor;

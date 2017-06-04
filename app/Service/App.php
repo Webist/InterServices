@@ -1,8 +1,13 @@
 <?php
 
 
-namespace App\InterActor;
+namespace App\Service;
 
+/**
+ * Class App
+ * Web delivery application service
+ * @package App\InterActor
+ */
 class App implements \App\Contract\Spec\Main
 {
 
@@ -20,10 +25,9 @@ class App implements \App\Contract\Spec\Main
     public function controllerInterActor(string $interActorName, array $route)
     {
         $interActor = null;
-        $meta = new \App\Storage\Meta($route);
         if (!empty($interActorName)) {
             $interActorClass = self::INTERACTOR_NAMESPACE . $interActorName;
-            $interActor = new $interActorClass($meta, $this);
+            $interActor = new $interActorClass($this);
         }
 
         // Extra feature, log visits

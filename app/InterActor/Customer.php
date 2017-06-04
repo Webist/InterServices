@@ -3,14 +3,10 @@
 namespace App\InterActor;
 
 
+use App\Service\App;
+
 class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\InterActor
 {
-    /**
-     * Holds route, input information and access to generic handler
-     * @var \App\Storage\Meta
-     */
-    private $meta;
-
     /**
      * @var App
      */
@@ -18,18 +14,11 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
 
     /**
      * RootPath constructor.
-     * @param \App\Storage\Meta $meta
      * @param App $app
      */
-    public function __construct(\App\Storage\Meta $meta, \App\InterActor\App $app)
+    public function __construct(\App\Service\App $app)
     {
-        $this->meta = $meta;
         $this->app = $app;
-    }
-
-    public function meta()
-    {
-        return $this->meta;
     }
 
     public function app()
@@ -61,8 +50,7 @@ class Customer implements \App\Contract\Spec\Customer, \App\Contract\Behave\Inte
         $operators = $customerService->returnValueOperators($arrayMap);
 
         $operations = new \Statement\Operations($operators, new \Statement\ReturnValue());
-
-        return $customerService->mutate($operations);
+        return $operations->execute();
     }
 
     /**
