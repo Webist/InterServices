@@ -8,26 +8,27 @@ Meaning this an application service might be a domain model with aggregations un
 a simple function such as findDiff() as an utility.   
 The main focus is use case operations.  
 
-Smallest application service is probably a for loop.
+Smallest application service is probably a `for loop`.
 ```php
-for(Initialization; Condition; Afterthought) {
-  // Execute 1: Initialization : Declare or assign variables
-  // Execute 2: Condition : Evaluate condition
-  // Execute 3: Afterthought : Decide a statement 
+var i = 0;      // 1: Initialization : Declare or assign variables
+for(; i < 5 ) { // 2: Condition : Evaluate condition
+  i++;          // 3: Afterthought : Decide a statement
  }
 ```
 Theoretically not much difference for an advanced application service.
 ```php
-  // Execute 1: Initialization : Declare or assign variables 
-  $customerService->maintain($arrayMap);  
+  // 1: Initialization : Declare or assign variables
+  $arrayMap = [1, 2, 3, 4, 5];  
+  $operator = 'mutate';
+  $uuid = 3;  
   
-  // Execute 2: Condition : Evaluate condition
-  $operators = $customerService->operators($operator, $uuid);  
+  // 2: Condition : Evaluate condition  
+  $customerService->maintainReturnValue($operator, $uuid);  
+  $operators = $customerService->operatorsReturnValue($arrayMap);     
   
-  // Execute 3: Afterthought : Decide a statement
-  $operations = new \Statement\Operations($operators, new \Statement\ReturnValue());  
-  
-  return $operations->execute();
+  // 3: Afterthought : Decide a statement  
+  $operations = new \Statement\Operations($operators, new \Statement\ReturnValue());    
+  return $operations->execute();  
 ```
 
 A business lifeCycle basically includes business rules, workflow or a finite state machine and execution.
