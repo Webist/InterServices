@@ -1,6 +1,6 @@
-### InterActor
+# InterActor
 
-An InterActor is a controller specific activity maintainer.  
+An InterActor is a project specific activity maintainer.  
 Being as gateway to the application services it is usable as client-side.
 
 Every controller should have its handler representation in this directory.
