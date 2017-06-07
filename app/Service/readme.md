@@ -6,7 +6,7 @@ An application service is a framework that handles operations lifeCycle in own s
 
 Meaning this an application service might be a domain model with aggregations unit, but also 
 a simple function such as findDiff() as an utility.   
-The main focus is use case operations.  
+The main focus of a service is use case operations.  
 
 Smallest application service is probably a `for loop`.
 ```php
@@ -55,7 +55,7 @@ A business lifeCycle basically includes business rules, workflow or a finite sta
 #### Function-centric
 Function-centric domain service.  
 Accepts input, does one job without necessarily communication with others.  
-Behaves as an utility, such as pdf-converter, arrayMap searcher.  
+Behaves as an utility, such as pdf-converter, arrayMap filter.  
 
 Start-point is writing a small program.  
 

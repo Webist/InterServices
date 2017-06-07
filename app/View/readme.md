@@ -10,11 +10,14 @@ A placeholder will be defined, such as ":pageBaseContent", in the result page.
 The viewModel by applying a replacement function, e.g. `preg_replace()`, replace this
 placeholder by specified data.
 
+[../../handler/Dom/readme.md](../../handler/Dom/readme.md)
+
+
 
 ```php
 Anecdote  
-Choosing an another viewModel or Template Engine is not blocked in any of sense.  
-It is a matter of creating a simple file in this directory to include the component of choice. 
+Using an other viewModel or Template Engine 
+a matter of creating a simple file in this directory to include the component of choice. 
 ```
 
 

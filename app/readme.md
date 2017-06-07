@@ -16,7 +16,7 @@ Entry point of application services, use cases (model layer)
 [InterActor/readme.md](InterActor/readme.md)
 
 + Service  
-Utility, Business lifeCycle operations   
+Utility or Business lifeCycle operations   
 [Service/readme.md](Service/readme.md)
 
 

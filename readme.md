@@ -1,71 +1,78 @@
-### MOM Web Delivery
+# MOM Web Delivery
 
-2 main lifeCycle layers   
-+ Web Delivery lifeCycle   
-Start-point `public/index.php`, end-point `app/Controller/{class}`.  
-HTTP request, response cycle.
-
-+ Application Service lifeCycle   
-Start-point `app/InterActor/{class}`, end-point `app/Service/{class}`.  
-Internal request, service-application response cycle. 
+MOM Web Delivery consists of two cycles.
 
 
-##### Web Delivery lifeCycle
-Web delivery lifeCycle handles the http request.   
-Request, route information is available via `InputHandler`.  
-
-
-##### Application Service lifeCycle  
-Application Service lifeCycle handles the request via an internal application, such as CLI, Controller object of the MVC.    
-An `app/InterActor/{class}` without construct, just works.  
-However the best practice is that an interActor hosts (inheritance via DI) an application service.  
-
-The typical use case is; hosting an application service for Web Delivery LifeCycle.   
-```markdown
-In a web delivery environment an `InterActor` object will be accessed from the `Controller` object,
-therefore it is best practice to build the InterActor with a constructor that hosts the app service `__construct(\App\Service\App $app)`.    
    
-Such an InterActor object, in a CLI environment, remains easy to use  
-because the `\App\Service\App` is nothing more than an utility without dependencies.  
-Event better, it provides a service container for the efficient usage of the classes. 
++ Web Delivery cycle   
+Process of HTTP request, response. 
+
+
++ Application Governance and Service cycle (app cycle)  
+Process of internal request, regulation by action governance and use case based service. 
+
+
+## Web Delivery cycle
+Start-point `public/index.php`, end-point `app/Controller/{class}`.   
+Request, route information is available via `InputHandler`.  
+A controller optionally owns a `\View\Model` for a proper response.
+   
+
+## Application Governance and Service cycle (app cycle)
+Start-point `app/InterActor/{class}`, end-point `app/Service/{class}`.   
+Web delivery end-point `app/Controller/{class}` hosts (inheritance via DI) the app cycle start-point `app/InterActor/{class}`.
+
+An InterActor object is responsible for maintaining and so governing the actions.  
+Depending on how advanced the business requirements, 
+it eventually applies regulations such as identification, assertion, countermeasure, monitoring, incident response.
+  
+A request for an InterActor is an internal application process, it might be implemented by an MVC controller object or
+it might be the entry-point for a service.
+
+```markdown
+When an InterActor is used in MVC context then it is best practice to construct the InterActor 
+object with the web delivery service app. `__construct(\App\Service\App $app)`.     
+ 
+
+`\App\Service\App` is an utility-service. Which means it has no construction and higher grade dependencies to operate.  
+For example it provides a DI service container for reusing the objects efficiently.
 ```
 
-#### MVC Analogy
-The MVC pattern with MOM Web Delivery remains same.    
+## MVC Analogy  
 An easy analogy of MVC within the MOM Web Delivery;  
 
 + By analogy, Controller is a *Project*
-+ By analogy, Model is a *Manager*
++ By analogy, Model is a *Activity Governance and Service*
 + By analogy, View is a *ResultSet*
 
-#### Controller
+### Controller
 The controller is responsible for incoming HTTP requests and deliver a suitable response.  
 
-A controller hosts by default an InputHandler and an InterActor.  
+A controller hosts by default a request InputHandler and an activity InterActor.  
 
 
 By analogy, a controller is a Project.  
 It is an activity within a restricted space to create something, 
 it distinguishes itself by once-only process.  
-Activities are handled by methods to interact with an InterActor Manager, optionally View Model and so provide a ResultSet.  
+Activities are handled by object methods to interact with an InterActor and optionally View Model to provide a ResultSet.  
 
-#### Model
+### Model
 The model is responsible for the InterAction and the LifeCycle of the business logic.  
 
-An InterActor by default hosts utility, such as service provider (c.q. service-container).  
+An InterActor might host an utility, such as service provider (c.q. service-container).  
 
-
-By analogy, an InterActor is a maintaining manager that interacts with service delivery frameworks.
+**InterActor**   
+By analogy, an InterActor is a maintaining activity owner that interacts with service delivery frameworks.
 InterActor has the role of regulator and therefore it aggregates (multiple) services 
 to provide information either towards controller, infrastructure or application service. 
   
-An application service is a provider of a unit and operations for use case's within a certain domain.  
-Note that the word `a unit` in previous sentence matches the model within an application service.  
+**Application Service**   
+An application service is a provider of a unit (or a model) and operations for use case's within a certain domain.  
  
 A typical application service is a domain model layer responsible for the operations such as creating statements 
 by commands and queries for that specific domain, followed by execute or let it execute by a persistence layer.
  
-#### View
+### View
 The view provides composition tools such as a DOM builder for HTML, XML output.  
 
 A view model accepts input data and requires DOM template inclusions. 
@@ -75,7 +82,7 @@ By analogy, a view model is a ResultSet provider.
 It wraps and demonstrates the outcomes in certain format.
 
 
-#### Component Orientation Mechanism
+## Component Orientation Mechanism
 MOM Web Delivery is based on component orientation mechanism M.O.M [(Machine Object Model)](http://webist.nl/articles/machine-object-model.md).
  
 Constructing relationships from higher level to lower layers 
