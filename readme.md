@@ -5,7 +5,9 @@ This project is no longer subject to any further development.
 ### I am working on a new project
 Last two years much effort has been focused on my self-thought Delivery Model in private workspace.
 
-Some of the significant features of the new Delivery Model, named `Callable` are;
+Some of the significant features of the new Delivery Model I am working on;
+
+Named `Callable`;
  
  + Delivery path resolve. 
    A callable, for instance a class-file, is a hashed keyword match. No routing system as it is known in the wild. 
